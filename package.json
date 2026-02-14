@@ -1,0 +1,44 @@
+{
+  "name": "herbeautyhacks-editorial",
+  "version": "1.0.0",
+  "description": "HerBeautyHacks editorial site built with Next.js 15, Tailwind v4, and React Query v5.",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/salmanshahid527/herbeautyhacks.git"
+  },
+  "keywords": [
+    "nextjs",
+    "react-query",
+    "tailwindcss",
+    "editorial"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/salmanshahid527/herbeautyhacks/issues"
+  },
+  "homepage": "https://github.com/salmanshahid527/herbeautyhacks#readme",
+  "dependencies": {
+    "@tanstack/react-query": "^5.90.21",
+    "next": "^15.5.12",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/node": "^25.2.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^15.5.12",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3"
+  }
+}
