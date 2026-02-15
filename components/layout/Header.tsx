@@ -33,11 +33,11 @@ export function Header() {
           <MobileNav navLinks={navLinks} categories={categories} />
           <Link href="/" className="flex items-center shrink-0">
             <Image
-              src="/logo-her-beauty-hacks.svg"
+              src="/logo-her-beauty-hacks.png"
               alt="Her Beauty Hacks"
-              width={180}
-              height={36}
-              className="h-9 w-auto"
+              width={220}
+              height={56}
+              className="h-9 md:h-10 w-auto"
               priority
             />
           </Link>

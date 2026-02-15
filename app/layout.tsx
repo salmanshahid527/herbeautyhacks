@@ -25,6 +25,10 @@ export const metadata: Metadata = {
     template: "%s | Her Beauty Hacks",
   },
   description: "Beauty, fashion, skincare, and lifestyle tips — no one is you.",
+  icons: {
+    icon: "/logo-her-beauty-hacks.png",
+    apple: "/logo-her-beauty-hacks.png",
+  },
 };
 
 export default function RootLayout({

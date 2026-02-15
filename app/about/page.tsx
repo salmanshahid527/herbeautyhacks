@@ -3,6 +3,9 @@ import { WpPageContent } from "@/components/pages/WpPageContent";
 import { getPageBySlug } from "@/lib/wp/pages";
 import type { Metadata } from "next";
 
+/** ISR: revalidate at most every 60 seconds */
+export const revalidate = 60;
+
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPageBySlug("about");
   return {

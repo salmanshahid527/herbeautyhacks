@@ -8,6 +8,12 @@ import { TopicCards } from "./TopicCards";
 import { FeaturedPosts } from "./FeaturedPosts";
 import { CategoriesAndSections } from "./CategoriesAndSections";
 import { MeetAuthor } from "./MeetAuthor";
+import {
+  TopicCardsSkeleton,
+  FeaturedPostsSkeleton,
+  CategorySectionSkeleton,
+  MeetAuthorSkeleton,
+} from "@/components/skeletons/HomeSkeletons";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -27,15 +33,12 @@ export function HomeSections() {
     <>
       <Hero />
       {isLoading ? (
-        <section className="section-spacing w-full bg-muted/20">
-          <div className="container container-wide px-4 mx-auto flex justify-center">
-            <div className="flex gap-2">
-              <span className="size-2 rounded-full bg-primary animate-bounce [animation-delay:0ms]" />
-              <span className="size-2 rounded-full bg-primary animate-bounce [animation-delay:150ms]" />
-              <span className="size-2 rounded-full bg-primary animate-bounce [animation-delay:300ms]" />
-            </div>
-          </div>
-        </section>
+        <>
+          <TopicCardsSkeleton />
+          <FeaturedPostsSkeleton />
+          <CategorySectionSkeleton />
+          <MeetAuthorSkeleton />
+        </>
       ) : !hasAnyContent ? (
         <section className="section-spacing w-full bg-muted/30 border-y border-border/60">
           <div className="container max-w-xl px-4 mx-auto text-center">

@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { PostList } from "@/components/blog/PostList";
+import { PostCardSkeleton } from "@/components/skeletons/PostCardSkeleton";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,11 +8,14 @@ export const metadata: Metadata = {
   description: "Beauty, fashion, skincare, and lifestyle articles.",
 };
 
+/** ISR: revalidate at most every 60 seconds */
+export const revalidate = 60;
+
 function PostListFallback() {
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 py-8">
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {[1, 2, 3, 4, 5, 6].map((i) => (
-        <div key={i} className="h-64 rounded-xl bg-muted animate-pulse" />
+        <PostCardSkeleton key={i} />
       ))}
     </div>
   );

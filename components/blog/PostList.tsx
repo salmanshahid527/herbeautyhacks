@@ -3,6 +3,7 @@
 import { usePosts } from "@/hooks/usePosts";
 import { useCategories } from "@/hooks/useCategories";
 import { PostCard } from "./PostCard";
+import { PostCardSkeleton } from "@/components/skeletons/PostCardSkeleton";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
 
@@ -14,9 +15,9 @@ export function PostList() {
 
   if (isLoading) {
     return (
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 py-8">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="h-64 rounded-xl bg-muted animate-pulse" />
+          <PostCardSkeleton key={i} />
         ))}
       </div>
     );

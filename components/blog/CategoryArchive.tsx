@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { useCategory } from "@/hooks/useCategories";
 import { usePostsByCategory } from "@/hooks/usePosts";
 import { PostCard } from "./PostCard";
+import { CategoryArchiveSkeleton } from "@/components/skeletons/CategoryArchiveSkeleton";
+import { PostCardSkeleton } from "@/components/skeletons/PostCardSkeleton";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 
@@ -17,16 +19,7 @@ export function CategoryArchive({ slug }: CategoryArchiveProps) {
   const { data: posts = [], isLoading: postsLoading } = usePostsByCategory(slug, 50);
 
   if (catLoading) {
-    return (
-      <div className="container container-wide px-4 py-10 mx-auto w-full min-h-[50vh] bg-muted/10">
-        <div className="h-8 w-32 bg-muted rounded animate-pulse mb-6" />
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="h-64 bg-muted rounded-xl animate-pulse" />
-          ))}
-        </div>
-      </div>
-    );
+    return <CategoryArchiveSkeleton />;
   }
   if (!category) notFound();
 
@@ -45,7 +38,7 @@ export function CategoryArchive({ slug }: CategoryArchiveProps) {
       {postsLoading ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="h-64 bg-muted rounded-xl animate-pulse" />
+            <PostCardSkeleton key={i} />
           ))}
         </div>
       ) : posts.length === 0 ? (

@@ -28,14 +28,14 @@ export function TopBar() {
   const facebookUrl = author?.facebook ?? "#";
 
   return (
-    <div className="w-full border-b border-border/60 bg-muted/30">
+    <div className="w-full border-b border-primary/10 bg-gradient-to-r from-primary-muted/40 via-primary/20 to-primary-muted/30">
       <div className="container container-wide flex h-9 md:h-10 items-center justify-between px-4 mx-auto">
         <div className="flex items-center gap-5">
           <a
             href={pinterestUrl}
             target={pinterestUrl.startsWith("http") ? "_blank" : undefined}
             rel={pinterestUrl.startsWith("http") ? "noopener noreferrer" : undefined}
-            className="text-muted-foreground hover:text-primary transition-colors"
+            className="text-primary hover:opacity-80 transition-opacity"
             aria-label="Pinterest"
           >
             <PinterestIcon className="size-4" />
@@ -44,7 +44,7 @@ export function TopBar() {
             href={instagramUrl}
             target={instagramUrl.startsWith("http") ? "_blank" : undefined}
             rel={instagramUrl.startsWith("http") ? "noopener noreferrer" : undefined}
-            className="text-muted-foreground hover:text-primary transition-colors"
+            className="text-primary hover:opacity-80 transition-opacity"
             aria-label="Instagram"
           >
             <Instagram className="size-4" />
@@ -53,7 +53,7 @@ export function TopBar() {
             href={facebookUrl}
             target={facebookUrl.startsWith("http") ? "_blank" : undefined}
             rel={facebookUrl.startsWith("http") ? "noopener noreferrer" : undefined}
-            className="text-muted-foreground hover:text-primary transition-colors"
+            className="text-primary hover:opacity-80 transition-opacity"
             aria-label="Facebook"
           >
             <Facebook className="size-4" />

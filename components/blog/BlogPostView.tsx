@@ -5,6 +5,7 @@ import { SafeImage } from "@/components/ui/safe-image";
 import { notFound } from "next/navigation";
 import { usePost } from "@/hooks/usePosts";
 import { PostContent } from "./PostContent";
+import { BlogPostSkeleton } from "@/components/skeletons/BlogPostSkeleton";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 
@@ -16,18 +17,7 @@ export function BlogPostView({ slug }: BlogPostViewProps) {
   const { data: post, isLoading, isError } = usePost(slug);
 
   if (isLoading) {
-    return (
-      <div className="container container-wide px-4 py-10 mx-auto w-full min-h-[50vh] bg-muted/10">
-        <div className="h-8 w-48 bg-muted rounded animate-pulse mb-6" />
-        <div className="h-10 w-full bg-muted rounded animate-pulse mb-4" />
-        <div className="h-4 w-2/3 bg-muted rounded animate-pulse mb-8" />
-        <div className="space-y-2">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-4 bg-muted rounded animate-pulse" />
-          ))}
-        </div>
-      </div>
-    );
+    return <BlogPostSkeleton />;
   }
 
   if (isError || (!post && !isLoading)) {

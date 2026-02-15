@@ -2,6 +2,7 @@
 
 import { usePage } from "@/hooks/usePage";
 import { RichText } from "@/components/blog/RichText";
+import { PageContentSkeleton } from "@/components/skeletons/PageContentSkeleton";
 
 interface WpPageContentProps {
   slug: string;
@@ -16,13 +17,8 @@ export function WpPageContent({ slug, emptyMessage, className }: WpPageContentPr
 
   if (isLoading) {
     return (
-      <div className={`space-y-4 ${className ?? ""}`}>
-        <div className="h-9 w-48 bg-muted rounded animate-pulse" />
-        <div className="space-y-2">
-          <div className="h-4 w-full bg-muted rounded animate-pulse" />
-          <div className="h-4 w-full bg-muted rounded animate-pulse" />
-          <div className="h-4 w-3/4 bg-muted rounded animate-pulse" />
-        </div>
+      <div className={className}>
+        <PageContentSkeleton />
       </div>
     );
   }

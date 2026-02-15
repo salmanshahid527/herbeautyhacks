@@ -3,21 +3,24 @@
 import Image from "next/image";
 import { useAuthor } from "@/hooks/useAuthor";
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function AboutContent() {
   const { data: author, isLoading } = useAuthor();
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
-        <div className="h-48 w-48 rounded-full bg-muted animate-pulse mx-auto" />
-        <div className="h-6 w-48 bg-muted rounded animate-pulse mx-auto" />
-        <div className="space-y-2">
-          <div className="h-4 w-full bg-muted rounded animate-pulse" />
-          <div className="h-4 w-full bg-muted rounded animate-pulse" />
-          <div className="h-4 w-3/4 bg-muted rounded animate-pulse" />
-        </div>
-      </div>
+      <Card className="overflow-hidden">
+        <CardContent className="p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center md:items-start">
+          <Skeleton className="size-40 shrink-0 rounded-full" />
+          <div className="flex-1 w-full space-y-3">
+            <Skeleton className="h-6 w-40 rounded" />
+            <Skeleton className="h-4 w-full rounded" />
+            <Skeleton className="h-4 w-full rounded" />
+            <Skeleton className="h-4 w-3/4 rounded" />
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 

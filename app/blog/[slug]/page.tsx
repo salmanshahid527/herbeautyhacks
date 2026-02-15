@@ -24,6 +24,9 @@ async function getPostMeta(slug: string) {
   }
 }
 
+/** ISR: revalidate at most every 60 seconds */
+export const revalidate = 60;
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostMeta(slug);
