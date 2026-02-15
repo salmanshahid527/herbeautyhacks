@@ -1,9 +1,14 @@
 import { BlogPostView } from "@/components/blog/BlogPostView";
 import { ArticleJsonLd } from "@/components/seo/ArticleJsonLd";
+import { decodeHtmlEntities } from "@/lib/html";
 import { getSiteUrl } from "@/lib/seo";
 import { fetchWp } from "@/lib/wp/client";
 import type { Metadata } from "next";
 import type { WpPost } from "@/lib/wp/types";
+
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, "").trim();
+}
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -18,8 +23,8 @@ async function getPostMeta(slug: string) {
     const post = Array.isArray(data) ? data[0] : null;
     return post
       ? {
-          title: post.title?.rendered?.replace(/<[^>]*>/g, "").trim(),
-          excerpt: post.excerpt?.rendered?.replace(/<[^>]*>/g, "").trim(),
+          title: decodeHtmlEntities(stripHtml(post.title?.rendered ?? "")),
+          excerpt: decodeHtmlEntities(stripHtml(post.excerpt?.rendered ?? "")),
         }
       : null;
   } catch {
@@ -39,8 +44,8 @@ async function getPostSeoData(slug: string) {
     const author = post._embedded?.author?.[0];
     const featuredMedia = post._embedded?.["wp:featuredmedia"]?.[0];
     return {
-      title: post.title?.rendered?.replace(/<[^>]*>/g, "").trim() ?? "",
-      description: post.excerpt?.rendered?.replace(/<[^>]*>/g, "").trim(),
+      title: decodeHtmlEntities(stripHtml(post.title?.rendered ?? "")) || "",
+      description: decodeHtmlEntities(stripHtml(post.excerpt?.rendered ?? "")),
       slug: post.slug,
       datePublished: post.date,
       dateModified: post.modified ?? post.date,

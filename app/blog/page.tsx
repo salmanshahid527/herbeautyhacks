@@ -23,7 +23,7 @@ function PostListFallback() {
 
 export default function BlogPage() {
   return (
-    <div className="container container-wide px-4 py-12 md:py-16 mx-auto w-full min-h-[50vh] bg-muted/10">
+    <div className="container container-narrow px-4 py-12 md:py-16 mx-auto w-full min-h-[50vh] bg-muted/10">
       <h1 className="section-title text-3xl md:text-4xl font-bold mb-12 text-foreground">Blog</h1>
       <Suspense fallback={<PostListFallback />}>
         <PostList />

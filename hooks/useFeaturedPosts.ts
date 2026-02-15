@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { decodeHtmlEntities } from "@/lib/html";
 import { fetchWp } from "@/lib/wp/client";
 import type { WpPost } from "@/lib/wp/types";
 import type { Post } from "./usePosts";
@@ -16,7 +17,7 @@ function mapWpPostToPost(wp: WpPost): Post {
     _id: String(wp.id),
     title: wp.title?.rendered ?? "",
     slug: wp.slug,
-    excerpt: stripHtml(wp.excerpt?.rendered ?? ""),
+    excerpt: decodeHtmlEntities(stripHtml(wp.excerpt?.rendered ?? "")),
     category: category ? { title: category.name, slug: category.slug } : undefined,
     featuredImage: featuredMedia?.source_url,
     featured: !!wp.sticky,
