@@ -1,13 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { SafeImage } from "@/components/ui/safe-image";
+import { ImageLightbox } from "@/components/ui/ImageLightbox";
 import { notFound } from "next/navigation";
 import { usePost } from "@/hooks/usePosts";
+import type { PostDetail } from "@/hooks/usePosts";
 import { PostContent } from "./PostContent";
+import { ShareButtons } from "./ShareButtons";
 import { BlogPostSkeleton } from "@/components/skeletons/BlogPostSkeleton";
 import { ChevronRight } from "lucide-react";
 import { decodeHtmlEntities } from "@/lib/html";
+import type { MappedPostDetail } from "@/lib/wp/post";
 
 /** Strip HTML tags and decode entities for safe plain-text title (avoids DOMPurify/ESM on SSR). */
 function formatTitle(html: string): string {
@@ -40,6 +45,10 @@ function getLeadText(excerpt: string | undefined, body: string | undefined): str
 
 interface BlogPostViewProps {
   slug: string;
+  /** When provided, full article is pre-rendered (SEO). No client fetch; used as initialData. */
+  initialPost?: MappedPostDetail | null;
+  /** Canonical URL for sharing; used in share buttons. */
+  shareUrl?: string;
 }
 
 function formatPostDate(isoDate: string | undefined): string {
@@ -52,19 +61,20 @@ function formatPostDate(isoDate: string | undefined): string {
   }
 }
 
-export function BlogPostView({ slug }: BlogPostViewProps) {
-  const { data: post, isLoading, isError } = usePost(slug);
+export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps) {
+  const [featuredPreviewSrc, setFeaturedPreviewSrc] = useState<string | null>(null);
+  const { data: post, isLoading } = usePost(slug, initialPost ?? undefined);
 
-  if (isLoading) {
+  const displayPost = (post ?? initialPost) as PostDetail | undefined;
+  if (initialPost == null && isLoading) {
     return <BlogPostSkeleton />;
   }
 
-  if (isError || (!post && !isLoading)) {
+  if (!displayPost) {
     notFound();
   }
-  if (!post) return null;
 
-  const hasByline = post.author?.name || post.publishedAt;
+  const hasByline = displayPost.author?.name || displayPost.publishedAt;
 
   return (
     <article className="w-full min-h-[50vh] bg-muted/10">
@@ -77,20 +87,20 @@ export function BlogPostView({ slug }: BlogPostViewProps) {
                 Home
               </Link>
             </li>
-            {post.category && (
+            {displayPost.category && (
               <>
                 <li aria-hidden="true" className="flex items-center gap-1">
                   <ChevronRight className="size-3.5 shrink-0" />
                   <Link
-                    href={`/category/${post.category.slug}`}
+                    href={`/category/${displayPost.category.slug}`}
                     className="hover:text-foreground hover:underline"
                   >
-                    {post.category.title}
+                    {displayPost.category.title}
                   </Link>
                 </li>
               </>
             )}
-            {!post.category && (
+            {!displayPost.category && (
               <li aria-hidden="true" className="flex items-center gap-1">
                 <ChevronRight className="size-3.5 shrink-0" />
                 <Link href="/blog" className="hover:text-foreground hover:underline">
@@ -102,55 +112,69 @@ export function BlogPostView({ slug }: BlogPostViewProps) {
         </nav>
 
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight">
-          {formatTitle(post.title ?? "")}
+          {formatTitle(displayPost.title ?? "")}
         </h1>
 
         {hasByline && (
           <p className="mt-3 text-sm text-muted-foreground">
-            {post.author?.name && <>Written by {post.author.name}</>}
-            {post.author?.name && post.publishedAt && " · "}
-            {post.publishedAt && formatPostDate(post.publishedAt)}
+            {displayPost.author?.name && <>Written by {displayPost.author.name}</>}
+            {displayPost.author?.name && displayPost.publishedAt && " · "}
+            {displayPost.publishedAt && formatPostDate(displayPost.publishedAt)}
           </p>
         )}
 
-        {(post.excerpt || post.body) && (
+        {(displayPost.excerpt || displayPost.body) && (
           <p className="mt-4 text-lg text-muted-foreground leading-relaxed max-w-3xl whitespace-normal">
-            {getLeadText(post.excerpt, post.body)}
+            {getLeadText(displayPost.excerpt, displayPost.body)}
           </p>
         )}
 
-        <div className="relative aspect-video rounded-xl overflow-hidden mt-8 mb-10 bg-muted shadow-lg">
+        <button
+          type="button"
+          className="relative aspect-video w-full rounded-xl overflow-hidden mt-8 mb-10 bg-muted shadow-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+          onClick={() => {
+            const src = displayPost.featuredImage;
+            if (src && src !== "/placeholder.svg") setFeaturedPreviewSrc(src);
+          }}
+          aria-label="View featured image"
+        >
           <SafeImage
-            src={post.featuredImage ?? "/placeholder.svg"}
+            src={displayPost.featuredImage ?? "/placeholder.svg"}
             alt=""
             fill
             className="object-cover"
             priority
             sizes="(max-width: 896px) 100vw, 896px"
           />
-        </div>
+        </button>
+        <ImageLightbox
+          src={featuredPreviewSrc}
+          onClose={() => setFeaturedPreviewSrc(null)}
+        />
 
-        <PostContent body={post.body} />
+        <PostContent body={displayPost.body} />
 
-        {(post.author || post.category) && (
+        {(displayPost.author || displayPost.category) && (
           <div className="mt-12 pt-8 border-t border-border">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
-              {post.author && (
+              {displayPost.author && (
                 <span>
-                  By <span className="font-medium text-foreground">{post.author.name}</span>
+                  By <span className="font-medium text-foreground">{displayPost.author.name}</span>
                 </span>
               )}
-              {post.category && (
+              {displayPost.category && (
                 <Link
-                  href={`/category/${post.category.slug}`}
+                  href={`/category/${displayPost.category.slug}`}
                   className="text-primary hover:underline"
                 >
-                  More in {post.category.title}
+                  More in {displayPost.category.title}
                 </Link>
               )}
             </div>
           </div>
         )}
+
+        <ShareButtons title={formatTitle(displayPost.title ?? "")} url={shareUrl} />
       </div>
     </article>
   );

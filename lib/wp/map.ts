@@ -36,3 +36,22 @@ export function mapWpPostToPost(wp: WpPost): MappedPost {
     publishedAt: wp.date,
   };
 }
+
+export interface MappedPostDetail extends MappedPost {
+  body?: string;
+  author?: { name: string; image?: string };
+  modifiedAt?: string;
+}
+
+export function mapWpPostToPostDetail(wp: WpPost): MappedPostDetail {
+  const post = mapWpPostToPost(wp);
+  const author = wp._embedded?.author?.[0];
+  return {
+    ...post,
+    body: wp.content?.rendered,
+    author: author
+      ? { name: author.name, image: author.avatar_urls?.[96] }
+      : undefined,
+    modifiedAt: wp.modified ?? wp.date,
+  };
+}

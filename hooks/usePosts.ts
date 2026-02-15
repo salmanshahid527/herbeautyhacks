@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { fetchWp } from "@/lib/wp/client";
-import { mapWpPostToPost as mapWpToPost } from "@/lib/wp/map";
+import { mapWpPostToPost as mapWpToPost, mapWpPostToPostDetail } from "@/lib/wp/map";
 import type { WpPost } from "@/lib/wp/types";
 
 export interface PostCategory {
@@ -25,21 +25,6 @@ export interface Post {
 export interface PostDetail extends Post {
   body?: string;
   author?: { name: string; image?: string };
-}
-
-function mapWpPostToPostDetail(wp: WpPost): PostDetail {
-  const post = mapWpToPost(wp) as Post;
-  const author = wp._embedded?.author?.[0];
-  return {
-    ...post,
-    body: wp.content?.rendered,
-    author: author
-      ? {
-          name: author.name,
-          image: author.avatar_urls?.[96],
-        }
-      : undefined,
-  };
 }
 
 async function fetchPosts(categorySlug?: string): Promise<Post[]> {
@@ -71,7 +56,7 @@ async function fetchPostBySlug(slug: string): Promise<PostDetail | null> {
       _embed: 1,
     });
     const wp = Array.isArray(data) ? data[0] : null;
-    return wp ? mapWpPostToPostDetail(wp) : null;
+    return wp ? (mapWpPostToPostDetail(wp) as PostDetail) : null;
   } catch {
     return null;
   }
@@ -119,11 +104,12 @@ export function usePosts(options?: { categorySlug?: string }) {
   });
 }
 
-export function usePost(slug: string | null) {
+export function usePost(slug: string | null, initialData?: PostDetail | null) {
   return useQuery({
     queryKey: ["post", slug],
     queryFn: () => fetchPostBySlug(slug!),
     enabled: !!slug,
+    initialData: initialData ?? undefined,
   });
 }
 
