@@ -11,6 +11,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
 import { MobileNav } from "./MobileNav";
 
 const defaultNavLinks = [
@@ -27,7 +28,7 @@ export function Header() {
   const navLinks = settings?.navLinks?.length ? settings.navLinks : defaultNavLinks;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/80 backdrop-blur-xl supports-backdrop-filter:bg-background/70 shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-white shadow-sm">
       <div className="container container-wide flex h-14 md:h-16 items-center justify-between gap-4 px-4 md:gap-6 mx-auto">
         <div className="flex items-center gap-2 min-w-0">
           <MobileNav navLinks={navLinks} categories={categories} />
@@ -48,7 +49,13 @@ export function Header() {
               link.href ? (
                 <NavigationMenuItem key={link.href}>
                   <NavigationMenuLink asChild>
-                    <Link href={link.href} className={navigationMenuTriggerStyle()}>
+                    <Link
+                      href={link.href}
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        "bg-transparent text-foreground hover:bg-primary/10 hover:text-primary focus:bg-primary/10 focus:text-primary"
+                      )}
+                    >
                       {link.label}
                     </Link>
                   </NavigationMenuLink>
