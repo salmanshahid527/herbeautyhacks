@@ -2,13 +2,20 @@
 
 import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
-import { usePostsByCategory } from "@/hooks/usePosts";
 import { SafeImage } from "@/components/ui/safe-image";
 import type { Category } from "@/hooks/useCategories";
+import type { Post } from "@/hooks/usePosts";
 
-function CategoryTile({ category, index }: { category: Category; index: number }) {
-  const { data: posts = [] } = usePostsByCategory(category.id, 1);
-  const imageUrl = posts[0]?.featuredImage;
+function CategoryTile({
+  category,
+  index,
+  latestPostImage,
+}: {
+  category: Category;
+  index: number;
+  latestPostImage?: string;
+}) {
+  const imageUrl = latestPostImage;
 
   return (
     <Link
@@ -31,7 +38,11 @@ function CategoryTile({ category, index }: { category: Category; index: number }
   );
 }
 
-export function TopicCards() {
+export function TopicCards({
+  postsByCategoryId = {},
+}: {
+  postsByCategoryId?: Record<number, Post[]>;
+}) {
   const { data: categories = [] } = useCategories();
   const displayCategories = categories.slice(0, 6);
 
@@ -45,7 +56,12 @@ export function TopicCards() {
         </h2>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
           {displayCategories.map((cat, index) => (
-            <CategoryTile key={cat._id} category={cat} index={index} />
+            <CategoryTile
+              key={cat._id}
+              category={cat}
+              index={index}
+              latestPostImage={postsByCategoryId[cat.id]?.[0]?.featuredImage}
+            />
           ))}
         </div>
       </div>

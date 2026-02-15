@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { fetchWp } from "@/lib/wp/client";
+import { mapWpPostToPost as mapWpToPost } from "@/lib/wp/map";
 import type { WpPost } from "@/lib/wp/types";
 
 export interface PostCategory {
@@ -26,27 +27,8 @@ export interface PostDetail extends Post {
   author?: { name: string; image?: string };
 }
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]*>/g, "").trim();
-}
-
-function mapWpPostToPost(wp: WpPost): Post {
-  const category = wp._embedded?.["wp:term"]?.[0]?.[0];
-  const featuredMedia = wp._embedded?.["wp:featuredmedia"]?.[0];
-  return {
-    _id: String(wp.id),
-    title: wp.title?.rendered ?? "",
-    slug: wp.slug,
-    excerpt: stripHtml(wp.excerpt?.rendered ?? ""),
-    category: category ? { title: category.name, slug: category.slug } : undefined,
-    featuredImage: featuredMedia?.source_url,
-    featured: !!wp.sticky,
-    publishedAt: wp.date,
-  };
-}
-
 function mapWpPostToPostDetail(wp: WpPost): PostDetail {
-  const post = mapWpPostToPost(wp);
+  const post = mapWpToPost(wp) as Post;
   const author = wp._embedded?.author?.[0];
   return {
     ...post,
@@ -76,7 +58,7 @@ async function fetchPosts(categorySlug?: string): Promise<Post[]> {
       if (catId) params.categories = catId;
     }
     const data = await fetchWp<WpPost[]>(`/posts`, params);
-    return (Array.isArray(data) ? data : []).map(mapWpPostToPost);
+    return (Array.isArray(data) ? data : []).map((wp) => mapWpToPost(wp) as Post);
   } catch {
     return [];
   }
@@ -107,7 +89,7 @@ async function fetchPostsByCategoryId(
       orderby: "date",
       order: "desc",
     });
-    return (Array.isArray(data) ? data : []).map(mapWpPostToPost);
+    return (Array.isArray(data) ? data : []).map((wp) => mapWpToPost(wp) as Post);
   } catch {
     return [];
   }
@@ -157,5 +139,48 @@ export function usePostsByCategory(
         ? fetchPostsByCategoryId(categorySlugOrId as number, limit)
         : fetchPostsByCategoryLimit(categorySlugOrId as string, limit),
     enabled: categorySlugOrId !== null && categorySlugOrId !== undefined,
+  });
+}
+
+/** One WordPress request: fetch recent posts (each has categories[]), then group by category. No N+1, no proxy. */
+async function fetchPostsForMultipleCategories(
+  categoryIds: number[],
+  limitPerCategory: number
+): Promise<Record<number, Post[]>> {
+  if (categoryIds.length === 0) return {};
+  const idSet = new Set(categoryIds);
+  const maxPosts = Math.min(categoryIds.length * limitPerCategory * 3, 100);
+  const data = await fetchWp<WpPost[]>(`/posts`, {
+    _embed: 1,
+    per_page: maxPosts,
+    orderby: "date",
+    order: "desc",
+  });
+  const allPosts = Array.isArray(data) ? data : [];
+  const countByCategory = Object.fromEntries(categoryIds.map((id) => [id, 0]));
+  const byCategory: Record<number, Post[]> = Object.fromEntries(
+    categoryIds.map((id) => [id, []])
+  );
+  for (const wp of allPosts) {
+    const cids = wp.categories ?? [];
+    for (const cid of cids) {
+      if (!idSet.has(cid) || countByCategory[cid] >= limitPerCategory) continue;
+      byCategory[cid].push(mapWpToPost(wp) as Post);
+      countByCategory[cid]++;
+    }
+  }
+  return byCategory;
+}
+
+/** Fetches posts for many categories in one WordPress request; groups by category in the hook. */
+export function usePostsForMultipleCategories(
+  categoryIds: number[],
+  limitPerCategory: number
+) {
+  const stableIds = categoryIds.length > 0 ? [...categoryIds].sort((a, b) => a - b) : [];
+  return useQuery({
+    queryKey: ["posts", "categories-batch", stableIds, limitPerCategory],
+    queryFn: () => fetchPostsForMultipleCategories(stableIds, limitPerCategory),
+    enabled: stableIds.length > 0,
   });
 }

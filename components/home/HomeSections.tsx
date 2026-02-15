@@ -2,6 +2,7 @@
 
 import { useCategories } from "@/hooks/useCategories";
 import { useFeaturedPosts } from "@/hooks/useFeaturedPosts";
+import { usePostsForMultipleCategories } from "@/hooks/usePosts";
 import { useAuthor } from "@/hooks/useAuthor";
 import { Hero } from "./Hero";
 import { TopicCards } from "./TopicCards";
@@ -17,15 +18,22 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
+const POSTS_PER_CATEGORY = 4;
+
 export function HomeSections() {
   const { data: categories = [], isLoading: categoriesLoading } = useCategories();
+  const categoryIds = categories.map((c) => c.id);
+  const { data: postsByCategoryId = {}, isLoading: categoryPostsLoading } = usePostsForMultipleCategories(
+    categoryIds,
+    POSTS_PER_CATEGORY
+  );
   const { data: posts = [], isLoading: postsLoading } = useFeaturedPosts();
   const { data: author, isLoading: authorLoading } = useAuthor();
 
   const hasCategories = categories.length > 0;
   const hasPosts = posts.length > 0;
   const hasAuthor = !!author;
-  const isLoading = categoriesLoading || postsLoading || authorLoading;
+  const isLoading = categoriesLoading || postsLoading || authorLoading || (hasCategories && categoryPostsLoading);
 
   const hasAnyContent = hasCategories || hasPosts || hasAuthor;
 
@@ -52,9 +60,9 @@ export function HomeSections() {
         </section>
       ) : (
         <>
-          {hasCategories && <TopicCards />}
+          {hasCategories && <TopicCards postsByCategoryId={postsByCategoryId} />}
           {hasPosts && <FeaturedPosts />}
-          {hasCategories && <CategoriesAndSections />}
+          {hasCategories && <CategoriesAndSections postsByCategoryId={postsByCategoryId} />}
           {hasAuthor && <MeetAuthor />}
         </>
       )}

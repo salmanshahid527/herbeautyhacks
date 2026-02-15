@@ -1,6 +1,7 @@
 "use client";
 
 import { useCategories } from "@/hooks/useCategories";
+import type { Post } from "@/hooks/usePosts";
 import { CategorySection } from "./CategorySection";
 
 const sectionTitles: Record<string, string> = {
@@ -13,7 +14,11 @@ const sectionTitles: Record<string, string> = {
   holidays: "Holiday Highlights",
 };
 
-export function CategoriesAndSections() {
+export function CategoriesAndSections({
+  postsByCategoryId = {},
+}: {
+  postsByCategoryId?: Record<number, Post[]>;
+}) {
   const { data: categories = [] } = useCategories();
 
   return (
@@ -25,6 +30,7 @@ export function CategoriesAndSections() {
           sectionTitle={sectionTitles[category.slug] ?? category.title}
           limit={4}
           variant={index % 2 === 0 ? "default" : "alt"}
+          initialPosts={postsByCategoryId[category.id]}
         />
       ))}
     </>

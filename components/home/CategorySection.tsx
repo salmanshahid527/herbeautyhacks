@@ -4,8 +4,8 @@ import Link from "next/link";
 import { SafeImage } from "@/components/ui/safe-image";
 import { usePostsByCategory } from "@/hooks/usePosts";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import type { Category } from "@/hooks/useCategories";
+import type { Post } from "@/hooks/usePosts";
 
 interface CategorySectionProps {
   category: Category;
@@ -13,6 +13,8 @@ interface CategorySectionProps {
   limit?: number;
   /** Alternate background for visual separation (e.g. even/odd) */
   variant?: "default" | "alt";
+  /** Pre-fetched posts (e.g. from batch on home); when set, no per-category request is made */
+  initialPosts?: Post[];
 }
 
 export function CategorySection({
@@ -20,8 +22,13 @@ export function CategorySection({
   sectionTitle,
   limit = 4,
   variant = "default",
+  initialPosts,
 }: CategorySectionProps) {
-  const { data: posts = [] } = usePostsByCategory(category.id, limit);
+  const { data: fetchedPosts = [] } = usePostsByCategory(
+    initialPosts === undefined ? category.id : null,
+    limit
+  );
+  const posts = initialPosts ?? fetchedPosts;
   const title = sectionTitle ?? category.title;
 
   if (posts.length === 0) return null;

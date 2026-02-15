@@ -42,7 +42,7 @@ React Query deduplicates by `queryKey`. These are used in multiple components bu
 
 ## Remaining request counts (typical)
 
-- **Home:** 1 (categories) + 1 (featured posts) + 1 (author) + 1 (site settings) + 6 (topic cards: one `/posts` per category) + N (category sections: one `/posts` per category). No duplicate `/categories` calls.
+- **Home:** 1 (categories) + 1 (featured posts) + 1 (author) + 1 (site settings) + **1** (WordPress `/posts` — one request for recent posts, grouped by category in the hook). No proxy; no per-category requests.
 - **Blog:** 1 (posts) + 1 (categories).
 - **Category archive:** 1 (category by slug) + 1 (posts by slug; one slug lookup then posts).
 - **Single post:** 1 (post by slug).
