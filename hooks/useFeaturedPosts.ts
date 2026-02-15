@@ -28,7 +28,7 @@ async function fetchFeaturedPosts(): Promise<Post[]> {
   try {
     const data = await fetchWp<WpPost[]>(`/posts`, {
       _embed: 1,
-      per_page: 12,
+      per_page: 6,
       orderby: "date",
       order: "desc",
     });

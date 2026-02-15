@@ -7,7 +7,7 @@ import { SafeImage } from "@/components/ui/safe-image";
 import type { Category } from "@/hooks/useCategories";
 
 function CategoryTile({ category, index }: { category: Category; index: number }) {
-  const { data: posts = [] } = usePostsByCategory(category.slug, 1);
+  const { data: posts = [] } = usePostsByCategory(category.id, 1);
   const imageUrl = posts[0]?.featuredImage;
 
   return (

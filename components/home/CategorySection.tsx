@@ -21,7 +21,7 @@ export function CategorySection({
   limit = 4,
   variant = "default",
 }: CategorySectionProps) {
-  const { data: posts = [] } = usePostsByCategory(category.slug, limit);
+  const { data: posts = [] } = usePostsByCategory(category.id, limit);
   const title = sectionTitle ?? category.title;
 
   if (posts.length === 0) return null;

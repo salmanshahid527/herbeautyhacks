@@ -95,6 +95,24 @@ async function fetchPostBySlug(slug: string): Promise<PostDetail | null> {
   }
 }
 
+async function fetchPostsByCategoryId(
+  categoryId: number,
+  limit: number
+): Promise<Post[]> {
+  try {
+    const data = await fetchWp<WpPost[]>(`/posts`, {
+      _embed: 1,
+      categories: categoryId,
+      per_page: limit,
+      orderby: "date",
+      order: "desc",
+    });
+    return (Array.isArray(data) ? data : []).map(mapWpPostToPost);
+  } catch {
+    return [];
+  }
+}
+
 async function fetchPostsByCategoryLimit(
   categorySlug: string,
   limit: number
@@ -104,15 +122,8 @@ async function fetchPostsByCategoryLimit(
       slug: categorySlug,
     });
     const catId = categories[0]?.id;
-    const params: Record<string, string | number> = {
-      _embed: 1,
-      per_page: limit,
-      orderby: "date",
-      order: "desc",
-    };
-    if (catId) params.categories = catId;
-    const data = await fetchWp<WpPost[]>(`/posts`, params);
-    return (Array.isArray(data) ? data : []).map(mapWpPostToPost);
+    if (!catId) return [];
+    return fetchPostsByCategoryId(catId, limit);
   } catch {
     return [];
   }
@@ -134,10 +145,17 @@ export function usePost(slug: string | null) {
   });
 }
 
-export function usePostsByCategory(categorySlug: string | null, limit = 6) {
+export function usePostsByCategory(
+  categorySlugOrId: string | number | null,
+  limit = 6
+) {
+  const byId = typeof categorySlugOrId === "number";
   return useQuery({
-    queryKey: ["posts", "category", categorySlug, limit],
-    queryFn: () => fetchPostsByCategoryLimit(categorySlug!, limit),
-    enabled: !!categorySlug,
+    queryKey: ["posts", "category", categorySlugOrId, limit],
+    queryFn: () =>
+      byId
+        ? fetchPostsByCategoryId(categorySlugOrId as number, limit)
+        : fetchPostsByCategoryLimit(categorySlugOrId as string, limit),
+    enabled: categorySlugOrId !== null && categorySlugOrId !== undefined,
   });
 }

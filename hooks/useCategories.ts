@@ -6,6 +6,7 @@ import type { WpCategory } from "@/lib/wp/types";
 
 export interface Category {
   _id: string;
+  id: number;
   title: string;
   slug: string;
   description?: string;
@@ -15,6 +16,7 @@ export interface Category {
 function mapWpCategoryToCategory(wp: WpCategory): Category {
   return {
     _id: String(wp.id),
+    id: wp.id,
     title: wp.name,
     slug: wp.slug,
     description: wp.description || undefined,
