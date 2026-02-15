@@ -17,16 +17,14 @@ export function MeetAuthor() {
         </h2>
         <Card className="overflow-hidden rounded-2xl border border-border/60 shadow-card-lg bg-card/98 backdrop-blur-sm border-l-4 border-l-primary animate-scale-in">
           <CardContent className="p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center md:items-start">
-            {author.image && (
-              <div className="relative size-32 md:size-40 rounded-full overflow-hidden shrink-0 bg-muted">
-                <SafeImage
-                  src={author.image}
-                  alt={author.name}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            )}
+            <div className="relative size-32 md:size-40 rounded-full overflow-hidden shrink-0 bg-muted">
+              <SafeImage
+                src={author.image ?? "/placeholder.svg"}
+                alt={author.name}
+                fill
+                className="object-cover"
+              />
+            </div>
             <div className="flex-1 text-center md:text-left">
               <h3 className="text-xl font-semibold mb-2">{author.name}</h3>
               {author.bio && (

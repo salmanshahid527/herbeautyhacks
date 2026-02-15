@@ -16,17 +16,13 @@ function CategoryTile({ category, index }: { category: Category; index: number }
       className="group relative block aspect-square w-full overflow-hidden rounded-2xl bg-muted shadow-card hover:shadow-card-lg transition-all duration-300 hover:-translate-y-1 animate-scale-in opacity-0"
       style={{ animationDelay: `${index * 0.08}s`, animationFillMode: "forwards" }}
     >
-      {imageUrl ? (
-        <SafeImage
-          src={imageUrl}
-          alt=""
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
-        />
-      ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-muted/50 to-primary/20" />
-      )}
+      <SafeImage
+        src={imageUrl ?? "/placeholder.svg"}
+        alt=""
+        fill
+        className="object-cover transition-transform duration-300 group-hover:scale-105"
+        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+      />
       <div className="absolute inset-0 bg-black/30 transition-opacity group-hover:bg-black/40" />
       <span className="absolute inset-x-0 bottom-0 p-3 text-center text-sm font-semibold text-white drop-shadow-md">
         {category.title}

@@ -35,16 +35,14 @@ export function AboutContent() {
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center md:items-start">
-        {author.image && (
-          <div className="relative size-40 rounded-full overflow-hidden shrink-0 bg-muted">
-            <Image
-              src={author.image}
-              alt={author.name}
-              fill
-              className="object-cover"
-            />
-          </div>
-        )}
+        <div className="relative size-40 rounded-full overflow-hidden shrink-0 bg-muted">
+          <Image
+            src={author.image ?? "/placeholder.svg"}
+            alt={author.name}
+            fill
+            className="object-cover"
+          />
+        </div>
         <div className="flex-1 text-center md:text-left">
           <h2 className="text-xl font-semibold mb-2">{author.name}</h2>
           {author.bio && (

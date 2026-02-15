@@ -47,18 +47,16 @@ export function CategorySection({
               style={{ animationDelay: `${index * 0.06}s`, animationFillMode: "forwards" }}
             >
               <Card className="overflow-hidden h-full rounded-2xl border border-border/60 bg-card shadow-card hover:shadow-card-lg hover:border-primary/20 hover:-translate-y-0.5 transition-all duration-300">
-                {post.featuredImage && (
-                  <div className="relative aspect-video bg-muted overflow-hidden">
-                    <SafeImage
-                      src={post.featuredImage}
-                      alt=""
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                )}
+                <div className="relative aspect-video bg-muted overflow-hidden">
+                  <SafeImage
+                    src={post.featuredImage ?? "/placeholder.svg"}
+                    alt=""
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
                 <CardContent className="p-4">
                   <h3 className="font-semibold text-sm line-clamp-2 text-foreground group-hover:text-primary transition-colors">{post.title}</h3>
                 </CardContent>

@@ -47,10 +47,9 @@ export function BlogPostView({ slug }: BlogPostViewProps) {
       {post.excerpt && (
         <p className="text-lg text-muted-foreground mb-6">{post.excerpt}</p>
       )}
-      {post.featuredImage && (
-        <div className="relative aspect-video rounded-lg overflow-hidden mb-8 bg-muted">
+      <div className="relative aspect-video rounded-lg overflow-hidden mb-8 bg-muted">
           <SafeImage
-            src={post.featuredImage}
+            src={post.featuredImage ?? "/placeholder.svg"}
             alt=""
             fill
             className="object-cover"
@@ -58,7 +57,6 @@ export function BlogPostView({ slug }: BlogPostViewProps) {
             sizes="(max-width: 800px) 100vw, 800px"
           />
         </div>
-      )}
       <PostContent body={post.body} />
       {post.author && (
         <div className="mt-10 pt-6 border-t border-border">

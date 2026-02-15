@@ -25,18 +25,16 @@ export function FeaturedPosts() {
               style={{ animationDelay: `${index * 0.08}s`, animationFillMode: "forwards" }}
             >
               <Card className="overflow-hidden h-full rounded-2xl border border-border/60 bg-card shadow-card hover:shadow-card-lg hover:border-primary/20 hover:-translate-y-1 transition-all duration-300">
-                {post.featuredImage && (
-                  <div className="relative aspect-video bg-muted overflow-hidden">
-                    <SafeImage
-                      src={post.featuredImage}
-                      alt=""
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-                )}
+                <div className="relative aspect-video bg-muted overflow-hidden">
+                  <SafeImage
+                    src={post.featuredImage ?? "/placeholder.svg"}
+                    alt=""
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
                 <CardContent className="p-5">
                   {post.category && (
                     <Badge className="mb-2 text-xs bg-primary/15 text-primary border-primary/30 hover:bg-primary/25 shadow-sm">
