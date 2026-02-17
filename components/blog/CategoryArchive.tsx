@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { useCategory } from "@/hooks/useCategories";
+import { useCategories } from "@/hooks/useCategories";
 import { usePostsByCategory } from "@/hooks/usePosts";
 import { PostCard } from "./PostCard";
 import { CategoryArchiveSkeleton } from "@/components/skeletons/CategoryArchiveSkeleton";
@@ -15,8 +15,12 @@ interface CategoryArchiveProps {
 }
 
 export function CategoryArchive({ slug }: CategoryArchiveProps) {
-  const { data: category, isLoading: catLoading } = useCategory(slug);
-  const { data: posts = [], isLoading: postsLoading } = usePostsByCategory(slug, 50);
+  const { data: categories = [], isLoading: catLoading } = useCategories();
+  const category = categories.find((c) => c.slug === slug) ?? null;
+  const { data: posts = [], isLoading: postsLoading } = usePostsByCategory(
+    category?.id ?? null,
+    50
+  );
 
   if (catLoading) {
     return <CategoryArchiveSkeleton />;
