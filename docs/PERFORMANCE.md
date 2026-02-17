@@ -40,6 +40,10 @@ React Query deduplicates by `queryKey`. These are used in multiple components bu
 4. **ISR**
    - `revalidate = 60` on relevant pages and `next: { revalidate: 60 }` in `fetchWp` for server-side caching where applicable.
 
+5. **Next.js Link prefetching**
+   - All internal navigation uses `next/link` `<Link>` so Next.js can prefetch route segments when links enter the viewport (default `prefetch={true}` in production).
+   - Blog list category filters and “All” use `<Link prefetch>` so `/blog` and `/blog?category=...` are prefetched for faster transitions.
+
 ## Remaining request counts (typical)
 
 - **Home:** 1 (categories) + 1 (featured posts) + 1 (author) + 1 (site settings) + **1** (WordPress `/posts` — one request for recent posts, grouped by category in the hook). No proxy; no per-category requests.

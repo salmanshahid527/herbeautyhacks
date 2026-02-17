@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePosts } from "@/hooks/usePosts";
 import { useCategories } from "@/hooks/useCategories";
 import { PostCard } from "./PostCard";
@@ -36,7 +37,7 @@ export function PostList() {
       {categories.length > 0 && (
         <div className="flex flex-wrap gap-2">
           <Button variant={!categorySlug ? "default" : "outline"} size="sm" asChild>
-            <a href="/blog">All</a>
+            <Link href="/blog" prefetch>All</Link>
           </Button>
           {categories.map((cat) => (
             <Button
@@ -45,7 +46,9 @@ export function PostList() {
               size="sm"
               asChild
             >
-              <a href={`/blog?category=${cat.slug}`}>{cat.title}</a>
+              <Link href={`/blog?category=${cat.slug}`} prefetch>
+                {cat.title}
+              </Link>
             </Button>
           ))}
         </div>

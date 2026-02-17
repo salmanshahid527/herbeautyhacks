@@ -88,9 +88,9 @@
   max-width: 88rem;
 }
 
-/* Narrower content (e.g. blog listing, 56rem = 896px) */
+/* Narrower content (e.g. blog listing, 64rem = 1024px) */
 .container-narrow {
-  max-width: 56rem;
+  max-width: 64rem;
 }
 
 /* Article body: readable line length (65ch) when needed */

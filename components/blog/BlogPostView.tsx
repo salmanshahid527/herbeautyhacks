@@ -144,7 +144,7 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
             fill
             className="object-cover"
             priority
-            sizes="(max-width: 896px) 100vw, 896px"
+            sizes="(max-width: 1024px) 100vw, 1024px"
           />
         </button>
         <ImageLightbox
