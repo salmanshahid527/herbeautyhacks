@@ -11,7 +11,7 @@ export function FeaturedPosts() {
   if (posts.length === 0) return null;
 
   return (
-    <section className="section-spacing w-full bg-background">
+    <section className="section-spacing w-full border-t border-primary/20 bg-accent/50">
       <div className="container container-wide px-4 mx-auto">
         <h2 className="section-title section-title-center text-2xl md:text-3xl font-bold text-center mb-12 text-foreground animate-fade-in-up">
           Posts you just can&apos;t miss!

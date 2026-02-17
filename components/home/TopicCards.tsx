@@ -49,7 +49,7 @@ export function TopicCards({
   if (displayCategories.length === 0) return null;
 
   return (
-    <section className="section-spacing w-full bg-muted/20">
+    <section className="section-spacing w-full border-t border-primary/20 bg-primary/5">
       <div className="container container-wide px-4 mx-auto">
         <h2 className="section-title section-title-center text-2xl md:text-3xl font-bold text-center mb-10 text-foreground animate-fade-in-up">
           What&apos;s in Store?

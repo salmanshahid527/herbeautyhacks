@@ -1,8 +1,6 @@
 "use client";
 
 import { useAuthor } from "@/hooks/useAuthor";
-import { SearchBar } from "./SearchBar";
-import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { Instagram, Facebook } from "lucide-react";
 
 function PinterestIcon({ className }: { className?: string }) {
@@ -20,8 +18,6 @@ function PinterestIcon({ className }: { className?: string }) {
 
 export function TopBar() {
   const { data: author } = useAuthor();
-  const { data: settings } = useSiteSettings();
-  const placeholder = settings?.searchPlaceholder ?? "Search…";
 
   const pinterestUrl = author?.pinterest ?? "#";
   const instagramUrl = author?.instagram ?? "#";
@@ -58,9 +54,6 @@ export function TopBar() {
           >
             <Facebook className="size-4" />
           </a>
-        </div>
-        <div className="flex items-center">
-          <SearchBar placeholder={placeholder} className="[&_input]:h-8 [&_input]:w-36 [&_input]:text-sm" />
         </div>
       </div>
     </div>

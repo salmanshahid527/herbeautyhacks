@@ -34,7 +34,7 @@ export function CategorySection({
   if (posts.length === 0) return null;
 
   return (
-    <section className={`section-spacing w-full ${variant === "alt" ? "bg-primary-muted/10" : "bg-muted/20"}`}>
+    <section className={`section-spacing w-full border-t border-primary/20 ${variant === "alt" ? "bg-primary-muted/15" : "bg-primary/5"}`}>
       <div className="container container-wide px-4 mx-auto">
         <div className="flex items-center justify-between mb-8">
           <h2 className="section-title text-2xl md:text-3xl font-bold text-foreground animate-fade-in-up">{title}</h2>

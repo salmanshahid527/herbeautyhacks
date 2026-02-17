@@ -17,7 +17,7 @@ export function Hero() {
   const ctaText = settings?.heroCtaText ?? "Pick Your Topic";
 
   return (
-    <section className="relative w-full overflow-hidden bg-white">
+    <section className="relative w-full overflow-hidden border-b border-primary/20 bg-gradient-to-r from-primary/5 via-background to-background">
       <div className="grid min-h-[70vh] w-full grid-cols-1 lg:grid-cols-2">
         {/* Left: copy */}
         <div className="flex flex-col justify-center px-6 py-16 md:px-12 lg:py-24">

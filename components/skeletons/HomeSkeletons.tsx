@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function TopicCardsSkeleton() {
   return (
-    <section className="section-spacing w-full bg-muted/20">
+    <section className="section-spacing w-full border-t border-primary/20 bg-muted/20">
       <div className="container container-wide px-4 mx-auto">
         <Skeleton className="mx-auto mb-10 h-9 w-64 rounded" />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
@@ -19,7 +19,7 @@ export function TopicCardsSkeleton() {
 
 export function FeaturedPostsSkeleton() {
   return (
-    <section className="section-spacing w-full bg-background">
+    <section className="section-spacing w-full border-t border-primary/20 bg-background">
       <div className="container container-wide px-4 mx-auto">
         <Skeleton className="mx-auto mb-12 h-9 w-72 rounded" />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -41,7 +41,7 @@ export function FeaturedPostsSkeleton() {
 
 export function CategorySectionSkeleton() {
   return (
-    <section className="section-spacing w-full bg-muted/20">
+    <section className="section-spacing w-full border-t border-primary/20 bg-muted/20">
       <div className="container container-wide px-4 mx-auto">
         <div className="mb-8 flex items-center justify-between">
           <Skeleton className="h-8 w-48 rounded" />
@@ -64,10 +64,10 @@ export function CategorySectionSkeleton() {
 
 export function MeetAuthorSkeleton() {
   return (
-    <section className="section-spacing w-full bg-muted/40 border-y border-border/50">
+    <section className="section-spacing w-full bg-gradient-to-b from-primary/10 via-primary-muted/20 to-accent/40 border-y border-primary/10">
       <div className="container container-wide px-4 mx-auto">
         <Skeleton className="mx-auto mb-12 h-9 w-56 rounded" />
-        <div className="flex flex-col gap-6 rounded-2xl border border-border/60 bg-card/98 p-6 md:flex-row md:p-8">
+        <div className="flex flex-col gap-6 rounded-2xl border border-primary/20 bg-card/95 p-6 md:flex-row md:p-8">
           <Skeleton className="size-32 shrink-0 rounded-full md:size-40" />
           <div className="flex-1 space-y-3">
             <Skeleton className="h-6 w-40 rounded" />
