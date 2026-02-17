@@ -51,8 +51,8 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true },
   },
   icons: {
-    icon: "/logo-her-beauty-hacks.png",
-    apple: "/logo-her-beauty-hacks.png",
+    icon: "/favicon.png",
+    apple: "/favicon.png",
   },
 };
 

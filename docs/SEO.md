@@ -40,3 +40,28 @@ No trailing slash. Used for sitemap, `robots.txt`, canonical URLs, and Open Grap
 1. Confirm `https://<your-domain>/robots.txt` and `https://<your-domain>/sitemap.xml` load.
 2. Check sitemap includes WordPress posts/categories if the API is reachable.
 3. Use [Google Rich Results Test](https://search.google.com/test/rich-results) or similar to validate JSON-LD.
+
+## Submitting sitemap to search engines
+
+### Google Search Console
+
+1. Go to [Google Search Console](https://search.google.com/search-console)
+2. Add your property (domain or URL prefix)
+3. Verify ownership (DNS, HTML file, or meta tag)
+4. Navigate to **Sitemaps** in the left menu
+5. Enter `https://<your-domain>/sitemap.xml` and click **Submit**
+6. Google will automatically discover updates (sitemap revalidates hourly)
+
+### Bing Webmaster Tools
+
+1. Go to [Bing Webmaster Tools](https://www.bing.com/webmasters)
+2. Add your site and verify ownership
+3. Go to **Sitemaps** → **Submit Sitemap**
+4. Enter `https://<your-domain>/sitemap.xml` and submit
+
+### Additional notes
+
+- The sitemap URL is already declared in `/robots.txt`, so crawlers will find it automatically
+- After submission, search engines typically crawl within a few days
+- Monitor indexing status in Search Console to see which pages are indexed
+- The sitemap auto-updates hourly (`revalidate = 3600`), so new posts appear automatically
