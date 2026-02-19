@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useCategories } from "@/hooks/useCategories";
 import { useNavLinks } from "@/hooks/useNavLinks";
+import type { NavLink } from "@/lib/wp/nav";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -14,7 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { MobileNav } from "./MobileNav";
 
-const defaultNavLinks = [
+const defaultNavLinks: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
@@ -23,11 +24,17 @@ const defaultNavLinks = [
   { label: "Privacy Policy", href: "/privacy" },
 ];
 
-export function Header() {
+interface HeaderProps {
+  /** Server-fetched nav so first paint matches (no flash). */
+  initialNavLinks?: NavLink[];
+}
+
+export function Header({ initialNavLinks }: HeaderProps) {
   const { data: categories = [] } = useCategories();
-  const { data: navLinksFromWp } = useNavLinks();
+  const { data: navLinksFromQuery } = useNavLinks(initialNavLinks ?? null);
   const navLinks =
-    navLinksFromWp && navLinksFromWp.length > 0 ? navLinksFromWp : defaultNavLinks;
+    (navLinksFromQuery && navLinksFromQuery.length > 0 ? navLinksFromQuery : initialNavLinks) ??
+    defaultNavLinks;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-white shadow-sm">

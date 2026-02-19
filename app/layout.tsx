@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/Header";
 import { CategoriesBar } from "@/components/layout/CategoriesBar";
 import { Footer } from "@/components/layout/Footer";
 import { OrganizationWebSiteJsonLd } from "@/components/seo/JsonLd";
+import { getNavLinks } from "@/lib/wp/nav";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -56,11 +57,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const initialNavLinks = await getNavLinks();
+
   return (
     <html lang="en">
       <body
@@ -70,7 +73,7 @@ export default function RootLayout({
         <Providers>
           <div className="flex min-h-screen flex-col">
             <TopBar />
-            <Header />
+            <Header initialNavLinks={initialNavLinks} />
             <CategoriesBar />
             <main className="flex-1 w-full flex flex-col items-center">{children}</main>
             <Footer />
