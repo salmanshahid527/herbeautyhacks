@@ -124,7 +124,7 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
         )}
 
         {(displayPost.excerpt || displayPost.body) && (
-          <p className="mt-4 text-lg text-muted-foreground leading-relaxed max-w-3xl whitespace-normal">
+          <p className="mt-4 text-lg text-muted-foreground leading-relaxed whitespace-normal text-justify">
             {getLeadText(displayPost.excerpt, displayPost.body)}
           </p>
         )}
@@ -152,7 +152,9 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
           onClose={() => setFeaturedPreviewSrc(null)}
         />
 
-        <PostContent body={displayPost.body} />
+        <div className="w-full [&_.prose_p]:text-justify">
+          <PostContent body={displayPost.body} />
+        </div>
 
         {(displayPost.author || displayPost.category) && (
           <div className="mt-12 pt-8 border-t border-border">
