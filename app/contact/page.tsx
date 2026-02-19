@@ -1,4 +1,5 @@
 import { WpPageContent } from "@/components/pages/WpPageContent";
+import { getSiteUrl } from "@/lib/seo";
 import { getPageBySlug } from "@/lib/wp/pages";
 import type { Metadata } from "next";
 
@@ -7,9 +8,14 @@ export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPageBySlug("contact");
+  const url = `${getSiteUrl()}/contact`;
+  const title = page?.title ? `${page.title} | Her Beauty Hacks` : "Contact | Her Beauty Hacks";
+  const description = page?.excerpt ?? "Get in touch with Her Beauty Hacks.";
   return {
-    title: page?.title ? `${page.title} | Her Beauty Hacks` : "Contact | Her Beauty Hacks",
-    description: page?.excerpt ?? "Get in touch with Her Beauty Hacks.",
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { title: page?.title ?? "Contact", description, url, type: "website" },
   };
 }
 

@@ -1,11 +1,21 @@
 import { Suspense } from "react";
 import { PostList } from "@/components/blog/PostList";
 import { PostCardSkeleton } from "@/components/skeletons/PostCardSkeleton";
+import { getSiteUrl } from "@/lib/seo";
 import type { Metadata } from "next";
+
+const blogUrl = `${getSiteUrl()}/blog`;
 
 export const metadata: Metadata = {
   title: "Blog | Her Beauty Hacks",
   description: "Beauty, fashion, skincare, and lifestyle articles.",
+  alternates: { canonical: blogUrl },
+  openGraph: {
+    title: "Blog | Her Beauty Hacks",
+    description: "Beauty, fashion, skincare, and lifestyle articles.",
+    url: blogUrl,
+    type: "website",
+  },
 };
 
 /** ISR: revalidate at most every 60 seconds */

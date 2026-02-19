@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { WpPageContent } from "@/components/pages/WpPageContent";
+import { getSiteUrl } from "@/lib/seo";
 import { getPageBySlug } from "@/lib/wp/pages";
 import type { Metadata } from "next";
 
@@ -9,9 +10,14 @@ export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPageBySlug("shop");
+  const url = `${getSiteUrl()}/shop`;
+  const title = page?.title ? `${page.title} | Her Beauty Hacks` : "Shop | Her Beauty Hacks";
+  const description = page?.excerpt ?? "Shop Her Beauty Hacks.";
   return {
-    title: page?.title ? `${page.title} | Her Beauty Hacks` : "Shop | Her Beauty Hacks",
-    description: page?.excerpt ?? "Shop Her Beauty Hacks.",
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { title: page?.title ?? "Shop", description, url, type: "website" },
   };
 }
 

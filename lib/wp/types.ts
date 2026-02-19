@@ -34,6 +34,7 @@ export interface WpUser {
 export interface WpPage {
   id: number;
   slug: string;
+  menu_order?: number;
   title: { rendered: string };
   content: { rendered: string };
   excerpt: { rendered: string };

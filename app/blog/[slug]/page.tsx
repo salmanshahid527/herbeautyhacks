@@ -15,9 +15,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return { title: "Post | Her Beauty Hacks" };
-  const url = `${getSiteUrl()}/blog/${slug}`;
+  const siteUrl = getSiteUrl();
+  const url = `${siteUrl}/blog/${slug}`;
   const title = post.title ?? "Post";
   const description = post.excerpt ?? undefined;
+  const imageUrl =
+    post.featuredImage?.startsWith("http") === true
+      ? post.featuredImage
+      : post.featuredImage
+        ? `${siteUrl}${post.featuredImage.startsWith("/") ? "" : "/"}${post.featuredImage}`
+        : undefined;
   return {
     title: `${title} | Her Beauty Hacks`,
     description,
@@ -27,6 +34,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       url,
       type: "article",
+      ...(imageUrl && {
+        images: [{ url: imageUrl, width: 1200, height: 630, alt: title }],
+      }),
     },
   };
 }

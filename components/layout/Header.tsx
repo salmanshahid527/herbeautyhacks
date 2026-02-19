@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useCategories } from "@/hooks/useCategories";
-import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { useNavLinks } from "@/hooks/useNavLinks";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -20,12 +20,14 @@ const defaultNavLinks = [
   { label: "About", href: "/about" },
   { label: "Shop", href: "/shop" },
   { label: "Contact", href: "/contact" },
+  { label: "Privacy Policy", href: "/privacy" },
 ];
 
 export function Header() {
   const { data: categories = [] } = useCategories();
-  const { data: settings } = useSiteSettings();
-  const navLinks = settings?.navLinks?.length ? settings.navLinks : defaultNavLinks;
+  const { data: navLinksFromWp } = useNavLinks();
+  const navLinks =
+    navLinksFromWp && navLinksFromWp.length > 0 ? navLinksFromWp : defaultNavLinks;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-white shadow-sm">

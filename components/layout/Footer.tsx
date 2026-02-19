@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
+import { useNavLinks } from "@/hooks/useNavLinks";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { useAuthor } from "@/hooks/useAuthor";
 import { Instagram, Facebook } from "lucide-react";
@@ -14,18 +15,21 @@ function PinterestIcon({ className }: { className?: string }) {
   );
 }
 
-const defaultGoToLinks = [
+const defaultExploreLinks = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
+  { label: "Privacy Policy", href: "/privacy" },
 ];
 
 export function Footer() {
   const { data: categories = [] } = useCategories();
+  const { data: navLinksFromWp } = useNavLinks();
   const { data: settings } = useSiteSettings();
   const { data: author } = useAuthor();
-  const goToLinks = settings?.footerGoToLinks?.length ? settings.footerGoToLinks : defaultGoToLinks;
+  const exploreLinks =
+    navLinksFromWp && navLinksFromWp.length > 0 ? navLinksFromWp : defaultExploreLinks;
   const legalLinks = settings?.footerLegalLinks ?? [];
   const asSeenOn = settings?.asSeenOn ?? [];
 
@@ -103,13 +107,13 @@ export function Footer() {
               </ul>
             </div>
 
-            {/* Go To */}
+            {/* Explore (same WP-driven links as header nav) */}
             <div>
               <h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                 Explore
               </h3>
               <ul className="mt-4 space-y-2.5">
-                {goToLinks.map((link) =>
+                {exploreLinks.map((link) =>
                   link.href ? (
                     <li key={link.href}>
                       <Link

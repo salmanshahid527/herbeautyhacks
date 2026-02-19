@@ -6,6 +6,15 @@ type WpPostStub = { slug: string; date: string };
 type WpCategoryStub = { slug: string };
 type WpPageStub = { slug: string; date: string };
 
+/** WP page slug -> app path (for pages that don't use /slug in the URL). */
+const PAGE_SLUG_TO_PATH: Record<string, string> = {
+  about: "/about",
+  contact: "/contact",
+  shop: "/shop",
+  "privacy-policy": "/privacy",
+  privacy: "/privacy",
+};
+
 export const revalidate = 3600; // 1 hour
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -17,6 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/shop`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/privacy`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
   ];
 
   let posts: MetadataRoute.Sitemap = [];
@@ -49,9 +59,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
     pages = pageList
-      .filter((p) => ["about", "contact", "shop"].includes(p.slug))
+      .filter((p) =>
+        ["about", "contact", "shop", "privacy-policy", "privacy"].includes(p.slug)
+      )
       .map((p) => ({
-        url: `${base}/${p.slug}`,
+        url: `${base}${PAGE_SLUG_TO_PATH[p.slug] ?? `/${p.slug}`}`,
         lastModified: p.date ? new Date(p.date) : new Date(),
         changeFrequency: "monthly" as const,
         priority: 0.6,
@@ -60,5 +72,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // If WP is down, return static routes only
   }
 
-  return [...staticRoutes, ...posts, ...categories, ...pages];
+  // Dedupe by URL (static + WP pages can both list e.g. /about, /privacy)
+  const all = [...staticRoutes, ...posts, ...categories, ...pages];
+  const seen = new Set<string>();
+  return all.filter((entry) => {
+    const key = entry.url;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }

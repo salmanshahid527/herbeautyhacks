@@ -40,6 +40,7 @@ const defaultSettings: SiteSettings = {
     { label: "About", href: "/about" },
     { label: "Shop", href: "/shop" },
     { label: "Contact", href: "/contact" },
+    { label: "Privacy Policy", href: "/privacy" },
   ],
   footerGoToLinks: [
     { label: "Home", href: "/" },
