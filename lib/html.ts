@@ -88,14 +88,21 @@ export function rewriteWpContentImgSrc(html: string): string {
 }
 
 /**
- * Force HTTPS for img src so images load on HTTPS pages (avoids mixed-content blocking).
+ * Force HTTPS for img src and srcset so images load on HTTPS pages (avoids mixed-content blocking).
  * WordPress often returns http:// URLs for media; browsers block them when the page is HTTPS.
+ * srcset can contain multiple URLs (e.g. "http://... 164w, http://... 768w") and all must be HTTPS.
  */
 export function forceHttpsForImgSrc(html: string): string {
   if (!html || typeof html !== "string") return html;
-  return html
+  let out = html
     .replace(/src="http:\/\//gi, 'src="https://')
     .replace(/src='http:\/\//gi, "src='https://");
+  out = out.replace(
+    /srcset=(["'])([^"']*)\1/gi,
+    (_, quote: string, value: string) =>
+      `srcset=${quote}${value.replace(/http:\/\//gi, "https://")}${quote}`
+  );
+  return out;
 }
 
 /**

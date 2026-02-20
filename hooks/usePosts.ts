@@ -56,18 +56,6 @@ async function fetchPostBySlug(slug: string): Promise<PostDetail | null> {
       _embed: 1,
     });
     const wp = Array.isArray(data) ? data[0] : null;
-    if (typeof window !== "undefined" && wp) {
-      const contentRendered = wp.content?.rendered ?? "";
-      const featuredUrl = wp._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
-      console.log("[Blog Post API Response]", {
-        slug,
-        "content.rendered (length)": contentRendered?.length,
-        "content.rendered (first 500 chars)": contentRendered?.slice(0, 500),
-        "featured_media source_url": featuredUrl,
-        imgSrcs: contentRendered?.match(/src=["']([^"']+)["']/gi) ?? [],
-        rawFirstPost: wp,
-      });
-    }
     return wp ? (mapWpPostToPostDetail(wp) as PostDetail) : null;
   } catch {
     return null;
@@ -117,11 +105,14 @@ export function usePosts(options?: { categorySlug?: string }) {
 }
 
 export function usePost(slug: string | null, initialData?: PostDetail | null) {
+  const hasServerData = !!initialData;
   return useQuery({
     queryKey: ["post", slug],
     queryFn: () => fetchPostBySlug(slug!),
     enabled: !!slug,
     initialData: initialData ?? undefined,
+    initialDataUpdatedAt: hasServerData ? Date.now() : undefined,
+    staleTime: hasServerData ? Infinity : 0,
   });
 }
 

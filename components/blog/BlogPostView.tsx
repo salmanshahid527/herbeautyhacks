@@ -65,16 +65,6 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
   const { data: post, isLoading } = usePost(slug, initialPost ?? undefined);
 
   const displayPost = (post ?? initialPost) as PostDetail | undefined;
-  if (typeof window !== "undefined" && displayPost) {
-    const body = displayPost.body ?? "";
-    console.log("[Blog Post View – data used for render]", {
-      slug,
-      bodyLength: body.length,
-      bodyFirst500: body.slice(0, 500),
-      featuredImage: displayPost.featuredImage,
-      imgSrcsInBody: body.match(/src=["']([^"']+)["']/gi) ?? [],
-    });
-  }
   if (initialPost == null && isLoading) {
     return <BlogPostSkeleton />;
   }
