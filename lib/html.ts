@@ -36,6 +36,31 @@ export function decodeHtmlEntities(text: string): string {
   return out;
 }
 
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * Rewrite img src that point at WordPress wp-content to our origin path.
+ * Next.js rewrites /wp-content/* to the WordPress server, so the browser requests
+ * our domain and we proxy — avoids mixed content (HTTP on HTTPS) and CORS on live.
+ */
+export function rewriteWpContentImgSrc(html: string): string {
+  if (!html || typeof html !== "string") return html;
+  const wpUrl =
+    typeof process !== "undefined" && process.env?.NEXT_PUBLIC_WP_URL
+      ? process.env.NEXT_PUBLIC_WP_URL.replace(/\/$/, "")
+      : "";
+  if (!wpUrl) return html;
+  try {
+    const origin = new URL(wpUrl).origin;
+    const prefix = escapeRegex(origin + "/wp-content/");
+    return html.replace(new RegExp(prefix, "gi"), "/wp-content/");
+  } catch {
+    return html;
+  }
+}
+
 /**
  * Force HTTPS for img src so images load on HTTPS pages (avoids mixed-content blocking).
  * WordPress often returns http:// URLs for media; browsers block them when the page is HTTPS.
