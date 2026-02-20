@@ -37,6 +37,17 @@ export function decodeHtmlEntities(text: string): string {
 }
 
 /**
+ * Force HTTPS for img src so images load on HTTPS pages (avoids mixed-content blocking).
+ * WordPress often returns http:// URLs for media; browsers block them when the page is HTTPS.
+ */
+export function forceHttpsForImgSrc(html: string): string {
+  if (!html || typeof html !== "string") return html;
+  return html
+    .replace(/src="http:\/\//gi, 'src="https://')
+    .replace(/src='http:\/\//gi, "src='https://");
+}
+
+/**
  * Minimal HTML sanitizer for prose content (no ESM deps, works in SSR).
  * Strips script, iframe, object, embed, form, and event-handler attributes.
  */

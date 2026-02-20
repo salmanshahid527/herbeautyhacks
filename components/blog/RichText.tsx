@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { decodeHtmlEntities, sanitizeHtmlForProse } from "@/lib/html";
+import { decodeHtmlEntities, forceHttpsForImgSrc, sanitizeHtmlForProse } from "@/lib/html";
 import { ImageLightbox } from "@/components/ui/ImageLightbox";
 
 interface RichTextProps {
@@ -30,7 +30,8 @@ export function RichText({ value }: RichTextProps) {
   if (!value?.trim()) return null;
   const decoded = decodeHtmlEntities(value);
   const sanitized = sanitizeHtmlForProse(decoded);
-  const html = decodeHtmlEntities(sanitized);
+  const withHttps = forceHttpsForImgSrc(sanitized);
+  const html = decodeHtmlEntities(withHttps);
 
   return (
     <>
