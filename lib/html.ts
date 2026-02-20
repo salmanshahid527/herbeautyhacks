@@ -40,6 +40,36 @@ function escapeRegex(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+function getWpContentOrigin(): string | null {
+  try {
+    const wpUrl =
+      typeof process !== "undefined" && process.env?.NEXT_PUBLIC_WP_URL
+        ? process.env.NEXT_PUBLIC_WP_URL.replace(/\/$/, "")
+        : "";
+    if (!wpUrl) return null;
+    return new URL(wpUrl).origin;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Rewrite a single URL: if it points at WordPress wp-content, return same-origin path
+ * so the Next.js rewrite can proxy it. Otherwise return the URL unchanged.
+ */
+export function rewriteWpContentUrl(url: string | null | undefined): string | undefined {
+  if (!url || typeof url !== "string") return undefined;
+  const origin = getWpContentOrigin();
+  if (!origin) return url;
+  const prefix = origin + "/wp-content/";
+  if (url.startsWith(prefix)) return "/wp-content/" + url.slice(prefix.length);
+  if (url.startsWith(origin) && url.includes("/wp-content/")) {
+    const idx = url.indexOf("/wp-content/");
+    return url.slice(idx);
+  }
+  return url;
+}
+
 /**
  * Rewrite img src that point at WordPress wp-content to our origin path.
  * Next.js rewrites /wp-content/* to the WordPress server, so the browser requests
@@ -47,13 +77,9 @@ function escapeRegex(s: string): string {
  */
 export function rewriteWpContentImgSrc(html: string): string {
   if (!html || typeof html !== "string") return html;
-  const wpUrl =
-    typeof process !== "undefined" && process.env?.NEXT_PUBLIC_WP_URL
-      ? process.env.NEXT_PUBLIC_WP_URL.replace(/\/$/, "")
-      : "";
-  if (!wpUrl) return html;
+  const origin = getWpContentOrigin();
+  if (!origin) return html;
   try {
-    const origin = new URL(wpUrl).origin;
     const prefix = escapeRegex(origin + "/wp-content/");
     return html.replace(new RegExp(prefix, "gi"), "/wp-content/");
   } catch {

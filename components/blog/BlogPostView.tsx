@@ -11,7 +11,7 @@ import { PostContent } from "./PostContent";
 import { ShareButtons } from "./ShareButtons";
 import { BlogPostSkeleton } from "@/components/skeletons/BlogPostSkeleton";
 import { ChevronRight } from "lucide-react";
-import { decodeHtmlEntities } from "@/lib/html";
+import { decodeHtmlEntities, rewriteWpContentUrl } from "@/lib/html";
 import type { MappedPostDetail } from "@/lib/wp/post";
 
 /** Strip HTML tags and decode entities for safe plain-text title (avoids DOMPurify/ESM on SSR). */
@@ -66,6 +66,16 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
   const { data: post, isLoading } = usePost(slug, initialPost ?? undefined);
 
   const displayPost = (post ?? initialPost) as PostDetail | undefined;
+  if (typeof window !== "undefined" && displayPost) {
+    const body = displayPost.body ?? "";
+    console.log("[Blog Post View – data used for render]", {
+      slug,
+      bodyLength: body.length,
+      bodyFirst500: body.slice(0, 500),
+      featuredImage: displayPost.featuredImage,
+      imgSrcsInBody: body.match(/src=["']([^"']+)["']/gi) ?? [],
+    });
+  }
   if (initialPost == null && isLoading) {
     return <BlogPostSkeleton />;
   }
@@ -74,6 +84,10 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
     notFound();
   }
 
+  const featuredImageSrc =
+    rewriteWpContentUrl(displayPost.featuredImage) ??
+    displayPost.featuredImage ??
+    "/placeholder.svg";
   const hasByline = displayPost.author?.name || displayPost.publishedAt;
 
   return (
@@ -133,13 +147,13 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
           type="button"
           className="relative aspect-video w-full rounded-xl overflow-hidden mt-8 mb-10 bg-muted shadow-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           onClick={() => {
-            const src = displayPost.featuredImage;
-            if (src && src !== "/placeholder.svg") setFeaturedPreviewSrc(src);
+            if (featuredImageSrc && featuredImageSrc !== "/placeholder.svg")
+              setFeaturedPreviewSrc(featuredImageSrc);
           }}
           aria-label="View featured image"
         >
           <SafeImage
-            src={displayPost.featuredImage ?? "/placeholder.svg"}
+            src={featuredImageSrc}
             alt=""
             fill
             className="object-cover"
