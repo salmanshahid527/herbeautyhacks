@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { SafeImage } from "@/components/ui/safe-image";
 import { ImageLightbox } from "@/components/ui/ImageLightbox";
 import { notFound } from "next/navigation";
 import { usePost } from "@/hooks/usePosts";
@@ -11,7 +10,7 @@ import { PostContent } from "./PostContent";
 import { ShareButtons } from "./ShareButtons";
 import { BlogPostSkeleton } from "@/components/skeletons/BlogPostSkeleton";
 import { ChevronRight } from "lucide-react";
-import { decodeHtmlEntities, rewriteWpContentUrl } from "@/lib/html";
+import { decodeHtmlEntities } from "@/lib/html";
 import type { MappedPostDetail } from "@/lib/wp/post";
 
 /** Strip HTML tags and decode entities for safe plain-text title (avoids DOMPurify/ESM on SSR). */
@@ -85,9 +84,7 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
   }
 
   const featuredImageSrc =
-    rewriteWpContentUrl(displayPost.featuredImage) ??
-    displayPost.featuredImage ??
-    "/placeholder.svg";
+    displayPost.featuredImage ?? "/placeholder.svg";
   const hasByline = displayPost.author?.name || displayPost.publishedAt;
 
   return (
@@ -152,13 +149,16 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
           }}
           aria-label="View featured image"
         >
-          <SafeImage
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={featuredImageSrc}
             alt=""
-            fill
-            className="object-cover"
-            priority
-            sizes="(max-width: 1024px) 100vw, 1024px"
+            className="absolute inset-0 h-full w-full object-cover"
+            loading="eager"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/placeholder.svg";
+            }}
           />
         </button>
         <ImageLightbox

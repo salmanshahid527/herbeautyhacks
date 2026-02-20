@@ -4,7 +4,6 @@ import { useRef, useEffect, useState } from "react";
 import {
   decodeHtmlEntities,
   forceHttpsForImgSrc,
-  rewriteWpContentImgSrc,
   sanitizeHtmlForProse,
 } from "@/lib/html";
 import { ImageLightbox } from "@/components/ui/ImageLightbox";
@@ -35,8 +34,7 @@ export function RichText({ value }: RichTextProps) {
   if (!value?.trim()) return null;
   const decoded = decodeHtmlEntities(value);
   const sanitized = sanitizeHtmlForProse(decoded);
-  const withProxy = rewriteWpContentImgSrc(sanitized);
-  const withHttps = forceHttpsForImgSrc(withProxy);
+  const withHttps = forceHttpsForImgSrc(sanitized);
   const html = decodeHtmlEntities(withHttps);
 
   return (
