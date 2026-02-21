@@ -44,7 +44,11 @@ export function RichText({ value }: RichTextProps) {
         className="prose max-w-none [&_img]:cursor-pointer"
         dangerouslySetInnerHTML={{ __html: html }}
       />
-      <ImageLightbox src={previewSrc} onClose={() => setPreviewSrc(null)} />
+      <ImageLightbox
+        src={previewSrc}
+        onClose={() => setPreviewSrc(null)}
+        context="article"
+      />
     </>
   );
 }

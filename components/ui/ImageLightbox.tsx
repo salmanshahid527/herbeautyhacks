@@ -3,15 +3,18 @@
 import { useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
+import { trackOpenLightbox } from "@/lib/analytics";
 
 interface ImageLightboxProps {
   /** When null/undefined, nothing is rendered. */
   src: string | null | undefined;
   onClose: () => void;
+  /** Optional: "featured" for hero image, "article" for in-content images. */
+  context?: "featured" | "article";
 }
 
 /** Full-screen image preview. Rendered in a portal so it sits above header/sidebars. */
-export function ImageLightbox({ src, onClose }: ImageLightboxProps) {
+export function ImageLightbox({ src, onClose, context }: ImageLightboxProps) {
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -21,6 +24,7 @@ export function ImageLightbox({ src, onClose }: ImageLightboxProps) {
 
   useEffect(() => {
     if (!src) return;
+    trackOpenLightbox(context);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", handleKeyDown);
@@ -28,7 +32,7 @@ export function ImageLightbox({ src, onClose }: ImageLightboxProps) {
       document.body.style.overflow = prev;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [src, handleKeyDown]);
+  }, [src, context, handleKeyDown]);
 
   if (!src || typeof document === "undefined") return null;
 

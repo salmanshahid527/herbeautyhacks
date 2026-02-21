@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Plus_Jakarta_Sans, Dancing_Script } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
@@ -64,11 +65,26 @@ export default async function RootLayout({
 }>) {
   const initialNavLinks = await getNavLinks();
 
+  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "G-YZLH5CBG9E";
+
   return (
     <html lang="en">
       <body
         className={`${plusJakartaSans.variable} ${dancingScript.variable} font-sans antialiased`}
       >
+        {/* Google tag (gtag.js) - loads on every page */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${gaId}');
+          `}
+        </Script>
         <OrganizationWebSiteJsonLd />
         <Providers>
           <div className="flex min-h-screen flex-col">

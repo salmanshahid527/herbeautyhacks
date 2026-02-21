@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Link2, Check } from "lucide-react";
+import { trackShare } from "@/lib/analytics";
 
 interface ShareButtonsProps {
   title: string;
@@ -24,6 +25,7 @@ export function ShareButtons({ title, url: urlProp }: ShareButtonsProps) {
   const shareLinks = [
     {
       label: "Share on X",
+      method: "x",
       href: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
       icon: (
         <svg className="size-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
@@ -33,6 +35,7 @@ export function ShareButtons({ title, url: urlProp }: ShareButtonsProps) {
     },
     {
       label: "Share on Facebook",
+      method: "facebook",
       href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
       icon: (
         <svg className="size-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
@@ -42,6 +45,7 @@ export function ShareButtons({ title, url: urlProp }: ShareButtonsProps) {
     },
     {
       label: "Share on LinkedIn",
+      method: "linkedin",
       href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
       icon: (
         <svg className="size-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
@@ -51,6 +55,7 @@ export function ShareButtons({ title, url: urlProp }: ShareButtonsProps) {
     },
     {
       label: "Share on WhatsApp",
+      method: "whatsapp",
       href: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`,
       icon: (
         <svg className="size-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
@@ -64,6 +69,7 @@ export function ShareButtons({ title, url: urlProp }: ShareButtonsProps) {
     if (typeof navigator?.clipboard === "undefined") return;
     try {
       await navigator.clipboard.writeText(url);
+      trackShare("copy_link");
       setCopied(true);
       const t = setTimeout(() => setCopied(false), 2000);
       return () => clearTimeout(t);
@@ -76,7 +82,7 @@ export function ShareButtons({ title, url: urlProp }: ShareButtonsProps) {
     <div className="mt-10 pt-8 border-t border-border">
       <p className="text-sm font-medium text-foreground mb-3">Share this article</p>
       <div className="flex flex-wrap items-center gap-2">
-        {shareLinks.map(({ label, href, icon }) => (
+        {shareLinks.map(({ label, method, href, icon }) => (
           <a
             key={label}
             href={href}
@@ -84,6 +90,7 @@ export function ShareButtons({ title, url: urlProp }: ShareButtonsProps) {
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center size-10 rounded-full bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             aria-label={label}
+            onClick={() => trackShare(method)}
           >
             {icon}
           </a>

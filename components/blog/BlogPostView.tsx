@@ -154,6 +154,7 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
         <ImageLightbox
           src={featuredPreviewSrc}
           onClose={() => setFeaturedPreviewSrc(null)}
+          context="featured"
         />
 
         <div className="w-full [&_.prose_p]:text-justify">
