@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePosts } from "@/hooks/usePosts";
 import { useCategories } from "@/hooks/useCategories";
+import { trackCategoryClick } from "@/lib/analytics";
 import { PostCard } from "./PostCard";
 import { PostCardSkeleton } from "@/components/skeletons/PostCardSkeleton";
 import { Button } from "@/components/ui/button";
@@ -46,7 +47,11 @@ export function PostList() {
               size="sm"
               asChild
             >
-              <Link href={`/blog?category=${cat.slug}`} prefetch>
+              <Link
+                href={`/blog?category=${cat.slug}`}
+                prefetch
+                onClick={() => trackCategoryClick(cat.slug, cat.title)}
+              >
                 {cat.title}
               </Link>
             </Button>

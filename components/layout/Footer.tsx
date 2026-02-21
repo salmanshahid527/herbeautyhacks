@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
+import { trackCategoryClick } from "@/lib/analytics";
 import { useNavLinks } from "@/hooks/useNavLinks";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { useAuthor } from "@/hooks/useAuthor";
@@ -99,6 +100,7 @@ export function Footer() {
                     <Link
                       href={`/category/${cat.slug}`}
                       className="text-sm text-foreground/80 transition-colors hover:text-primary"
+                      onClick={() => trackCategoryClick(cat.slug, cat.title)}
                     >
                       {cat.title}
                     </Link>

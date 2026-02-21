@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
 import { Skeleton } from "@/components/ui/skeleton";
+import { trackCategoryClick } from "@/lib/analytics";
 
 const BAR_MIN_HEIGHT = "2.75rem"; /* py-3 + one line of text */
 
@@ -30,6 +31,7 @@ export function CategoriesBar() {
                 <Link
                   href={`/category/${cat.slug}`}
                   className="hover:underline underline-offset-4 uppercase tracking-wide"
+                  onClick={() => trackCategoryClick(cat.slug, cat.title)}
                 >
                   {cat.title}
                 </Link>

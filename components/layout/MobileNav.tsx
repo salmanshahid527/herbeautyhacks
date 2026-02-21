@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Menu } from "lucide-react";
+import { trackCategoryClick } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -52,6 +53,7 @@ export function MobileNav({ navLinks, categories }: MobileNavProps) {
                   key={cat._id}
                   href={`/category/${cat.slug}`}
                   className="text-base text-foreground hover:text-primary pl-2"
+                  onClick={() => trackCategoryClick(cat.slug, cat.title)}
                 >
                   {cat.title}
                 </Link>

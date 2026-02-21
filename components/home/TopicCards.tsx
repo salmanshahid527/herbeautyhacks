@@ -5,6 +5,7 @@ import { useCategories } from "@/hooks/useCategories";
 import { SafeImage } from "@/components/ui/safe-image";
 import type { Category } from "@/hooks/useCategories";
 import type { Post } from "@/hooks/usePosts";
+import { trackCategoryClick } from "@/lib/analytics";
 
 function CategoryTile({
   category,
@@ -22,6 +23,7 @@ function CategoryTile({
       href={`/category/${category.slug}`}
       className="group relative block aspect-square w-full overflow-hidden rounded-2xl bg-muted shadow-card hover:shadow-card-lg transition-all duration-300 hover:-translate-y-1 animate-scale-in opacity-0"
       style={{ animationDelay: `${index * 0.08}s`, animationFillMode: "forwards" }}
+      onClick={() => trackCategoryClick(category.slug, category.title)}
     >
       <SafeImage
         src={imageUrl ?? "/placeholder.svg"}

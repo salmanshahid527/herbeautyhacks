@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { SafeImage } from "@/components/ui/safe-image";
+import { trackCategoryClick } from "@/lib/analytics";
 import { usePostsByCategory } from "@/hooks/usePosts";
 import { Card, CardContent } from "@/components/ui/card";
 import type { Category } from "@/hooks/useCategories";
@@ -41,6 +42,7 @@ export function CategorySection({
           <Link
             href={`/category/${category.slug}`}
             className="text-sm font-semibold text-primary hover:underline underline-offset-4 transition-opacity hover:opacity-80"
+            onClick={() => trackCategoryClick(category.slug, category.title)}
           >
             See All →
           </Link>

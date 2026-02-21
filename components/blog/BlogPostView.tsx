@@ -11,6 +11,7 @@ import { ShareButtons } from "./ShareButtons";
 import { BlogPostSkeleton } from "@/components/skeletons/BlogPostSkeleton";
 import { ChevronRight } from "lucide-react";
 import { decodeHtmlEntities } from "@/lib/html";
+import { trackCategoryClick } from "@/lib/analytics";
 import type { MappedPostDetail } from "@/lib/wp/post";
 
 /** Strip HTML tags and decode entities for safe plain-text title (avoids DOMPurify/ESM on SSR). */
@@ -95,6 +96,12 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
                   <Link
                     href={`/category/${displayPost.category.slug}`}
                     className="hover:text-foreground hover:underline"
+                    onClick={() =>
+                      trackCategoryClick(
+                        displayPost.category!.slug,
+                        displayPost.category!.title
+                      )
+                    }
                   >
                     {displayPost.category.title}
                   </Link>
@@ -173,6 +180,12 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
                 <Link
                   href={`/category/${displayPost.category.slug}`}
                   className="text-primary hover:underline"
+                  onClick={() =>
+                    trackCategoryClick(
+                      displayPost.category!.slug,
+                      displayPost.category!.title
+                    )
+                  }
                 >
                   More in {displayPost.category.title}
                 </Link>
