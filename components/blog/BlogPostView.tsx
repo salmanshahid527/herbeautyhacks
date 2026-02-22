@@ -154,6 +154,7 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
             className="object-contain"
             sizes="(min-width: 1200px) 800px, 100vw"
             preload
+            loading="eager"
           />
         </button>
         <ImageLightbox

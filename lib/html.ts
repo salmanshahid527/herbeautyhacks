@@ -184,14 +184,14 @@ export function forceHttpsForImgSrc(html: string): string {
 }
 
 /**
- * Add loading="lazy" to img tags that don't have a loading attribute.
- * Reduces initial payload and speeds up LCP for the first image.
+ * Add loading="eager" to img tags that don't have a loading attribute.
+ * All prose images load with the page (no lazy loading).
  */
 export function addLazyLoadingToProseImages(html: string): string {
   if (!html || typeof html !== "string") return html;
   return html.replace(
     /<img(?=\s)(?![^>]*\sloading=)([^>]*)>/gi,
-    (_, rest) => `<img loading="lazy"${rest}>`
+    (_, rest) => `<img loading="eager"${rest}>`
   );
 }
 
