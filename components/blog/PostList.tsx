@@ -8,12 +8,22 @@ import { PostCard } from "./PostCard";
 import { PostCardSkeleton } from "@/components/skeletons/PostCardSkeleton";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
+import type { Post } from "@/hooks/usePosts";
+import type { Category } from "@/hooks/useCategories";
 
-export function PostList() {
+interface PostListProps {
+  initialPosts?: Post[];
+  initialCategories?: Category[];
+}
+
+export function PostList({ initialPosts, initialCategories }: PostListProps = {}) {
   const searchParams = useSearchParams();
   const categorySlug = searchParams.get("category") ?? undefined;
-  const { data: posts = [], isLoading, isError } = usePosts({ categorySlug });
-  const { data: categories = [] } = useCategories();
+  const { data: posts = [], isLoading, isError } = usePosts({
+    categorySlug,
+    initialData: categorySlug == null ? initialPosts : undefined,
+  });
+  const { data: categories = [] } = useCategories(initialCategories);
 
   if (isLoading) {
     return (
@@ -62,8 +72,8 @@ export function PostList() {
         <p className="py-12 text-center text-muted-foreground">No posts yet.</p>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post) => (
-            <PostCard key={post._id} post={post} />
+          {posts.map((post, index) => (
+            <PostCard key={post._id} post={post} priority={index < 3} />
           ))}
         </div>
       )}

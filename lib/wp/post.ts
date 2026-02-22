@@ -5,10 +5,11 @@ import {
   sanitizeHtmlForProse,
 } from "@/lib/html";
 import { fetchWp } from "@/lib/wp/client";
-import { mapWpPostToPostDetail } from "@/lib/wp/map";
+import { mapWpPostToPost, mapWpPostToPostDetail } from "@/lib/wp/map";
 import type { WpPost } from "@/lib/wp/types";
 
 export type { MappedPostDetail } from "@/lib/wp/map";
+export type { MappedPost } from "@/lib/wp/map";
 
 /** Process post body: sanitize, fix URLs to site domain, and force HTTPS for images. */
 function processPostBody(html: string | undefined): string | undefined {
@@ -29,5 +30,20 @@ export const getPostBySlug = cache(async function getPostBySlug(slug: string) {
     return post;
   } catch {
     return null;
+  }
+});
+
+/** Fetch posts for blog listing (server-only). Cached per request. */
+export const getPostsForBlog = cache(async function getPostsForBlog() {
+  try {
+    const data = await fetchWp<WpPost[]>("/posts", {
+      _embed: 1,
+      per_page: 50,
+      orderby: "date",
+      order: "desc",
+    });
+    return (Array.isArray(data) ? data : []).map((wp) => mapWpPostToPost(wp));
+  } catch {
+    return [];
   }
 });

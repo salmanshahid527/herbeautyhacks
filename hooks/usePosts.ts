@@ -96,11 +96,17 @@ async function fetchPostsByCategoryLimit(
   }
 }
 
-export function usePosts(options?: { categorySlug?: string }) {
+export function usePosts(options?: { categorySlug?: string; initialData?: Post[] }) {
   const categorySlug = options?.categorySlug;
+  const initialData = options?.initialData;
+  const hasInitial =
+    categorySlug == null && initialData !== undefined && initialData !== null;
   return useQuery({
     queryKey: ["posts", categorySlug ?? "all"],
     queryFn: () => fetchPosts(categorySlug),
+    initialData: hasInitial ? initialData : undefined,
+    initialDataUpdatedAt: hasInitial ? Date.now() : undefined,
+    staleTime: hasInitial ? Infinity : 0,
   });
 }
 

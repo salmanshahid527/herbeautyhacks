@@ -50,10 +50,14 @@ async function fetchCategoryBySlug(slug: string): Promise<Category | null> {
   }
 }
 
-export function useCategories() {
+export function useCategories(initialData?: Category[]) {
+  const hasInitial = initialData !== undefined && initialData !== null;
   return useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategories,
+    initialData: hasInitial ? initialData : undefined,
+    initialDataUpdatedAt: hasInitial ? Date.now() : undefined,
+    staleTime: hasInitial ? Infinity : 0,
   });
 }
 
