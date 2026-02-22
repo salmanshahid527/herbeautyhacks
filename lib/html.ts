@@ -11,7 +11,7 @@ export function decodeHtmlEntities(text: string): string {
   if (typeof document !== "undefined") {
     const div = document.createElement("div");
     div.innerHTML = text;
-    return div.innerHTML;
+    return div.textContent ?? div.innerText ?? "";
   }
 
   let out = text;
