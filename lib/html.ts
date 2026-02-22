@@ -91,27 +91,39 @@ function getSiteOrigin(): string {
 /** Known WordPress backend hostnames to always rewrite to the site (fallback if env differs). */
 const KNOWN_WP_HOSTS = ["lightskyblue-armadillo-384014.hostingersite.com"];
 
+/** Site hostname only (e.g. herbeautyhacks.com) for replacing bare hostname in text. */
+function getSiteHostname(): string {
+  try {
+    return new URL(getSiteOrigin()).hostname;
+  } catch {
+    return "herbeautyhacks.com";
+  }
+}
+
 /**
  * Replace WordPress backend URL with the frontend site URL in content.
- * Fixes links in post body that WordPress rewrote to the WP domain (e.g. herbeautyhacks.com → hostingersite.com).
- * Replaces both https and http variants of the WP origin so all links point to the site.
+ * Fixes links and plain-text hostnames (e.g. "At lightskyblue-... we believe" → "At herbeautyhacks.com we believe").
+ * Replaces: full origins (https/http), protocol-relative (//host), and bare hostname in text.
  */
 export function rewriteWpUrlsToSiteUrl(html: string): string {
   if (!html || typeof html !== "string") return html;
   const siteOrigin = getSiteOrigin();
-  let out = html;
+  const siteHostname = getSiteHostname();
+  const hostsToReplace = new Set<string>(KNOWN_WP_HOSTS);
   try {
     const wpOrigin = getWpContentOrigin();
     if (wpOrigin && wpOrigin !== siteOrigin) {
       const hostname = new URL(wpOrigin).hostname;
-      out = out.replace(new RegExp(escapeRegex(wpOrigin), "gi"), siteOrigin);
-      const httpOrigin = `http://${hostname}`;
-      if (httpOrigin !== wpOrigin)
-        out = out.replace(new RegExp(escapeRegex(httpOrigin), "gi"), siteOrigin);
+      hostsToReplace.add(hostname);
     }
-    for (const host of KNOWN_WP_HOSTS) {
+    let out = html;
+    for (const host of hostsToReplace) {
       out = out.replace(new RegExp(escapeRegex(`https://${host}`), "gi"), siteOrigin);
       out = out.replace(new RegExp(escapeRegex(`http://${host}`), "gi"), siteOrigin);
+      out = out.replace(new RegExp(escapeRegex(`//${host}`), "gi"), `//${siteHostname}`);
+    }
+    for (const host of hostsToReplace) {
+      out = out.replace(new RegExp(escapeRegex(host), "gi"), siteHostname);
     }
     return out;
   } catch {

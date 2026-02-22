@@ -19,11 +19,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const page = await getPageBySlug("contact");
   return (
     <div className="container container-wide px-4 py-10 mx-auto w-full min-h-[50vh] bg-muted/20">
       <WpPageContent
         slug="contact"
+        initialPage={page}
         emptyMessage={
           <p className="text-muted-foreground">
             We&apos;d love to hear from you. Add a &quot;Contact&quot; page in WordPress to show

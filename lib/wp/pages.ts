@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { decodeHtmlEntities, rewriteWpUrlsToSiteUrl } from "@/lib/html";
 import { fetchWp } from "@/lib/wp/client";
 import type { WpPage } from "@/lib/wp/types";
@@ -12,6 +13,7 @@ export interface Page {
 
 /** Slug aliases: try these if the primary slug returns no page (e.g. WP uses "contact-us" for Contact). */
 const SLUG_FALLBACKS: Record<string, string[]> = {
+  about: ["about-us"],
   contact: ["contact-us"],
 };
 
@@ -36,7 +38,8 @@ async function fetchPageBySlug(slug: string): Promise<Page | null> {
   }
 }
 
-export async function getPageBySlug(slug: string): Promise<Page | null> {
+/** Cached per request so generateMetadata + page can share one fetch. */
+export const getPageBySlug = cache(async function getPageBySlug(slug: string): Promise<Page | null> {
   const page = await fetchPageBySlug(slug);
   if (page) return page;
   const fallbacks = SLUG_FALLBACKS[slug];
@@ -46,4 +49,4 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
     if (p) return p;
   }
   return null;
-}
+});

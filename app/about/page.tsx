@@ -20,11 +20,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const page = await getPageBySlug("about");
   return (
     <div className="container container-wide px-4 py-10 mx-auto w-full space-y-12 min-h-[50vh] bg-muted/20">
       <WpPageContent
         slug="about"
+        initialPage={page}
         emptyMessage={
           <>
             <h1 className="text-3xl font-bold mb-8">About</h1>

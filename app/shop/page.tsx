@@ -21,11 +21,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function ShopPage() {
+export default async function ShopPage() {
+  const page = await getPageBySlug("shop");
   return (
     <div className="container container-wide px-4 py-10 mx-auto w-full space-y-8 min-h-[50vh] bg-muted/20">
       <WpPageContent
         slug="shop"
+        initialPage={page}
         emptyMessage={
           <>
             <p className="text-muted-foreground mb-8">

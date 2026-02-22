@@ -1,19 +1,22 @@
 "use client";
 
 import { usePage } from "@/hooks/usePage";
+import type { Page } from "@/lib/wp/pages";
 import { RichText } from "@/components/blog/RichText";
 import { PageContentSkeleton } from "@/components/skeletons/PageContentSkeleton";
 
 interface WpPageContentProps {
   slug: string;
+  /** Server-fetched page so first paint shows correct content (no flash/wrong URL). */
+  initialPage?: Page | null;
   /** Fallback when no page is found (e.g. "Coming soon") */
   emptyMessage?: React.ReactNode;
   /** Optional class for the wrapper */
   className?: string;
 }
 
-export function WpPageContent({ slug, emptyMessage, className }: WpPageContentProps) {
-  const { data: page, isLoading, isError } = usePage(slug);
+export function WpPageContent({ slug, initialPage, emptyMessage, className }: WpPageContentProps) {
+  const { data: page, isLoading, isError } = usePage(slug, initialPage);
 
   if (isLoading) {
     return (

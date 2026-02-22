@@ -21,11 +21,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const page = await getPageBySlug("privacy-policy");
   return (
     <div className="container container-wide px-4 py-10 mx-auto w-full min-h-[50vh] bg-muted/20">
       <WpPageContent
         slug="privacy-policy"
+        initialPage={page}
         emptyMessage={
           <>
             <h1 className="text-3xl font-bold mb-8">Privacy Policy</h1>
