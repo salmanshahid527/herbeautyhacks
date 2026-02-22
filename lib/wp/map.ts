@@ -27,7 +27,7 @@ export function mapWpPostToPost(wp: WpPost): MappedPost {
   const featuredMedia = wp._embedded?.["wp:featuredmedia"]?.[0];
   return {
     _id: String(wp.id),
-    title: wp.title?.rendered ?? "",
+    title: decodeHtmlEntities(stripHtml(wp.title?.rendered ?? "")),
     slug: wp.slug,
     excerpt: decodeHtmlEntities(stripHtml(wp.excerpt?.rendered ?? "")),
     category: category ? { title: category.name, slug: category.slug } : undefined,
