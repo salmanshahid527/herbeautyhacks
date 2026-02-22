@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { rewriteWpUrlsToSiteUrl } from "@/lib/html";
 import { fetchWp } from "@/lib/wp/client";
 import type { WpCategory } from "@/lib/wp/types";
 
@@ -14,12 +15,15 @@ export interface Category {
 }
 
 function mapWpCategoryToCategory(wp: WpCategory): Category {
+  const description = wp.description
+    ? rewriteWpUrlsToSiteUrl(wp.description)
+    : undefined;
   return {
     _id: String(wp.id),
     id: wp.id,
     title: wp.name,
     slug: wp.slug,
-    description: wp.description || undefined,
+    description,
   };
 }
 

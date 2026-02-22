@@ -1,4 +1,4 @@
-import { decodeHtmlEntities } from "@/lib/html";
+import { decodeHtmlEntities, rewriteWpUrlsToSiteUrl } from "@/lib/html";
 import { fetchWp } from "@/lib/wp/client";
 import type { WpPage } from "@/lib/wp/types";
 
@@ -55,7 +55,7 @@ export async function getNavLinks(): Promise<NavLink[]> {
       if (seenPath.has(path)) continue;
       seenPath.add(path);
       ordered.push({
-        label: decodeHtmlEntities(stripHtml(p.title?.rendered ?? p.slug)),
+        label: rewriteWpUrlsToSiteUrl(decodeHtmlEntities(stripHtml(p.title?.rendered ?? p.slug))),
         href: path,
       });
     }

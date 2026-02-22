@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { rewriteWpUrlsToSiteUrl } from "@/lib/html";
 import { fetchWp } from "@/lib/wp/client";
 import type { WpUser } from "@/lib/wp/types";
 
@@ -19,10 +20,13 @@ async function fetchAuthor(): Promise<Author | null> {
     const data = await fetchWp<WpUser[]>(`/users`, { per_page: 1 });
     const user = Array.isArray(data) ? data[0] : null;
     if (!user) return null;
+    const bio = user.description
+      ? rewriteWpUrlsToSiteUrl(user.description)
+      : undefined;
     return {
       _id: String(user.id),
       name: user.name,
-      bio: user.description || undefined,
+      bio,
       image: user.avatar_urls?.[96],
     };
   } catch {

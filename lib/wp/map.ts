@@ -1,4 +1,4 @@
-import { decodeHtmlEntities } from "@/lib/html";
+import { decodeHtmlEntities, rewriteWpUrlsToSiteUrl } from "@/lib/html";
 import type { WpPost } from "@/lib/wp/types";
 
 export interface MappedPostCategory {
@@ -25,11 +25,13 @@ function stripHtml(html: string): string {
 export function mapWpPostToPost(wp: WpPost): MappedPost {
   const category = wp._embedded?.["wp:term"]?.[0]?.[0];
   const featuredMedia = wp._embedded?.["wp:featuredmedia"]?.[0];
+  const title = rewriteWpUrlsToSiteUrl(decodeHtmlEntities(stripHtml(wp.title?.rendered ?? "")));
+  const excerpt = rewriteWpUrlsToSiteUrl(decodeHtmlEntities(stripHtml(wp.excerpt?.rendered ?? "")));
   return {
     _id: String(wp.id),
-    title: decodeHtmlEntities(stripHtml(wp.title?.rendered ?? "")),
+    title,
     slug: wp.slug,
-    excerpt: decodeHtmlEntities(stripHtml(wp.excerpt?.rendered ?? "")),
+    excerpt,
     category: category ? { title: category.name, slug: category.slug } : undefined,
     featuredImage: featuredMedia?.source_url,
     featured: !!wp.sticky,
@@ -46,9 +48,10 @@ export interface MappedPostDetail extends MappedPost {
 export function mapWpPostToPostDetail(wp: WpPost): MappedPostDetail {
   const post = mapWpPostToPost(wp);
   const author = wp._embedded?.author?.[0];
+  const rawBody = wp.content?.rendered ?? "";
   return {
     ...post,
-    body: wp.content?.rendered,
+    body: rawBody ? rewriteWpUrlsToSiteUrl(rawBody) : undefined,
     author: author
       ? { name: author.name, image: author.avatar_urls?.[96] }
       : undefined,
