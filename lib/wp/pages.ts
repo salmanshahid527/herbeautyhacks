@@ -1,3 +1,4 @@
+import { decodeHtmlEntities } from "@/lib/html";
 import { fetchWp } from "@/lib/wp/client";
 import type { WpPage } from "@/lib/wp/types";
 
@@ -14,12 +15,13 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
     const data = await fetchWp<WpPage[]>(`/pages`, { slug, per_page: 1 });
     const wp = Array.isArray(data) ? data[0] : null;
     if (!wp) return null;
+    const strip = (html: string) => html.replace(/<[^>]*>/g, "").trim();
     return {
       _id: String(wp.id),
       slug: wp.slug,
-      title: wp.title?.rendered?.replace(/<[^>]*>/g, "").trim() ?? "",
+      title: decodeHtmlEntities(strip(wp.title?.rendered ?? "")),
       content: wp.content?.rendered ?? "",
-      excerpt: wp.excerpt?.rendered?.replace(/<[^>]*>/g, "").trim() ?? "",
+      excerpt: decodeHtmlEntities(strip(wp.excerpt?.rendered ?? "")),
     };
   } catch {
     return null;

@@ -2,18 +2,10 @@
 const AMP = "[&\uFF06]";
 
 /**
- * Decode HTML entities so WP content displays correctly (e.g. &#8217; → ', &#8230; → …).
- * Uses browser parser when available; else regex on server.
+ * Decode HTML entities (e.g. &#8217; → ', &amp; → &) while preserving HTML tags.
+ * Use this for HTML content (blog body, page content).
  */
-export function decodeHtmlEntities(text: string): string {
-  if (!text || typeof text !== "string") return text;
-
-  if (typeof document !== "undefined") {
-    const div = document.createElement("div");
-    div.innerHTML = text;
-    return div.textContent ?? div.innerText ?? "";
-  }
-
+function decodeHtmlEntitiesRegex(text: string): string {
   let out = text;
   out = out.replace(/&amp;#(\d+);?/g, (_, n) => `&#${n};`);
   out = out.replace(/&amp;#x([0-9a-f]+);?/gi, (_, n) => `&#x${n};`);
@@ -34,6 +26,36 @@ export function decodeHtmlEntities(text: string): string {
   out = out.replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&nbsp;/g, " ");
   out = out.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
   return out;
+}
+
+/**
+ * True if the string looks like HTML or entity-encoded HTML (e.g. after server→client serialization).
+ * When true we use regex decode so tags are preserved; when false we may use DOM+textContent for plain text (titles).
+ */
+function looksLikeHtml(text: string): boolean {
+  return (
+    text.includes("<") ||
+    text.includes("&lt;") ||
+    text.includes("&gt;") ||
+    /&(amp|quot|#\d+);/i.test(text)
+  );
+}
+
+/**
+ * Decode HTML entities so WP content displays correctly (e.g. &#8217; → ', &#8230; → …).
+ * - For HTML (or entity-encoded HTML): decodes entities but keeps tags (for RichText / page content).
+ * - For plain text only (e.g. titles): on client uses DOM + textContent so entities decode correctly after hydration.
+ */
+export function decodeHtmlEntities(text: string): string {
+  if (!text || typeof text !== "string") return text;
+
+  if (typeof document !== "undefined" && !looksLikeHtml(text)) {
+    const div = document.createElement("div");
+    div.innerHTML = text;
+    return div.textContent ?? div.innerText ?? "";
+  }
+
+  return decodeHtmlEntitiesRegex(text);
 }
 
 function escapeRegex(s: string): string {
