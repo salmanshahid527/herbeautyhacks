@@ -10,6 +10,8 @@ import { CategoryArchiveSkeleton } from "@/components/skeletons/CategoryArchiveS
 import { PostCardSkeleton } from "@/components/skeletons/PostCardSkeleton";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
+import type { Category } from "@/hooks/useCategories";
+import type { Post } from "@/hooks/usePosts";
 
 function formatCategoryDescription(html: string | undefined): string {
   if (!html?.trim()) return "";
@@ -19,20 +21,30 @@ function formatCategoryDescription(html: string | undefined): string {
 
 interface CategoryArchiveProps {
   slug: string;
+  initialCategory?: Category | null;
+  initialPosts?: Post[];
+  initialCategories?: Category[];
 }
 
-export function CategoryArchive({ slug }: CategoryArchiveProps) {
-  const { data: categories = [], isLoading: catLoading } = useCategories();
-  const category = categories.find((c) => c.slug === slug) ?? null;
+export function CategoryArchive({
+  slug,
+  initialCategory,
+  initialPosts,
+  initialCategories,
+}: CategoryArchiveProps) {
+  const { data: categories = [] } = useCategories(initialCategories);
+  const category = initialCategory ?? categories.find((c) => c.slug === slug) ?? null;
   const { data: posts = [], isLoading: postsLoading } = usePostsByCategory(
     category?.id ?? null,
-    50
+    50,
+    initialPosts
   );
 
-  if (catLoading) {
+  if (!category) {
+    if (initialCategory === null) notFound();
+    if (categories.length > 0) notFound();
     return <CategoryArchiveSkeleton />;
   }
-  if (!category) notFound();
 
   return (
     <div className="container container-wide px-4 py-10 mx-auto w-full min-h-[50vh] bg-muted/10">
@@ -58,8 +70,8 @@ export function CategoryArchive({ slug }: CategoryArchiveProps) {
         <p className="py-12 text-center text-muted-foreground">No posts in this category yet.</p>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post) => (
-            <PostCard key={post._id} post={post} />
+          {posts.map((post, index) => (
+            <PostCard key={post._id} post={post} priority={index < 3} />
           ))}
         </div>
       )}

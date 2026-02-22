@@ -38,3 +38,16 @@ export const getCategories = cache(async function getCategories(): Promise<Categ
     return [];
   }
 });
+
+/** Fetch a single category by slug (server-only). Cached per request. */
+export const getCategoryBySlug = cache(async function getCategoryBySlug(
+  slug: string
+): Promise<Category | null> {
+  try {
+    const data = await fetchWp<WpCategory[]>("/categories", { slug });
+    const wp = Array.isArray(data) ? data[0] : null;
+    return wp ? mapWpCategoryToCategory(wp) : null;
+  } catch {
+    return null;
+  }
+});

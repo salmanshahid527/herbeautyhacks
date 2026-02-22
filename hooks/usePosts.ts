@@ -124,9 +124,15 @@ export function usePost(slug: string | null, initialData?: PostDetail | null) {
 
 export function usePostsByCategory(
   categorySlugOrId: string | number | null,
-  limit = 6
+  limit = 6,
+  initialData?: Post[]
 ) {
   const byId = typeof categorySlugOrId === "number";
+  const hasInitial =
+    initialData !== undefined &&
+    initialData !== null &&
+    categorySlugOrId !== null &&
+    categorySlugOrId !== undefined;
   return useQuery({
     queryKey: ["posts", "category", categorySlugOrId, limit],
     queryFn: () =>
@@ -134,6 +140,9 @@ export function usePostsByCategory(
         ? fetchPostsByCategoryId(categorySlugOrId as number, limit)
         : fetchPostsByCategoryLimit(categorySlugOrId as string, limit),
     enabled: categorySlugOrId !== null && categorySlugOrId !== undefined,
+    initialData: hasInitial ? initialData : undefined,
+    initialDataUpdatedAt: hasInitial ? Date.now() : undefined,
+    staleTime: hasInitial ? Infinity : 0,
   });
 }
 

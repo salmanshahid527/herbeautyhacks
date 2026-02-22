@@ -8,17 +8,24 @@ import type { Metadata } from "next";
 
 const blogUrl = `${getSiteUrl()}/blog`;
 
-export const metadata: Metadata = {
-  title: "Blog | Her Beauty Hacks",
-  description: "Beauty, fashion, skincare, and lifestyle articles.",
-  alternates: { canonical: blogUrl },
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  const posts = await getPostsForBlog();
+  const firstImage = posts[0]?.featuredImage;
+  return {
     title: "Blog | Her Beauty Hacks",
     description: "Beauty, fashion, skincare, and lifestyle articles.",
-    url: blogUrl,
-    type: "website",
-  },
-};
+    alternates: { canonical: blogUrl },
+    openGraph: {
+      title: "Blog | Her Beauty Hacks",
+      description: "Beauty, fashion, skincare, and lifestyle articles.",
+      url: blogUrl,
+      type: "website",
+    },
+    ...(firstImage && {
+      links: [{ rel: "preload", as: "image", href: firstImage }],
+    }),
+  };
+}
 
 /** ISR: revalidate at most every 60 seconds */
 export const revalidate = 60;

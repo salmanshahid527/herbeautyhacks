@@ -5,6 +5,7 @@ import {
   sanitizeHtmlForProse,
 } from "@/lib/html";
 import { fetchWp } from "@/lib/wp/client";
+import { getCategoryBySlug } from "@/lib/wp/categories";
 import { mapWpPostToPost, mapWpPostToPostDetail } from "@/lib/wp/map";
 import type { WpPost } from "@/lib/wp/types";
 
@@ -38,6 +39,26 @@ export const getPostsForBlog = cache(async function getPostsForBlog() {
   try {
     const data = await fetchWp<WpPost[]>("/posts", {
       _embed: 1,
+      per_page: 50,
+      orderby: "date",
+      order: "desc",
+    });
+    return (Array.isArray(data) ? data : []).map((wp) => mapWpPostToPost(wp));
+  } catch {
+    return [];
+  }
+});
+
+/** Fetch posts for a category by slug (server-only). Cached per request. */
+export const getPostsForCategoryBySlug = cache(async function getPostsForCategoryBySlug(
+  categorySlug: string
+) {
+  try {
+    const category = await getCategoryBySlug(categorySlug);
+    if (!category) return [];
+    const data = await fetchWp<WpPost[]>("/posts", {
+      _embed: 1,
+      categories: category.id,
       per_page: 50,
       orderby: "date",
       order: "desc",

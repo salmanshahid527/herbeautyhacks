@@ -1,15 +1,27 @@
 "use client";
 
-import Link from "next/link";
+import dynamic from "next/dynamic";
+import { useSearchParams } from "next/navigation";
 import { usePosts } from "@/hooks/usePosts";
-import { useCategories } from "@/hooks/useCategories";
-import { trackCategoryClick } from "@/lib/analytics";
 import { PostCard } from "./PostCard";
 import { PostCardSkeleton } from "@/components/skeletons/PostCardSkeleton";
-import { Button } from "@/components/ui/button";
-import { useSearchParams } from "next/navigation";
 import type { Post } from "@/hooks/usePosts";
 import type { Category } from "@/hooks/useCategories";
+
+/** Lazy-loaded to reduce initial JS and TBT on mobile; category filter is below the fold. */
+const BlogCategoryFilter = dynamic(
+  () => import("./BlogCategoryFilter").then((m) => ({ default: m.BlogCategoryFilter })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex flex-wrap gap-2 min-h-8 w-full" aria-hidden>
+        <span className="inline-block h-8 w-12 rounded-lg bg-muted animate-pulse" />
+        <span className="inline-block h-8 w-20 rounded-lg bg-muted animate-pulse" />
+        <span className="inline-block h-8 w-16 rounded-lg bg-muted animate-pulse" />
+      </div>
+    ),
+  }
+);
 
 interface PostListProps {
   initialPosts?: Post[];
@@ -23,7 +35,6 @@ export function PostList({ initialPosts, initialCategories }: PostListProps = {}
     categorySlug,
     initialData: categorySlug == null ? initialPosts : undefined,
   });
-  const { data: categories = [] } = useCategories(initialCategories);
 
   if (isLoading) {
     return (
@@ -45,29 +56,7 @@ export function PostList({ initialPosts, initialCategories }: PostListProps = {}
 
   return (
     <div className="space-y-8">
-      {categories.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          <Button variant={!categorySlug ? "default" : "outline"} size="sm" asChild>
-            <Link href="/blog" prefetch>All</Link>
-          </Button>
-          {categories.map((cat) => (
-            <Button
-              key={cat._id}
-              variant={categorySlug === cat.slug ? "default" : "outline"}
-              size="sm"
-              asChild
-            >
-              <Link
-                href={`/blog?category=${cat.slug}`}
-                prefetch
-                onClick={() => trackCategoryClick(cat.slug, cat.title)}
-              >
-                {cat.title}
-              </Link>
-            </Button>
-          ))}
-        </div>
-      )}
+      <BlogCategoryFilter initialCategories={initialCategories} />
       {posts.length === 0 ? (
         <p className="py-12 text-center text-muted-foreground">No posts yet.</p>
       ) : (

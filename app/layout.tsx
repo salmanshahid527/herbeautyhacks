@@ -19,7 +19,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 const dancingScript = Dancing_Script({
   variable: "--font-dancing-script",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "600"],
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://herbeautyhacks.com";
