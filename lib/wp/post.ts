@@ -1,16 +1,21 @@
 import { cache } from "react";
-import { forceHttpsForImgSrc, sanitizeHtmlForProse } from "@/lib/html";
+import {
+  forceHttpsForImgSrc,
+  rewriteWpUrlsToSiteUrl,
+  sanitizeHtmlForProse,
+} from "@/lib/html";
 import { fetchWp } from "@/lib/wp/client";
 import { mapWpPostToPostDetail } from "@/lib/wp/map";
 import type { WpPost } from "@/lib/wp/types";
 
 export type { MappedPostDetail } from "@/lib/wp/map";
 
-/** Process post body for safe display: sanitize and force HTTPS for img src/srcset (avoids mixed-content). */
+/** Process post body: sanitize, fix URLs to site domain, and force HTTPS for images. */
 function processPostBody(html: string | undefined): string | undefined {
   if (!html?.trim()) return html;
   const sanitized = sanitizeHtmlForProse(html);
-  return forceHttpsForImgSrc(sanitized);
+  const withSiteUrls = rewriteWpUrlsToSiteUrl(sanitized);
+  return forceHttpsForImgSrc(withSiteUrls);
 }
 
 /** Fetch a single post by slug (for server-side pre-render / SEO). Cached per request for generateMetadata + page. */

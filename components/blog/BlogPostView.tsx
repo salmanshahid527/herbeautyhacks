@@ -139,7 +139,7 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
 
         <button
           type="button"
-          className="relative aspect-video w-full rounded-xl overflow-hidden mt-8 mb-10 bg-muted shadow-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+          className="w-full rounded-xl overflow-hidden mt-8 mb-10 bg-muted shadow-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex justify-center items-center min-h-[200px] max-h-[75vh]"
           onClick={() => {
             if (featuredImageSrc && featuredImageSrc !== "/placeholder.svg")
               setFeaturedPreviewSrc(featuredImageSrc);
@@ -150,8 +150,10 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
           <img
             src={featuredImageSrc}
             alt=""
-            className="absolute inset-0 h-full w-full object-cover"
+            className="w-full h-auto max-h-[75vh] object-contain"
             loading="eager"
+            decoding="async"
+            fetchPriority="high"
             onError={(e) => {
               e.currentTarget.onerror = null;
               e.currentTarget.src = "/placeholder.svg";

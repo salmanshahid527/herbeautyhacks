@@ -4,11 +4,18 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useCategories } from "@/hooks/useCategories";
 import { usePostsByCategory } from "@/hooks/usePosts";
+import { decodeHtmlEntities } from "@/lib/html";
 import { PostCard } from "./PostCard";
 import { CategoryArchiveSkeleton } from "@/components/skeletons/CategoryArchiveSkeleton";
 import { PostCardSkeleton } from "@/components/skeletons/PostCardSkeleton";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
+
+function formatCategoryDescription(html: string | undefined): string {
+  if (!html?.trim()) return "";
+  const stripped = html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  return decodeHtmlEntities(stripped);
+}
 
 interface CategoryArchiveProps {
   slug: string;
@@ -37,7 +44,9 @@ export function CategoryArchive({ slug }: CategoryArchiveProps) {
       </Button>
       <h1 className="text-3xl font-bold mb-2">{category.title}</h1>
       {category.description && (
-        <p className="text-muted-foreground mb-8">{category.description}</p>
+        <p className="text-muted-foreground mb-8">
+          {formatCategoryDescription(category.description)}
+        </p>
       )}
       {postsLoading ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

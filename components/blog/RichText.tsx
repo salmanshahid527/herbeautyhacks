@@ -2,8 +2,10 @@
 
 import { useRef, useEffect, useState } from "react";
 import {
+  addLazyLoadingToProseImages,
   decodeHtmlEntities,
   forceHttpsForImgSrc,
+  rewriteWpUrlsToSiteUrl,
   sanitizeHtmlForProse,
 } from "@/lib/html";
 import { ImageLightbox } from "@/components/ui/ImageLightbox";
@@ -34,8 +36,10 @@ export function RichText({ value }: RichTextProps) {
   if (!value?.trim()) return null;
   const decoded = decodeHtmlEntities(value);
   const sanitized = sanitizeHtmlForProse(decoded);
-  const withHttps = forceHttpsForImgSrc(sanitized);
-  const html = decodeHtmlEntities(withHttps);
+  const withSiteUrls = rewriteWpUrlsToSiteUrl(sanitized);
+  const withHttps = forceHttpsForImgSrc(withSiteUrls);
+  const withLazy = addLazyLoadingToProseImages(withHttps);
+  const html = decodeHtmlEntities(withLazy);
 
   return (
     <>

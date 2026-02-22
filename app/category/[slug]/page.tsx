@@ -1,4 +1,5 @@
 import { CategoryArchive } from "@/components/blog/CategoryArchive";
+import { decodeHtmlEntities } from "@/lib/html";
 import { getSiteUrl } from "@/lib/seo";
 import { fetchWp } from "@/lib/wp/client";
 import type { WpCategory } from "@/lib/wp/types";
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ? `${category.name} | Her Beauty Hacks`
     : "Category | Her Beauty Hacks";
   const description =
-    category?.description?.replace(/<[^>]*>/g, "").trim() ||
+    decodeHtmlEntities(category?.description?.replace(/<[^>]*>/g, " ").trim() ?? "") ||
     `Posts in ${category?.name ?? "this category"}.`;
   return {
     title,

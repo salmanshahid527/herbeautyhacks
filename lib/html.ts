@@ -75,6 +75,36 @@ function getWpContentOrigin(): string | null {
   }
 }
 
+/** Site URL (frontend) without trailing slash. */
+function getSiteOrigin(): string {
+  const url =
+    typeof process !== "undefined" && process.env?.NEXT_PUBLIC_SITE_URL
+      ? process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "")
+      : "https://herbeautyhacks.com";
+  try {
+    return new URL(url).origin;
+  } catch {
+    return url;
+  }
+}
+
+/**
+ * Replace WordPress backend URL with the frontend site URL in content.
+ * Fixes links in post body that WordPress rewrote to the WP domain (e.g. herbeautyhacks.com → hostingersite.com).
+ */
+export function rewriteWpUrlsToSiteUrl(html: string): string {
+  if (!html || typeof html !== "string") return html;
+  const wpOrigin = getWpContentOrigin();
+  const siteOrigin = getSiteOrigin();
+  if (!wpOrigin || wpOrigin === siteOrigin) return html;
+  try {
+    const pattern = new RegExp(escapeRegex(wpOrigin), "gi");
+    return html.replace(pattern, siteOrigin);
+  } catch {
+    return html;
+  }
+}
+
 /**
  * Rewrite a single URL: if it points at WordPress wp-content, return same-origin path
  * so the Next.js rewrite can proxy it. Otherwise return the URL unchanged.
@@ -125,6 +155,18 @@ export function forceHttpsForImgSrc(html: string): string {
       `srcset=${quote}${value.replace(/http:\/\//gi, "https://")}${quote}`
   );
   return out;
+}
+
+/**
+ * Add loading="lazy" to img tags that don't have a loading attribute.
+ * Reduces initial payload and speeds up LCP for the first image.
+ */
+export function addLazyLoadingToProseImages(html: string): string {
+  if (!html || typeof html !== "string") return html;
+  return html.replace(
+    /<img(?=\s)(?![^>]*\sloading=)([^>]*)>/gi,
+    (_, rest) => `<img loading="lazy"${rest}>`
+  );
 }
 
 /**
