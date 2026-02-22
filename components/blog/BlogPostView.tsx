@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ImageLightbox } from "@/components/ui/ImageLightbox";
+import { ImageLightbox } from "@/components/ui/ImageLightboxLazy";
 import { notFound } from "next/navigation";
 import { usePost } from "@/hooks/usePosts";
 import type { PostDetail } from "@/hooks/usePosts";
@@ -139,7 +139,7 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
 
         <button
           type="button"
-          className="w-full rounded-xl overflow-hidden mt-8 mb-10 bg-muted shadow-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex justify-center items-center min-h-[200px] max-h-[75vh]"
+          className="w-full rounded-xl overflow-hidden mt-8 mb-10 bg-muted shadow-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex justify-center items-center aspect-video max-h-[75vh] [&>img]:max-h-[75vh]"
           onClick={() => {
             if (featuredImageSrc && featuredImageSrc !== "/placeholder.svg")
               setFeaturedPreviewSrc(featuredImageSrc);
@@ -150,7 +150,7 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
           <img
             src={featuredImageSrc}
             alt=""
-            className="w-full h-auto max-h-[75vh] object-contain"
+            className="w-full h-auto object-contain"
             loading="eager"
             decoding="async"
             fetchPriority="high"

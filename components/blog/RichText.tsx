@@ -8,7 +8,7 @@ import {
   rewriteWpUrlsToSiteUrl,
   sanitizeHtmlForProse,
 } from "@/lib/html";
-import { ImageLightbox } from "@/components/ui/ImageLightbox";
+import { ImageLightbox } from "@/components/ui/ImageLightboxLazy";
 
 interface RichTextProps {
   value: string | null | undefined;

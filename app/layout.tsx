@@ -66,18 +66,31 @@ export default async function RootLayout({
   const initialNavLinks = await getNavLinks();
 
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "G-YZLH5CBG9E";
+  let wpOrigin: string | null = null;
+  try {
+    const wpUrl = process.env.NEXT_PUBLIC_WP_URL;
+    if (wpUrl?.startsWith("http")) wpOrigin = new URL(wpUrl).origin;
+  } catch {
+    // ignore
+  }
 
   return (
     <html lang="en">
+      <head>
+        {wpOrigin && (
+          <link rel="preconnect" href={wpOrigin} crossOrigin="anonymous" />
+        )}
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+      </head>
       <body
         className={`${plusJakartaSans.variable} ${dancingScript.variable} font-sans antialiased`}
       >
-        {/* Google tag (gtag.js) - loads on every page */}
+        {/* Google tag (gtag.js) - lazyOnload reduces main-thread blocking on mobile; analytics still record once loaded */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}

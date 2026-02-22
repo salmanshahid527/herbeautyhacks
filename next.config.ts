@@ -7,6 +7,9 @@ const wpHost = process.env.NEXT_PUBLIC_WP_URL
   : "your-site.com";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    optimizePackageImports: ["lucide-react"],
+  },
   async rewrites() {
     return [
       {
