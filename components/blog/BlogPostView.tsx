@@ -9,6 +9,7 @@ import type { PostDetail } from "@/hooks/usePosts";
 import { PostContent } from "./PostContent";
 import { ShareButtons } from "./ShareButtons";
 import { BlogPostSkeleton } from "@/components/skeletons/BlogPostSkeleton";
+import { SafeImage } from "@/components/ui/safe-image";
 import { ChevronRight } from "lucide-react";
 import { decodeHtmlEntities } from "@/lib/html";
 import { trackCategoryClick } from "@/lib/analytics";
@@ -139,25 +140,20 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
 
         <button
           type="button"
-          className="w-full rounded-xl overflow-hidden mt-8 mb-10 bg-muted shadow-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex justify-center items-center aspect-video max-h-[75vh] [&>img]:max-h-[75vh]"
+          className="relative w-full rounded-xl overflow-hidden mt-8 mb-10 bg-muted shadow-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex justify-center items-center aspect-video max-h-[75vh]"
           onClick={() => {
             if (featuredImageSrc && featuredImageSrc !== "/placeholder.svg")
               setFeaturedPreviewSrc(featuredImageSrc);
           }}
           aria-label="View featured image"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <SafeImage
             src={featuredImageSrc}
             alt=""
-            className="w-full h-auto object-contain"
-            loading="eager"
-            decoding="async"
-            fetchPriority="high"
-            onError={(e) => {
-              e.currentTarget.onerror = null;
-              e.currentTarget.src = "/placeholder.svg";
-            }}
+            fill
+            className="object-contain"
+            sizes="(min-width: 1200px) 800px, 100vw"
+            preload
           />
         </button>
         <ImageLightbox
