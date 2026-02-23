@@ -34,3 +34,12 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Deploy on Hostinger (Node.js)
+
+- **App type:** Plain Next.js — no custom server. Uses `next start` only.
+- **Start command in hPanel:** set to **`npm run start:hostinger`** so the app listens on Hostinger’s port (`process.env.PORT`).  
+  Alternative if your panel exposes the port as a variable: **`npm start -- -p $PORT`**.
+- **Build command:** `npm run build`
+- **Application root:** Folder that contains `package.json` (so `.next` is created there).
+- **Node version:** 18.x or 20.x (`engines` in package.json).
