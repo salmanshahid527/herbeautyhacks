@@ -21,27 +21,14 @@ function formatTitle(html: string): string {
   return decodeHtmlEntities(stripped);
 }
 
-/** Get plain text of first paragraph from HTML. */
-function firstParagraphFromHtml(html: string): string {
-  if (!html?.trim()) return "";
-  const match = html.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
-  const block = match ? match[1] : html;
-  const stripped = block.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
-  return decodeHtmlEntities(stripped);
-}
-
-/** Excerpt to show: use full first paragraph from body when API excerpt is truncated (e.g. ends with …). */
-function getLeadText(excerpt: string | undefined, body: string | undefined): string {
-  const trimmed = excerpt?.trim();
-  if (!trimmed) {
-    return body ? firstParagraphFromHtml(body) : "";
+function formatPostDate(iso: string | undefined): string {
+  if (!iso) return "";
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+  } catch {
+    return "";
   }
-  const looksTruncated = /\[?\.\.\.\]?$|…$/.test(trimmed);
-  if (looksTruncated && body?.trim()) {
-    const first = firstParagraphFromHtml(body);
-    return first || trimmed;
-  }
-  return trimmed;
 }
 
 interface BlogPostViewProps {
@@ -50,16 +37,6 @@ interface BlogPostViewProps {
   initialPost?: MappedPostDetail | null;
   /** Canonical URL for sharing; used in share buttons. */
   shareUrl?: string;
-}
-
-function formatPostDate(isoDate: string | undefined): string {
-  if (!isoDate) return "";
-  try {
-    const d = new Date(isoDate);
-    return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-  } catch {
-    return "";
-  }
 }
 
 export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps) {
@@ -77,7 +54,6 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
 
   const featuredImageSrc =
     displayPost.featuredImage ?? "/placeholder.svg";
-  const hasByline = displayPost.author?.name || displayPost.publishedAt;
 
   return (
     <article className="w-full min-h-[50vh] bg-muted/10">
@@ -120,23 +96,25 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
           </ol>
         </nav>
 
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight">
-          {formatTitle(displayPost.title ?? "")}
-        </h1>
-
-        {hasByline && (
-          <p className="mt-3 text-sm text-muted-foreground">
-            {displayPost.author?.name && <>Written by {displayPost.author.name}</>}
-            {displayPost.author?.name && displayPost.publishedAt && " · "}
-            {displayPost.publishedAt && formatPostDate(displayPost.publishedAt)}
-          </p>
-        )}
-
-        {(displayPost.excerpt || displayPost.body) && (
-          <p className="mt-4 text-lg text-muted-foreground leading-relaxed whitespace-normal text-justify">
-            {getLeadText(displayPost.excerpt, displayPost.body)}
-          </p>
-        )}
+        {/* Title and written by above the featured image */}
+        <header className="mt-6 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
+            {formatTitle(displayPost.title ?? "")}
+          </h1>
+          {(displayPost.author?.name || displayPost.publishedAt) && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              {displayPost.author?.name && (
+                <span>Written by {displayPost.author.name}</span>
+              )}
+              {displayPost.author?.name && displayPost.publishedAt && " · "}
+              {displayPost.publishedAt && (
+                <time dateTime={displayPost.publishedAt}>
+                  {formatPostDate(displayPost.publishedAt)}
+                </time>
+              )}
+            </p>
+          )}
+        </header>
 
         <button
           type="button"
