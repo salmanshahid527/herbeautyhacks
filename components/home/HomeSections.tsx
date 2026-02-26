@@ -49,7 +49,7 @@ export function HomeSections() {
         </>
       ) : !hasAnyContent ? (
         <section className="section-spacing w-full bg-muted/30 border-y border-border/60">
-          <div className="container max-w-xl px-4 mx-auto text-center">
+          <div className="container max-w-xl px-3 sm:px-4 mx-auto text-center">
             <p className="text-muted-foreground mb-6">
               No posts or categories yet. Add content in your WordPress dashboard to see it here.
             </p>

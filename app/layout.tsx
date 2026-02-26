@@ -104,7 +104,7 @@ export default async function RootLayout({
             <TopBar />
             <Header initialNavLinks={initialNavLinks} />
             <CategoriesBar />
-            <main className="flex-1 w-full flex flex-col items-center">{children}</main>
+            <main className="flex-1 w-full flex flex-col items-center overflow-x-hidden">{children}</main>
             <Footer />
           </div>
         </Providers>

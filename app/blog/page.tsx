@@ -32,7 +32,7 @@ export const revalidate = 60;
 
 function PostListFallback() {
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {[1, 2, 3, 4, 5, 6].map((i) => (
         <PostCardSkeleton key={i} />
       ))}
@@ -46,8 +46,8 @@ export default async function BlogPage() {
     getCategories(),
   ]);
   return (
-    <div className="container container-narrow px-4 py-12 md:py-16 mx-auto w-full min-h-[50vh] bg-muted/10">
-      <h1 className="section-title text-3xl md:text-4xl font-bold mb-12 text-foreground">Blog</h1>
+    <div className="container container-narrow px-3 sm:px-4 md:px-6 py-8 sm:py-12 md:py-16 mx-auto w-full min-h-[50vh] bg-muted/10">
+      <h1 className="section-title text-2xl sm:text-3xl md:text-4xl font-bold mb-8 sm:mb-12 text-foreground">Blog</h1>
       <Suspense fallback={<PostListFallback />}>
         <PostList initialPosts={initialPosts} initialCategories={initialCategories} />
       </Suspense>

@@ -33,7 +33,7 @@ function CategoryTile({
         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
       />
       <div className="absolute inset-0 bg-black/30 transition-opacity group-hover:bg-black/40" />
-      <span className="absolute inset-x-0 bottom-0 p-3 text-center text-sm font-semibold text-white drop-shadow-md">
+      <span className="absolute inset-x-0 bottom-0 p-2 sm:p-3 text-center text-xs sm:text-sm font-semibold text-white drop-shadow-md">
         {category.title}
       </span>
     </Link>
@@ -52,11 +52,11 @@ export function TopicCards({
 
   return (
     <section className="section-spacing w-full border-t border-primary/20 bg-primary/5">
-      <div className="container container-wide px-4 mx-auto">
-        <h2 className="section-title section-title-center text-2xl md:text-3xl font-bold text-center mb-10 text-foreground animate-fade-in-up">
+      <div className="container container-wide px-3 sm:px-4 md:px-6 mx-auto">
+        <h2 className="section-title section-title-center text-xl sm:text-2xl md:text-3xl font-bold text-center mb-8 sm:mb-10 text-foreground animate-fade-in-up">
           What&apos;s in Store?
         </h2>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
           {displayCategories.map((cat, index) => (
             <CategoryTile
               key={cat._id}

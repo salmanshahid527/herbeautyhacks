@@ -37,8 +37,8 @@ export function Header({ initialNavLinks }: HeaderProps) {
     defaultNavLinks;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-white shadow-sm">
-      <div className="container container-wide flex h-14 md:h-16 items-center justify-between gap-4 px-4 md:gap-6 mx-auto">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-white/95 backdrop-blur-sm shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
+      <div className="container container-wide flex h-14 md:h-16 items-center justify-between gap-3 px-3 sm:px-4 md:gap-6 md:px-6 mx-auto">
         <div className="flex items-center gap-2 min-w-0">
           <MobileNav navLinks={navLinks} categories={categories} />
           <Link href="/" className="flex items-center shrink-0">
@@ -47,13 +47,13 @@ export function Header({ initialNavLinks }: HeaderProps) {
               alt="Her Beauty Hacks"
               width={220}
               height={56}
-              className="h-9 md:h-10 w-auto"
+              className="h-8 sm:h-9 md:h-10 w-auto max-w-[140px] sm:max-w-[180px] md:max-w-none object-contain"
               priority
             />
           </Link>
         </div>
-        <NavigationMenu className="hidden md:flex justify-end max-w-max flex-1">
-          <NavigationMenuList className="gap-1 justify-end">
+        <NavigationMenu className="hidden sm:flex justify-end max-w-max flex-1 min-w-0">
+          <NavigationMenuList className="flex flex-wrap justify-end gap-x-1 gap-y-1 space-x-0">
             {navLinks.map((link) =>
               link.href ? (
                 <NavigationMenuItem key={link.href}>
@@ -62,7 +62,7 @@ export function Header({ initialNavLinks }: HeaderProps) {
                       href={link.href}
                       className={cn(
                         navigationMenuTriggerStyle(),
-                        "bg-transparent text-foreground hover:bg-primary/10 hover:text-primary focus:bg-primary/10 focus:text-primary"
+                        "bg-transparent text-foreground hover:bg-primary/10 hover:text-primary focus:bg-primary/10 focus:text-primary px-3 py-2 text-sm md:px-4"
                       )}
                     >
                       {link.label}

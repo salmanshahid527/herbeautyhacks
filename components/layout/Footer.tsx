@@ -36,10 +36,10 @@ export function Footer() {
 
   return (
     <footer className="bg-muted/40 border-t border-border">
-      <div className="container container-wide px-4 mx-auto">
+      <div className="container container-wide px-3 sm:px-4 md:px-6 mx-auto">
         {/* Main footer content */}
         <div className="py-12 md:py-16">
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
+          <div className="grid gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
             {/* Brand column */}
             <div className="sm:col-span-2 lg:col-span-1">
               <Link href="/" className="inline-block">
@@ -160,12 +160,12 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col gap-4 border-t border-border py-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-4 border-t border-border py-6 text-center sm:text-left sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} Her Beauty Hacks
           </p>
           {legalLinks.length > 0 && (
-            <ul className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted-foreground">
+            <ul className="flex flex-wrap justify-center sm:justify-start gap-x-4 sm:gap-x-6 gap-y-1 text-sm text-muted-foreground">
               {legalLinks.map((link) =>
                 link.href ? (
                   <li key={link.href}>

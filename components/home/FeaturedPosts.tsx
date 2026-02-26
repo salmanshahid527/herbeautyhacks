@@ -12,11 +12,11 @@ export function FeaturedPosts() {
 
   return (
     <section className="section-spacing w-full border-t border-primary/20 bg-accent/50">
-      <div className="container container-wide px-4 mx-auto">
-        <h2 className="section-title section-title-center text-2xl md:text-3xl font-bold text-center mb-12 text-foreground animate-fade-in-up">
+      <div className="container container-wide px-3 sm:px-4 md:px-6 mx-auto">
+        <h2 className="section-title section-title-center text-xl sm:text-2xl md:text-3xl font-bold text-center mb-8 sm:mb-12 text-foreground animate-fade-in-up">
           Posts you just can&apos;t miss!
         </h2>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {posts.slice(0, 6).map((post, index) => (
             <Link
               key={post._id}
@@ -35,7 +35,7 @@ export function FeaturedPosts() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
-                <CardContent className="p-5">
+                <CardContent className="p-3 sm:p-5">
                   {post.category && (
                     <Badge className="mb-2 text-xs bg-primary/15 text-primary border-primary/30 hover:bg-primary/25 shadow-sm">
                       {post.category.title}

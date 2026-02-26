@@ -24,35 +24,35 @@ export function TopBar() {
   const facebookUrl = author?.facebook ?? "#";
 
   return (
-    <div className="w-full border-b border-primary/10 bg-gradient-to-r from-primary-muted/40 via-primary/20 to-primary-muted/30">
-      <div className="container container-wide flex h-9 md:h-10 items-center justify-between px-4 mx-auto">
+    <div className="hidden sm:block w-full border-b border-primary/10 bg-gradient-to-r from-primary-muted/40 via-primary/20 to-primary-muted/30">
+      <div className="container container-wide flex h-9 md:h-10 items-center justify-between px-3 sm:px-4 md:px-6 mx-auto">
         <div className="flex items-center gap-5">
           <a
             href={pinterestUrl}
             target={pinterestUrl.startsWith("http") ? "_blank" : undefined}
             rel={pinterestUrl.startsWith("http") ? "noopener noreferrer" : undefined}
-            className="text-primary hover:opacity-80 transition-opacity"
+            className="text-primary hover:opacity-80 active:opacity-70 transition-opacity p-1 rounded touch-manipulation"
             aria-label="Pinterest"
           >
-            <PinterestIcon className="size-4" />
+            <PinterestIcon className="size-4 sm:size-[18px]" />
           </a>
           <a
             href={instagramUrl}
             target={instagramUrl.startsWith("http") ? "_blank" : undefined}
             rel={instagramUrl.startsWith("http") ? "noopener noreferrer" : undefined}
-            className="text-primary hover:opacity-80 transition-opacity"
+            className="text-primary hover:opacity-80 active:opacity-70 transition-opacity p-1 rounded touch-manipulation"
             aria-label="Instagram"
           >
-            <Instagram className="size-4" />
+            <Instagram className="size-4 sm:size-[18px]" />
           </a>
           <a
             href={facebookUrl}
             target={facebookUrl.startsWith("http") ? "_blank" : undefined}
             rel={facebookUrl.startsWith("http") ? "noopener noreferrer" : undefined}
-            className="text-primary hover:opacity-80 transition-opacity"
+            className="text-primary hover:opacity-80 active:opacity-70 transition-opacity p-1 rounded touch-manipulation"
             aria-label="Facebook"
           >
-            <Facebook className="size-4" />
+            <Facebook className="size-4 sm:size-[18px]" />
           </a>
         </div>
       </div>

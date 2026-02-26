@@ -36,9 +36,9 @@ export function CategorySection({
 
   return (
     <section className={`section-spacing w-full border-t border-primary/20 ${variant === "alt" ? "bg-primary-muted/15" : "bg-primary/5"}`}>
-      <div className="container container-wide px-4 mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="section-title text-2xl md:text-3xl font-bold text-foreground animate-fade-in-up">{title}</h2>
+      <div className="container container-wide px-3 sm:px-4 md:px-6 mx-auto">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
+          <h2 className="section-title text-xl sm:text-2xl md:text-3xl font-bold text-foreground animate-fade-in-up">{title}</h2>
           <Link
             href={`/category/${category.slug}`}
             className="text-sm font-semibold text-primary hover:underline underline-offset-4 transition-opacity hover:opacity-80"
@@ -47,7 +47,7 @@ export function CategorySection({
             See All →
           </Link>
         </div>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:gap-5 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
           {posts.map((post, index) => (
             <Link
               key={post._id}
@@ -66,7 +66,7 @@ export function CategorySection({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <CardContent className="p-4">
+                <CardContent className="p-3 sm:p-4">
                   <h3 className="font-semibold text-sm line-clamp-2 text-foreground group-hover:text-primary transition-colors">{post.title}</h3>
                 </CardContent>
               </Card>

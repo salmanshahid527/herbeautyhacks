@@ -19,13 +19,13 @@ export function MeetAuthor() {
 
   return (
     <section className="section-spacing w-full bg-gradient-to-b from-primary/10 via-primary-muted/20 to-accent/40 border-y border-primary/10">
-      <div className="container container-wide px-4 mx-auto">
-        <h2 className="section-title section-title-center text-2xl md:text-3xl font-bold text-center mb-12 text-foreground animate-fade-in-up">
+      <div className="container container-wide px-3 sm:px-4 md:px-6 mx-auto">
+        <h2 className="section-title section-title-center text-xl sm:text-2xl md:text-3xl font-bold text-center mb-8 sm:mb-12 text-foreground animate-fade-in-up">
           Meet The Author
         </h2>
-        <div className="overflow-hidden rounded-2xl border border-primary/20 bg-card/95 shadow-lg backdrop-blur-sm animate-scale-in">
-          <div className="p-6 md:p-10 flex flex-col md:flex-row gap-8 items-center md:items-start">
-            <div className="relative size-28 md:size-36 rounded-full overflow-hidden shrink-0 ring-4 ring-primary/20 bg-muted">
+        <div className="overflow-hidden rounded-xl sm:rounded-2xl border border-primary/20 bg-card/95 shadow-lg backdrop-blur-sm animate-scale-in">
+          <div className="p-4 sm:p-6 md:p-10 flex flex-col md:flex-row gap-6 sm:gap-8 items-center md:items-start">
+            <div className="relative size-24 sm:size-28 md:size-36 rounded-full overflow-hidden shrink-0 ring-4 ring-primary/20 bg-muted">
               <SafeImage
                 src={author.image ?? "/placeholder.svg"}
                 alt={author.name}
@@ -34,7 +34,7 @@ export function MeetAuthor() {
               />
             </div>
             <div className="flex-1 text-center md:text-left">
-              <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-2">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-foreground mb-2">
                 {author.name}
               </h3>
               {author.bio && (

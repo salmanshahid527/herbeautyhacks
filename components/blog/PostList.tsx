@@ -45,7 +45,7 @@ export function PostList({ initialPosts, initialCategories }: PostListProps = {}
     <div className="space-y-8">
       <BlogCategoryFilter initialCategories={initialCategories} />
       {isLoading ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <PostCardSkeleton key={i} />
           ))}
@@ -57,7 +57,7 @@ export function PostList({ initialPosts, initialCategories }: PostListProps = {}
       ) : posts.length === 0 ? (
         <p className="py-12 text-center text-muted-foreground">No posts yet.</p>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post, index) => (
             <PostCard key={post._id} post={post} priority={index < 3} />
           ))}

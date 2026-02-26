@@ -22,22 +22,22 @@ interface MobileNavProps {
 export function MobileNav({ navLinks, categories }: MobileNavProps) {
   return (
     <Sheet>
-      <SheetTrigger asChild className="md:hidden">
-        <Button variant="ghost" size="icon" aria-label="Open menu">
-          <Menu className="size-5" />
+      <SheetTrigger asChild className="sm:hidden">
+        <Button variant="ghost" size="icon" aria-label="Open menu" className="size-10 min-w-10 touch-manipulation">
+          <Menu className="size-5 sm:size-6" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-[280px]">
+      <SheetContent side="left" className="w-[min(85vw,320px)] max-w-full p-4 sm:p-6">
         <SheetHeader>
           <SheetTitle className="sr-only">Menu</SheetTitle>
         </SheetHeader>
-        <nav className="flex flex-col gap-4 mt-6">
+        <nav className="flex flex-col gap-1 mt-6 sm:mt-8" aria-label="Main navigation">
           {navLinks.map((link) =>
             link.href ? (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-lg font-medium text-foreground hover:text-primary"
+                className="py-3 px-2 -mx-2 text-base sm:text-lg font-medium text-foreground hover:text-primary hover:bg-primary/5 rounded-md transition-colors touch-manipulation min-h-[44px] flex items-center"
               >
                 {link.label}
               </Link>
@@ -45,19 +45,21 @@ export function MobileNav({ navLinks, categories }: MobileNavProps) {
           )}
           {categories.length > 0 && (
             <>
-              <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+              <span className="text-xs sm:text-sm font-semibold text-muted-foreground uppercase tracking-wider mt-4 pt-4 border-t border-border">
                 Categories
               </span>
-              {categories.map((cat) => (
-                <Link
-                  key={cat._id}
-                  href={`/category/${cat.slug}`}
-                  className="text-base text-foreground hover:text-primary pl-2"
-                  onClick={() => trackCategoryClick(cat.slug, cat.title)}
-                >
-                  {cat.title}
-                </Link>
-              ))}
+              <div className="flex flex-col gap-1">
+                {categories.map((cat) => (
+                  <Link
+                    key={cat._id}
+                    href={`/category/${cat.slug}`}
+                    className="py-3 px-2 -mx-2 text-sm sm:text-base text-foreground hover:text-primary hover:bg-primary/5 rounded-md transition-colors touch-manipulation min-h-[44px] flex items-center pl-2"
+                    onClick={() => trackCategoryClick(cat.slug, cat.title)}
+                  >
+                    {cat.title}
+                  </Link>
+                ))}
+              </div>
             </>
           )}
         </nav>

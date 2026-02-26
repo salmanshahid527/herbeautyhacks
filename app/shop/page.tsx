@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ShopPage() {
   const page = await getPageBySlug("shop");
   return (
-    <div className="container container-wide px-4 py-10 mx-auto w-full space-y-8 min-h-[50vh] bg-muted/20">
+    <div className="container container-wide px-3 sm:px-4 md:px-6 py-8 sm:py-10 mx-auto w-full space-y-8 min-h-[50vh] bg-muted/20">
       <WpPageContent
         slug="shop"
         initialPage={page}

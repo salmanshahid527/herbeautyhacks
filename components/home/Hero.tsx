@@ -17,26 +17,26 @@ export function Hero() {
   const ctaText = settings?.heroCtaText ?? "Pick Your Topic";
 
   return (
-    <section className="relative w-full overflow-hidden border-b border-primary/20 bg-gradient-to-r from-primary/5 via-background to-background">
+    <section className="relative w-full overflow-hidden border-b border-primary/20 bg-gradient-to-br from-primary/8 via-primary/3 to-background">
       <div className="grid min-h-[70vh] w-full grid-cols-1 lg:grid-cols-2">
         {/* Left: copy */}
-        <div className="flex flex-col justify-center px-6 py-16 md:px-12 lg:py-24">
-          <h1 className="font-script text-4xl font-bold text-primary md:text-5xl lg:text-6xl xl:text-7xl tracking-tight">
+        <div className="flex flex-col justify-center px-4 py-12 sm:px-6 sm:py-16 md:px-12 lg:py-24">
+          <h1 className="font-script text-3xl font-bold text-primary sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-tight animate-fade-in-up">
             {tagline}
           </h1>
-          <p className="mt-4 max-w-lg text-base text-foreground/85 md:text-lg leading-relaxed">
+          <p className="mt-4 max-w-lg text-sm text-foreground/85 sm:text-base md:text-lg leading-relaxed animate-fade-in-up animate-delay-1 opacity-0 [animation-fill-mode:both]">
             {intro}
           </p>
           <Button
             asChild
             size="lg"
-            className="mt-8 w-fit bg-primary hover:bg-primary/90 text-primary-foreground rounded-none px-8 h-12 text-base font-semibold"
+            className="mt-6 sm:mt-8 w-full sm:w-fit bg-primary hover:bg-primary/90 hover:shadow-lg active:scale-[0.98] text-primary-foreground rounded-none px-6 sm:px-8 h-11 sm:h-12 text-sm sm:text-base font-semibold transition-all animate-fade-in-up animate-delay-2 opacity-0 [animation-fill-mode:both]"
           >
             <Link href="/blog">{ctaText}</Link>
           </Button>
         </div>
         {/* Right: hero image */}
-        <div className="relative min-h-[320px] w-full bg-muted lg:min-h-0">
+        <div className="relative min-h-[240px] sm:min-h-[280px] md:min-h-[320px] w-full bg-muted lg:min-h-0 animate-scale-in opacity-0 [animation-fill-mode:both] [animation-delay:0.25s]">
           <Image
             src={HERO_IMAGE}
             alt=""

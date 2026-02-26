@@ -27,7 +27,7 @@ export function PostCard({ post, priority }: PostCardProps) {
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
-        <CardContent className="p-4">
+        <CardContent className="p-3 sm:p-4">
           {post.category && (
             <Badge className="mb-2 text-xs bg-primary/15 text-primary border-primary/30">
               {post.category.title}

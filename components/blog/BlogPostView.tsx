@@ -57,7 +57,7 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
 
   return (
     <article className="w-full min-h-[50vh] bg-muted/10">
-      <div className="container container-narrow px-4 py-10 md:py-14 mx-auto">
+      <div className="container container-narrow px-3 sm:px-4 md:px-6 py-8 sm:py-10 md:py-14 mx-auto">
         {/* Breadcrumb: Home / Category */}
         <nav aria-label="Breadcrumb" className="mb-6">
           <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
@@ -98,7 +98,7 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
 
         {/* Title and written by above the featured image */}
         <header className="mt-6 mb-2">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground tracking-tight">
             {formatTitle(displayPost.title ?? "")}
           </h1>
           {(displayPost.author?.name || displayPost.publishedAt) && (
@@ -118,7 +118,7 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
 
         <button
           type="button"
-          className="relative w-full rounded-xl overflow-hidden mt-8 mb-10 bg-muted shadow-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex justify-center items-center aspect-video max-h-[75vh]"
+          className="relative w-full rounded-lg sm:rounded-xl overflow-hidden mt-6 sm:mt-8 mb-8 sm:mb-10 bg-muted shadow-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex justify-center items-center aspect-video max-h-[60vh] sm:max-h-[75vh]"
           onClick={() => {
             if (featuredImageSrc && featuredImageSrc !== "/placeholder.svg")
               setFeaturedPreviewSrc(featuredImageSrc);
