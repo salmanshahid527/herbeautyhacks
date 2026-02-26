@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { PostList } from "@/components/blog/PostList";
 import { PostCardSkeleton } from "@/components/skeletons/PostCardSkeleton";
-import { getSiteUrl } from "@/lib/seo";
+import { getSiteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import { getPostsForBlog } from "@/lib/wp/post";
 import { getCategories } from "@/lib/wp/categories";
 import type { Metadata } from "next";
@@ -11,6 +11,13 @@ const blogUrl = `${getSiteUrl()}/blog`;
 export async function generateMetadata(): Promise<Metadata> {
   const posts = await getPostsForBlog();
   const firstImage = posts[0]?.featuredImage;
+  const siteUrl = getSiteUrl();
+  const imageUrl =
+    firstImage?.startsWith("http") === true
+      ? firstImage
+      : firstImage
+        ? `${siteUrl}${firstImage.startsWith("/") ? "" : "/"}${firstImage}`
+        : undefined;
   return {
     title: "Blog | Her Beauty Hacks",
     description: "Beauty, fashion, skincare, and lifestyle articles.",
@@ -20,6 +27,14 @@ export async function generateMetadata(): Promise<Metadata> {
       description: "Beauty, fashion, skincare, and lifestyle articles.",
       url: blogUrl,
       type: "website",
+      images: imageUrl
+        ? [{ url: imageUrl, width: 1200, height: 630, alt: "Her Beauty Hacks Blog" }]
+        : [DEFAULT_OG_IMAGE],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Blog | Her Beauty Hacks",
+      description: "Beauty, fashion, skincare, and lifestyle articles.",
     },
     ...(firstImage && {
       links: [{ rel: "preload", as: "image", href: firstImage }],

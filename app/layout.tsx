@@ -38,6 +38,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Her Beauty Hacks",
+    url: siteUrl,
     title: "Her Beauty Hacks",
     description: "Beauty, fashion, skincare, and lifestyle tips — no one is you.",
     images: [{ url: "/logo-her-beauty-hacks.png", width: 512, height: 512, alt: "Her Beauty Hacks" }],

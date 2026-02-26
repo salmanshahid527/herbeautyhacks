@@ -1,6 +1,6 @@
 import { BlogPostView } from "@/components/blog/BlogPostView";
 import { ArticleJsonLd } from "@/components/seo/ArticleJsonLd";
-import { getSiteUrl } from "@/lib/seo";
+import { getSiteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import { getPostBySlug } from "@/lib/wp/post";
 import type { Metadata } from "next";
 
@@ -34,9 +34,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       url,
       type: "article",
-      ...(imageUrl && {
-        images: [{ url: imageUrl, width: 1200, height: 630, alt: title }],
-      }),
+      images: imageUrl
+        ? [{ url: imageUrl, width: 1200, height: 630, alt: title }]
+        : [DEFAULT_OG_IMAGE],
+      publishedTime: post.publishedAt,
+      modifiedTime: post.modifiedAt ?? post.publishedAt,
+      authors: post.author?.name ? [post.author.name] : undefined,
+      section: post.category?.title,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: description ?? undefined,
     },
     ...(post.featuredImage && {
       links: [{ rel: "preload", as: "image", href: post.featuredImage }],

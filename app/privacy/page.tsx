@@ -1,5 +1,5 @@
 import { WpPageContent } from "@/components/pages/WpPageContent";
-import { getSiteUrl } from "@/lib/seo";
+import { getSiteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import { getPageBySlug } from "@/lib/wp/pages";
 import type { Metadata } from "next";
 
@@ -17,7 +17,13 @@ export async function generateMetadata(): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: url },
-    openGraph: { title: page?.title ?? "Privacy Policy", description, url, type: "website" },
+    openGraph: {
+      title: page?.title ?? "Privacy Policy",
+      description,
+      url,
+      type: "website",
+      images: [DEFAULT_OG_IMAGE],
+    },
   };
 }
 

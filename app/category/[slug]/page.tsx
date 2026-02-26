@@ -1,6 +1,6 @@
 import { CategoryArchive } from "@/components/blog/CategoryArchive";
 import { decodeHtmlEntities } from "@/lib/html";
-import { getSiteUrl } from "@/lib/seo";
+import { getSiteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import { getCategories, getCategoryBySlug } from "@/lib/wp/categories";
 import { getPostsForCategoryBySlug } from "@/lib/wp/post";
 import type { Metadata } from "next";
@@ -25,6 +25,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     `Posts in ${category?.title ?? "this category"}.`;
   const posts = category ? await getPostsForCategoryBySlug(slug) : [];
   const firstImage = posts[0]?.featuredImage;
+  const imageUrl =
+    firstImage?.startsWith("http") === true
+      ? firstImage
+      : firstImage
+        ? `${siteUrl}${firstImage.startsWith("/") ? "" : "/"}${firstImage}`
+        : undefined;
   return {
     title,
     description,
@@ -34,6 +40,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       url,
       type: "website",
+      images: imageUrl
+        ? [{ url: imageUrl, width: 1200, height: 630, alt: category?.title ?? "Category" }]
+        : [DEFAULT_OG_IMAGE],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: category?.title ?? "Category",
+      description,
     },
     ...(firstImage && {
       links: [{ rel: "preload", as: "image", href: firstImage }],
