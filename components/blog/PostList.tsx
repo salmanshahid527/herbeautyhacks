@@ -31,33 +31,30 @@ interface PostListProps {
 export function PostList({ initialPosts, initialCategories }: PostListProps = {}) {
   const searchParams = useSearchParams();
   const categorySlug = searchParams.get("category") ?? undefined;
+  const categoryId =
+    categorySlug && initialCategories?.length
+      ? initialCategories.find((c) => c.slug === categorySlug)?.id
+      : undefined;
   const { data: posts = [], isLoading, isError } = usePosts({
-    categorySlug,
-    initialData: categorySlug == null ? initialPosts : undefined,
+    categorySlug: categoryId ? undefined : categorySlug,
+    categoryId,
+    initialData: categorySlug == null && categoryId == null ? initialPosts : undefined,
   });
-
-  if (isLoading) {
-    return (
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <PostCardSkeleton key={i} />
-        ))}
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <p className="py-12 text-center text-muted-foreground">
-        Something went wrong loading posts.
-      </p>
-    );
-  }
 
   return (
     <div className="space-y-8">
       <BlogCategoryFilter initialCategories={initialCategories} />
-      {posts.length === 0 ? (
+      {isLoading ? (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <PostCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : isError ? (
+        <p className="py-12 text-center text-muted-foreground">
+          Something went wrong loading posts.
+        </p>
+      ) : posts.length === 0 ? (
         <p className="py-12 text-center text-muted-foreground">No posts yet.</p>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

@@ -21,7 +21,7 @@ export function BlogCategoryFilter({ initialCategories }: BlogCategoryFilterProp
   return (
     <div className="flex flex-wrap gap-2">
       <Button variant={!categorySlug ? "default" : "outline"} size="sm" asChild>
-        <Link href="/blog" prefetch>All</Link>
+        <Link href="/blog" prefetch={false}>All</Link>
       </Button>
       {categories.map((cat) => (
         <Button
@@ -32,7 +32,7 @@ export function BlogCategoryFilter({ initialCategories }: BlogCategoryFilterProp
         >
           <Link
             href={`/blog?category=${cat.slug}`}
-            prefetch
+            prefetch={false}
             onClick={() => trackCategoryClick(cat.slug, cat.title)}
           >
             {cat.title}

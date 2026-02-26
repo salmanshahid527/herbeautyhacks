@@ -27,7 +27,10 @@ export interface PostDetail extends Post {
   author?: { name: string; image?: string };
 }
 
-async function fetchPosts(categorySlug?: string): Promise<Post[]> {
+async function fetchPostsForBlog(
+  categoryId?: number,
+  categorySlug?: string
+): Promise<Post[]> {
   try {
     const params: Record<string, string | number> = {
       _embed: 1,
@@ -35,7 +38,9 @@ async function fetchPosts(categorySlug?: string): Promise<Post[]> {
       orderby: "date",
       order: "desc",
     };
-    if (categorySlug) {
+    if (categoryId) {
+      params.categories = categoryId;
+    } else if (categorySlug) {
       const categories = await fetchWp<{ id: number }[]>(`/categories`, {
         slug: categorySlug,
       });
@@ -96,14 +101,24 @@ async function fetchPostsByCategoryLimit(
   }
 }
 
-export function usePosts(options?: { categorySlug?: string; initialData?: Post[] }) {
+export function usePosts(options?: {
+  categorySlug?: string;
+  categoryId?: number;
+  initialData?: Post[];
+}) {
   const categorySlug = options?.categorySlug;
+  const categoryId = options?.categoryId;
   const initialData = options?.initialData;
   const hasInitial =
-    categorySlug == null && initialData !== undefined && initialData !== null;
+    categorySlug == null &&
+    categoryId == null &&
+    initialData !== undefined &&
+    initialData !== null;
+  const cacheKey =
+    categoryId != null ? `cat:${categoryId}` : categorySlug ?? "all";
   return useQuery({
-    queryKey: ["posts", categorySlug ?? "all"],
-    queryFn: () => fetchPosts(categorySlug),
+    queryKey: ["posts", cacheKey],
+    queryFn: () => fetchPostsForBlog(categoryId, categoryId ? undefined : categorySlug),
     initialData: hasInitial ? initialData : undefined,
     initialDataUpdatedAt: hasInitial ? Date.now() : undefined,
     staleTime: hasInitial ? Infinity : 0,
