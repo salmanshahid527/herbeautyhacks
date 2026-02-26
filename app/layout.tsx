@@ -53,6 +53,9 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true },
   },
+  verification: {
+    google: "14B709F9ED0815745382AEBA337BB6C7",
+  },
   icons: {
     icon: "/favicon.png",
     apple: "/favicon.png",
