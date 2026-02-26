@@ -8,7 +8,7 @@ export const revalidate = 60;
 const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
-  title: "Her Beauty Hacks",
+  title: { absolute: "Her Beauty Hacks" },
   description: "Beauty, fashion, skincare, and lifestyle tips — no one is you.",
   alternates: { canonical: siteUrl },
   openGraph: {

@@ -10,7 +10,7 @@ export const revalidate = 60;
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPageBySlug("about");
   const url = `${getSiteUrl()}/about`;
-  const title = page?.title ? `${page.title} | Her Beauty Hacks` : "About | Her Beauty Hacks";
+  const title = page?.title ?? "About";
   const description = page?.excerpt ?? "Meet the author behind Her Beauty Hacks.";
   return {
     title,

@@ -17,9 +17,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const category = await getCategoryBySlug(slug);
   const siteUrl = getSiteUrl();
   const url = `${siteUrl}/category/${slug}`;
-  const title = category
-    ? `${category.title} | Her Beauty Hacks`
-    : "Category | Her Beauty Hacks";
+  const title = category?.title ?? "Category";
   const description =
     (category?.description && decodeHtmlEntities(category.description.replace(/<[^>]*>/g, " ").trim())) ||
     `Posts in ${category?.title ?? "this category"}.`;

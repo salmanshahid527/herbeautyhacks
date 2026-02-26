@@ -19,11 +19,11 @@ export async function generateMetadata(): Promise<Metadata> {
         ? `${siteUrl}${firstImage.startsWith("/") ? "" : "/"}${firstImage}`
         : undefined;
   return {
-    title: "Blog | Her Beauty Hacks",
+    title: "Blog",
     description: "Beauty, fashion, skincare, and lifestyle articles.",
     alternates: { canonical: blogUrl },
     openGraph: {
-      title: "Blog | Her Beauty Hacks",
+      title: "Blog",
       description: "Beauty, fashion, skincare, and lifestyle articles.",
       url: blogUrl,
       type: "website",
@@ -33,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: "Blog | Her Beauty Hacks",
+      title: "Blog",
       description: "Beauty, fashion, skincare, and lifestyle articles.",
     },
     ...(firstImage && {

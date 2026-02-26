@@ -14,7 +14,7 @@ export const revalidate = 60;
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
-  if (!post) return { title: "Post | Her Beauty Hacks" };
+  if (!post) return { title: "Post" };
   const siteUrl = getSiteUrl();
   const url = `${siteUrl}/blog/${slug}`;
   const title = post.title ?? "Post";
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         ? `${siteUrl}${post.featuredImage.startsWith("/") ? "" : "/"}${post.featuredImage}`
         : undefined;
   return {
-    title: `${title} | Her Beauty Hacks`,
+    title,
     description,
     alternates: { canonical: url },
     openGraph: {

@@ -9,9 +9,7 @@ export const revalidate = 60;
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPageBySlug("privacy-policy");
   const url = `${getSiteUrl()}/privacy`;
-  const title = page?.title
-    ? `${page.title} | Her Beauty Hacks`
-    : "Privacy Policy | Her Beauty Hacks";
+  const title = page?.title ?? "Privacy Policy";
   const description = page?.excerpt ?? "Privacy policy for Her Beauty Hacks.";
   return {
     title,

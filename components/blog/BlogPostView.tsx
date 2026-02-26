@@ -1,15 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { ImageLightbox } from "@/components/ui/ImageLightboxLazy";
 import { notFound } from "next/navigation";
 import { usePost } from "@/hooks/usePosts";
 import type { PostDetail } from "@/hooks/usePosts";
 import { PostContent } from "./PostContent";
 import { ShareButtons } from "./ShareButtons";
 import { BlogPostSkeleton } from "@/components/skeletons/BlogPostSkeleton";
-import { SafeImage } from "@/components/ui/safe-image";
 import { ChevronRight } from "lucide-react";
 import { decodeHtmlEntities } from "@/lib/html";
 import { trackCategoryClick } from "@/lib/analytics";
@@ -40,7 +37,6 @@ interface BlogPostViewProps {
 }
 
 export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps) {
-  const [featuredPreviewSrc, setFeaturedPreviewSrc] = useState<string | null>(null);
   const { data: post, isLoading } = usePost(slug, initialPost ?? undefined);
 
   const displayPost = (post ?? initialPost) as PostDetail | undefined;
@@ -51,9 +47,6 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
   if (!displayPost) {
     notFound();
   }
-
-  const featuredImageSrc =
-    displayPost.featuredImage ?? "/placeholder.svg";
 
   return (
     <article className="w-full min-h-[50vh] bg-muted/10">
@@ -115,31 +108,6 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
             </p>
           )}
         </header>
-
-        <button
-          type="button"
-          className="relative w-full rounded-lg sm:rounded-xl overflow-hidden mt-6 sm:mt-8 mb-8 sm:mb-10 bg-muted shadow-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex justify-center items-center aspect-video max-h-[60vh] sm:max-h-[75vh]"
-          onClick={() => {
-            if (featuredImageSrc && featuredImageSrc !== "/placeholder.svg")
-              setFeaturedPreviewSrc(featuredImageSrc);
-          }}
-          aria-label="View featured image"
-        >
-          <SafeImage
-            src={featuredImageSrc}
-            alt=""
-            fill
-            className="object-contain"
-            sizes="(min-width: 1200px) 800px, 100vw"
-            preload
-            loading="eager"
-          />
-        </button>
-        <ImageLightbox
-          src={featuredPreviewSrc}
-          onClose={() => setFeaturedPreviewSrc(null)}
-          context="featured"
-        />
 
         <div className="w-full [&_.prose_p]:text-justify">
           <PostContent body={displayPost.body} />
