@@ -1,5 +1,6 @@
 import { BlogPostView } from "@/components/blog/BlogPostView";
 import { ArticleJsonLd } from "@/components/seo/ArticleJsonLd";
+import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 import { getSiteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import { getPostBySlug } from "@/lib/wp/post";
 import type { Metadata } from "next";
@@ -56,18 +57,37 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
   const initialPost = await getPostBySlug(slug);
+  const absoluteImageUrl =
+    initialPost?.featuredImage?.startsWith("http") === true
+      ? initialPost.featuredImage
+      : initialPost?.featuredImage
+        ? `${getSiteUrl()}${initialPost.featuredImage.startsWith("/") ? "" : "/"}${initialPost.featuredImage}`
+        : undefined;
+
   return (
     <>
       {initialPost && (
-        <ArticleJsonLd
-          title={initialPost.title ?? ""}
-          description={initialPost.excerpt}
-          slug={initialPost.slug}
-          datePublished={initialPost.publishedAt ?? ""}
-          dateModified={initialPost.modifiedAt ?? initialPost.publishedAt ?? ""}
-          authorName={initialPost.author?.name}
-          imageUrl={initialPost.featuredImage}
-        />
+        <>
+          <ArticleJsonLd
+            title={initialPost.title ?? ""}
+            description={initialPost.excerpt}
+            slug={initialPost.slug}
+            datePublished={initialPost.publishedAt ?? ""}
+            dateModified={initialPost.modifiedAt ?? initialPost.publishedAt ?? ""}
+            authorName={initialPost.author?.name}
+            imageUrl={absoluteImageUrl}
+          />
+          <BreadcrumbJsonLd
+            items={[
+              { name: "Home", url: getSiteUrl() },
+              { name: "Blog", url: `${getSiteUrl()}/blog` },
+              ...(initialPost.category
+                ? [{ name: initialPost.category.title, url: `${getSiteUrl()}/category/${initialPost.category.slug}` }]
+                : []),
+              { name: initialPost.title ?? "Post", url: `${getSiteUrl()}/blog/${initialPost.slug}` },
+            ]}
+          />
+        </>
       )}
       <BlogPostView
         slug={slug}

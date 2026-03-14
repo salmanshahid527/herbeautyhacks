@@ -1,11 +1,15 @@
 import { HomeSections } from "@/components/home/HomeSections";
 import { getSiteUrl } from "@/lib/seo";
+import { getCategories } from "@/lib/wp/categories";
+import { getFeaturedPosts, getPostsForMultipleCategories } from "@/lib/wp/post";
+import { getAuthor } from "@/lib/wp/author";
 import type { Metadata } from "next";
 
 /** ISR: revalidate at most every 60 seconds */
 export const revalidate = 60;
 
 const siteUrl = getSiteUrl();
+const POSTS_PER_CATEGORY = 4;
 
 export const metadata: Metadata = {
   title: { absolute: "Her Beauty Hacks" },
@@ -25,6 +29,26 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
-  return <HomeSections />;
+export default async function Home() {
+  const [categories, featuredPosts, author] = await Promise.all([
+    getCategories(),
+    getFeaturedPosts(),
+    getAuthor(),
+  ]);
+  const categoryIds = categories.map((c) => c.id);
+  const postsByCategoryId =
+    categoryIds.length > 0
+      ? await getPostsForMultipleCategories(categoryIds, POSTS_PER_CATEGORY)
+      : {};
+
+  return (
+    <HomeSections
+      initialData={{
+        categories,
+        featuredPosts,
+        author,
+        postsByCategoryId,
+      }}
+    />
+  );
 }

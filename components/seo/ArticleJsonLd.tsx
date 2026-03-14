@@ -22,6 +22,11 @@ export function ArticleJsonLd({
   imageUrl,
 }: ArticleJsonLdProps) {
   const url = `${siteUrl}/blog/${slug}`;
+  const absoluteImageUrl = imageUrl
+    ? imageUrl.startsWith("http")
+      ? imageUrl
+      : `${siteUrl}${imageUrl.startsWith("/") ? "" : "/"}${imageUrl}`
+    : undefined;
   const data = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -31,7 +36,7 @@ export function ArticleJsonLd({
     datePublished,
     dateModified: dateModified ?? datePublished,
     author: authorName ? { "@type": "Person", name: authorName } : undefined,
-    image: imageUrl ? [imageUrl] : undefined,
+    image: absoluteImageUrl ? [absoluteImageUrl] : undefined,
     publisher: {
       "@type": "Organization",
       name: "Her Beauty Hacks",

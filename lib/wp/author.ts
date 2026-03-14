@@ -1,6 +1,4 @@
-"use client";
-
-import { useQuery } from "@tanstack/react-query";
+import { cache } from "react";
 import { rewriteWpUrlsToSiteUrl } from "@/lib/html";
 import { fetchWp } from "@/lib/wp/client";
 import type { WpUser } from "@/lib/wp/types";
@@ -15,7 +13,8 @@ export interface Author {
   facebook?: string;
 }
 
-async function fetchAuthor(): Promise<Author | null> {
+/** Fetch site author (first user, server-only). Cached per request. */
+export const getAuthor = cache(async function getAuthor(): Promise<Author | null> {
   try {
     const data = await fetchWp<WpUser[]>(`/users`, { per_page: 1 });
     const user = Array.isArray(data) ? data[0] : null;
@@ -32,15 +31,4 @@ async function fetchAuthor(): Promise<Author | null> {
   } catch {
     return null;
   }
-}
-
-export function useAuthor(initialData?: Author | null) {
-  const hasServerData = initialData !== undefined && initialData !== null;
-  return useQuery({
-    queryKey: ["author"],
-    queryFn: fetchAuthor,
-    initialData: initialData ?? undefined,
-    initialDataUpdatedAt: hasServerData ? Date.now() : undefined,
-    staleTime: hasServerData ? Infinity : 0,
-  });
-}
+});

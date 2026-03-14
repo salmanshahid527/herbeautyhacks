@@ -17,18 +17,40 @@ import {
 } from "@/components/skeletons/HomeSkeletons";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import type { Category } from "@/hooks/useCategories";
+import type { Post } from "@/hooks/usePosts";
+import type { Author } from "@/hooks/useAuthor";
 
 const POSTS_PER_CATEGORY = 4;
 
-export function HomeSections() {
-  const { data: categories = [], isLoading: categoriesLoading } = useCategories();
-  const categoryIds = categories.map((c) => c.id);
-  const { data: postsByCategoryId = {}, isLoading: categoryPostsLoading } = usePostsForMultipleCategories(
-    categoryIds,
-    POSTS_PER_CATEGORY
+export interface HomeSectionsInitialData {
+  categories?: Category[];
+  featuredPosts?: Post[];
+  author?: Author | null;
+  postsByCategoryId?: Record<number, Post[]>;
+}
+
+interface HomeSectionsProps {
+  initialData?: HomeSectionsInitialData | null;
+}
+
+export function HomeSections({ initialData }: HomeSectionsProps) {
+  const { data: categories = [], isLoading: categoriesLoading } = useCategories(
+    initialData?.categories
   );
-  const { data: posts = [], isLoading: postsLoading } = useFeaturedPosts();
-  const { data: author, isLoading: authorLoading } = useAuthor();
+  const categoryIds = categories.map((c) => c.id);
+  const { data: postsByCategoryId = {}, isLoading: categoryPostsLoading } =
+    usePostsForMultipleCategories(
+      categoryIds,
+      POSTS_PER_CATEGORY,
+      initialData?.postsByCategoryId
+    );
+  const { data: posts = [], isLoading: postsLoading } = useFeaturedPosts(
+    initialData?.featuredPosts
+  );
+  const { data: author, isLoading: authorLoading } = useAuthor(
+    initialData?.author
+  );
 
   const hasCategories = categories.length > 0;
   const hasPosts = posts.length > 0;

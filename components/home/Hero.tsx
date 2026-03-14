@@ -39,7 +39,7 @@ export function Hero() {
         <div className="relative min-h-[240px] sm:min-h-[280px] md:min-h-[320px] w-full bg-muted lg:min-h-0 animate-scale-in opacity-0 [animation-fill-mode:both] [animation-delay:0.25s]">
           <Image
             src={HERO_IMAGE}
-            alt=""
+            alt="Her Beauty Hacks - beauty and lifestyle tips"
             fill
             className="object-cover object-center"
             priority

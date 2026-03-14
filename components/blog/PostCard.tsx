@@ -19,7 +19,7 @@ export function PostCard({ post, priority }: PostCardProps) {
         <div className="relative aspect-video bg-muted overflow-hidden">
           <SafeImage
             src={post.featuredImage ?? "/placeholder.svg"}
-            alt=""
+            alt={post.title}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-500"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

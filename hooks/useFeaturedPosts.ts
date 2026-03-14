@@ -39,9 +39,13 @@ async function fetchFeaturedPosts(): Promise<Post[]> {
   }
 }
 
-export function useFeaturedPosts() {
+export function useFeaturedPosts(initialData?: Post[] | null) {
+  const hasInitial = initialData !== undefined && initialData !== null;
   return useQuery({
     queryKey: ["featuredPosts"],
     queryFn: fetchFeaturedPosts,
+    initialData: hasInitial ? initialData : undefined,
+    initialDataUpdatedAt: hasInitial ? Date.now() : undefined,
+    staleTime: hasInitial ? Infinity : 0,
   });
 }

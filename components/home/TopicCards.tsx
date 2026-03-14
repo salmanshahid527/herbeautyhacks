@@ -27,7 +27,7 @@ function CategoryTile({
     >
       <SafeImage
         src={imageUrl ?? "/placeholder.svg"}
-        alt=""
+        alt={`${category.title} category`}
         fill
         className="object-cover transition-transform duration-300 group-hover:scale-105"
         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"

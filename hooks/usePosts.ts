@@ -194,12 +194,20 @@ async function fetchPostsForMultipleCategories(
 /** Fetches posts for many categories in one WordPress request; groups by category in the hook. */
 export function usePostsForMultipleCategories(
   categoryIds: number[],
-  limitPerCategory: number
+  limitPerCategory: number,
+  initialData?: Record<number, Post[]> | null
 ) {
   const stableIds = categoryIds.length > 0 ? [...categoryIds].sort((a, b) => a - b) : [];
+  const hasInitial =
+    initialData !== undefined &&
+    initialData !== null &&
+    stableIds.length > 0;
   return useQuery({
     queryKey: ["posts", "categories-batch", stableIds, limitPerCategory],
     queryFn: () => fetchPostsForMultipleCategories(stableIds, limitPerCategory),
     enabled: stableIds.length > 0,
+    initialData: hasInitial ? initialData : undefined,
+    initialDataUpdatedAt: hasInitial ? Date.now() : undefined,
+    staleTime: hasInitial ? Infinity : 0,
   });
 }

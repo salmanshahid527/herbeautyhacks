@@ -59,7 +59,7 @@ export function CategorySection({
                 <div className="relative aspect-video bg-muted overflow-hidden">
                   <SafeImage
                     src={post.featuredImage ?? "/placeholder.svg"}
-                    alt=""
+                    alt={post.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                     sizes="(max-width: 768px) 50vw, 25vw"

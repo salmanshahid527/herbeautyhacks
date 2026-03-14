@@ -68,3 +68,54 @@ export const getPostsForCategoryBySlug = cache(async function getPostsForCategor
     return [];
   }
 });
+
+/** Fetch featured/recent posts for home (server-only). Cached per request. */
+export const getFeaturedPosts = cache(async function getFeaturedPosts() {
+  try {
+    const data = await fetchWp<WpPost[]>("/posts", {
+      _embed: 1,
+      per_page: 6,
+      orderby: "date",
+      order: "desc",
+    });
+    return (Array.isArray(data) ? data : []).map((wp) => mapWpPostToPost(wp));
+  } catch {
+    return [];
+  }
+});
+
+/** Fetch posts grouped by category in one request (server-only). For home page. */
+export const getPostsForMultipleCategories = cache(async function getPostsForMultipleCategories(
+  categoryIds: number[],
+  limitPerCategory: number
+): Promise<Record<number, ReturnType<typeof mapWpPostToPost>[]>> {
+  if (categoryIds.length === 0) return {};
+  const idSet = new Set(categoryIds);
+  const maxPosts = Math.min(categoryIds.length * limitPerCategory * 3, 100);
+  try {
+    const data = await fetchWp<WpPost[]>("/posts", {
+      _embed: 1,
+      per_page: maxPosts,
+      orderby: "date",
+      order: "desc",
+    });
+    const allPosts = Array.isArray(data) ? data : [];
+    const countByCategory: Record<number, number> = Object.fromEntries(
+      categoryIds.map((id) => [id, 0])
+    );
+    const byCategory: Record<number, ReturnType<typeof mapWpPostToPost>[]> = Object.fromEntries(
+      categoryIds.map((id) => [id, []])
+    );
+    for (const wp of allPosts) {
+      const cids = wp.categories ?? [];
+      for (const cid of cids) {
+        if (!idSet.has(cid) || countByCategory[cid] >= limitPerCategory) continue;
+        byCategory[cid].push(mapWpPostToPost(wp));
+        countByCategory[cid]++;
+      }
+    }
+    return byCategory;
+  } catch {
+    return {};
+  }
+});
