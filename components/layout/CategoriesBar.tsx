@@ -4,10 +4,15 @@ import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trackCategoryClick } from "@/lib/analytics";
+import type { Category } from "@/lib/wp/categories";
 
+interface CategoriesBarProps {
+  /** Server-fetched categories so SSR matches client (avoids hydration error). */
+  initialCategories?: Category[];
+}
 
-export function CategoriesBar() {
-  const { data: categories = [], isLoading } = useCategories();
+export function CategoriesBar({ initialCategories }: CategoriesBarProps) {
+  const { data: categories = [], isLoading } = useCategories(initialCategories);
 
   return (
     <nav

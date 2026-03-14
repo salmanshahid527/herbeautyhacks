@@ -6,6 +6,7 @@ import { trackCategoryClick } from "@/lib/analytics";
 import { useNavLinks } from "@/hooks/useNavLinks";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { useAuthor } from "@/hooks/useAuthor";
+import type { Category } from "@/lib/wp/categories";
 import { Instagram, Facebook } from "lucide-react";
 
 function PinterestIcon({ className }: { className?: string }) {
@@ -24,8 +25,13 @@ const defaultExploreLinks = [
   { label: "Privacy Policy", href: "/privacy" },
 ];
 
-export function Footer() {
-  const { data: categories = [] } = useCategories();
+interface FooterProps {
+  /** Server-fetched categories so SSR matches client (avoids hydration error). */
+  initialCategories?: Category[];
+}
+
+export function Footer({ initialCategories }: FooterProps) {
+  const { data: categories = [] } = useCategories(initialCategories);
   const { data: navLinksFromWp } = useNavLinks();
   const { data: settings } = useSiteSettings();
   const { data: author } = useAuthor();

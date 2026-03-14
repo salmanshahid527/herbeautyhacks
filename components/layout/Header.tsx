@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useCategories } from "@/hooks/useCategories";
 import { useNavLinks } from "@/hooks/useNavLinks";
 import type { NavLink } from "@/lib/wp/nav";
+import type { Category } from "@/lib/wp/categories";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -27,10 +28,12 @@ const defaultNavLinks: NavLink[] = [
 interface HeaderProps {
   /** Server-fetched nav so first paint matches (no flash). */
   initialNavLinks?: NavLink[];
+  /** Server-fetched categories so SSR matches client (avoids hydration error). */
+  initialCategories?: Category[];
 }
 
-export function Header({ initialNavLinks }: HeaderProps) {
-  const { data: categories = [] } = useCategories();
+export function Header({ initialNavLinks, initialCategories }: HeaderProps) {
+  const { data: categories = [] } = useCategories(initialCategories);
   const { data: navLinksFromQuery } = useNavLinks(initialNavLinks ?? null);
   const navLinks =
     (navLinksFromQuery && navLinksFromQuery.length > 0 ? navLinksFromQuery : initialNavLinks) ??
