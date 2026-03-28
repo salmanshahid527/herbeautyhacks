@@ -36,7 +36,7 @@ export function Hero() {
           </Button>
         </div>
         {/* Right: hero image */}
-        <div className="relative min-h-[240px] sm:min-h-[280px] md:min-h-[320px] w-full bg-muted lg:min-h-0 animate-scale-in opacity-0 [animation-fill-mode:both] [animation-delay:0.25s]">
+        <div className="relative min-h-[240px] sm:min-h-[280px] md:min-h-[320px] w-full bg-muted lg:min-h-0">
           <Image
             src={HERO_IMAGE}
             alt="Her Beauty Hacks - beauty and lifestyle tips"

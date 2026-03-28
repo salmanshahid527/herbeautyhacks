@@ -21,6 +21,7 @@ const dancingScript = Dancing_Script({
   variable: "--font-dancing-script",
   subsets: ["latin"],
   weight: ["400", "600"],
+  display: "swap",
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://herbeautyhacks.com";
@@ -89,6 +90,8 @@ export default async function RootLayout({
           <link rel="preconnect" href={wpOrigin} crossOrigin="anonymous" />
         )}
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
       </head>
       <body
         className={`${plusJakartaSans.variable} ${dancingScript.variable} font-sans antialiased`}
