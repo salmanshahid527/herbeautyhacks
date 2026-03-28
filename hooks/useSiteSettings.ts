@@ -38,7 +38,6 @@ const defaultSettings: SiteSettings = {
     { label: "Home", href: "/" },
     { label: "Blog", href: "/blog" },
     { label: "About", href: "/about" },
-    { label: "Shop", href: "/shop" },
     { label: "Contact", href: "/contact" },
     { label: "Privacy Policy", href: "/privacy" },
   ],

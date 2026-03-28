@@ -10,7 +10,6 @@ type WpPageStub = { slug: string; date: string };
 const PAGE_SLUG_TO_PATH: Record<string, string> = {
   about: "/about",
   contact: "/contact",
-  shop: "/shop",
   "privacy-policy": "/privacy",
   privacy: "/privacy",
 };
@@ -25,7 +24,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/blog`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${base}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${base}/shop`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/privacy`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
   ];
 
@@ -60,7 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     pages = pageList
       .filter((p) =>
-        ["about", "contact", "shop", "privacy-policy", "privacy"].includes(p.slug)
+        ["about", "contact", "privacy-policy", "privacy"].includes(p.slug)
       )
       .map((p) => ({
         url: `${base}${PAGE_SLUG_TO_PATH[p.slug] ?? `/${p.slug}`}`,
