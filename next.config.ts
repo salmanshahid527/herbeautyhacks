@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
+import { normalizeWpSiteRoot } from "./lib/wp/env";
 
-const wpUrl = process.env.NEXT_PUBLIC_WP_URL ?? "https://your-site.com";
-const wpOrigin = wpUrl.replace(/\/$/, "");
+const wpOrigin = normalizeWpSiteRoot(process.env.NEXT_PUBLIC_WP_URL);
 const wpHost = process.env.NEXT_PUBLIC_WP_URL
-  ? new URL(process.env.NEXT_PUBLIC_WP_URL).hostname
+  ? new URL(normalizeWpSiteRoot(process.env.NEXT_PUBLIC_WP_URL)).hostname
   : "your-site.com";
 
 const nextConfig: NextConfig = {

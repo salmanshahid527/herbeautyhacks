@@ -1,6 +1,6 @@
-const baseUrl =
-  process.env.NEXT_PUBLIC_WP_URL ?? "https://your-site.com";
-const apiBase = `${baseUrl.replace(/\/$/, "")}/wp-json/wp/v2`;
+import { getWpJsonV2Base } from "@/lib/wp/env";
+
+const apiBase = getWpJsonV2Base(process.env.NEXT_PUBLIC_WP_URL);
 
 export function getWpApiUrl(): string {
   return apiBase;
