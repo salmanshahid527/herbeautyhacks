@@ -25,7 +25,7 @@ export function FeaturedPosts() {
               style={{ animationDelay: `${index * 0.08}s`, animationFillMode: "forwards" }}
             >
               {/* Card link */}
-              <Link href={`/blog/${post.slug}`}>
+              <Link href={`/${post.slug}`}>
                 <Card className="overflow-hidden h-full rounded-2xl border border-border/60 bg-card shadow-card hover:shadow-card-lg hover:border-primary/20 hover:-translate-y-1 transition-all duration-300">
                   <div className="relative aspect-video bg-muted overflow-hidden">
                     <SafeImage

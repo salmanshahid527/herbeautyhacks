@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import { trackCategoryClick } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,6 +32,13 @@ export function MobileNav({ navLinks, categories }: MobileNavProps) {
           <SheetTitle className="sr-only">Menu</SheetTitle>
         </SheetHeader>
         <nav className="flex flex-col gap-1 mt-6 sm:mt-8" aria-label="Main navigation">
+          <Link
+            href="/search"
+            className="flex items-center gap-2 py-3 px-2 -mx-2 text-base sm:text-lg font-medium text-foreground hover:text-primary hover:bg-primary/5 rounded-md transition-colors touch-manipulation min-h-[44px]"
+          >
+            <Search className="size-5 shrink-0" />
+            Search
+          </Link>
           {navLinks.map((link) =>
             link.href ? (
               <Link

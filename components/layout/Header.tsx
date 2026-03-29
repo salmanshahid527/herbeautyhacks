@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { Search } from "lucide-react";
 import { useCategories } from "@/hooks/useCategories";
 import { useNavLinks } from "@/hooks/useNavLinks";
 import type { NavLink } from "@/lib/wp/nav";
@@ -55,7 +56,21 @@ export function Header({ initialNavLinks, initialCategories }: HeaderProps) {
           </Link>
         </div>
         <NavigationMenu className="hidden sm:flex justify-end max-w-max flex-1 min-w-0">
-          <NavigationMenuList className="flex flex-wrap justify-end gap-x-1 gap-y-1 space-x-0">
+          <NavigationMenuList className="flex flex-wrap items-center justify-end gap-x-1 gap-y-1 space-x-0">
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link
+                  href="/search"
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "bg-transparent text-foreground hover:bg-primary/10 hover:text-primary focus:bg-primary/10 focus:text-primary px-3 py-2 text-sm md:px-4",
+                  )}
+                  aria-label="Search"
+                >
+                  <Search className="size-4 md:size-[18px]" />
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
             {navLinks.map((link) =>
               link.href ? (
                 <NavigationMenuItem key={link.href}>

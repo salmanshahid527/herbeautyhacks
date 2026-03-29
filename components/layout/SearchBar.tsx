@@ -33,7 +33,8 @@ export function SearchBar({ placeholder = "Search…", className }: SearchBarPro
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const { data: results = [], isLoading } = useSearch(debouncedQuery);
+  const { data: results = [], isLoading, isFetching } = useSearch(debouncedQuery);
+  const searching = isLoading || isFetching;
   const showDropdown = open && (debouncedQuery.length >= 2 || results.length > 0);
 
   return (
@@ -58,7 +59,7 @@ export function SearchBar({ placeholder = "Search…", className }: SearchBarPro
           className="absolute top-full left-0 mt-1 w-72 rounded-md border bg-popover py-2 shadow-lg z-50 max-h-80 overflow-auto"
           role="listbox"
         >
-          {isLoading ? (
+          {searching ? (
             <p className="px-3 py-2 text-sm text-muted-foreground">Searching…</p>
           ) : results.length === 0 ? (
             <p className="px-3 py-2 text-sm text-muted-foreground">
@@ -69,7 +70,7 @@ export function SearchBar({ placeholder = "Search…", className }: SearchBarPro
               {results.map((post) => (
                 <li key={post._id} role="option">
                   <Link
-                    href={`/blog/${post.slug}`}
+                    href={`/${post.slug}`}
                     className="block px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm"
                     onClick={() => setOpen(false)}
                   >

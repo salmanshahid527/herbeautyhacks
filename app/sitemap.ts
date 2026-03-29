@@ -77,7 +77,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
     posts = postStubs.map((p) => ({
-      url: `${base}/blog/${p.slug}`,
+      url: `${base}/${p.slug}`,
       lastModified: lastMod(p.modified ?? p.date),
       changeFrequency: "weekly" as const,
       priority: 0.8,

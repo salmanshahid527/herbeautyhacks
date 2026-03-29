@@ -14,7 +14,7 @@ interface PostCardProps {
 
 export function PostCard({ post, priority }: PostCardProps) {
   return (
-    <Link href={`/blog/${post.slug}`} className="group block h-full">
+    <Link href={`/${post.slug}`} className="group block h-full">
       <Card className="overflow-hidden h-full rounded-2xl border border-border/60 bg-card shadow-card hover:shadow-card-lg hover:border-primary/20 hover:-translate-y-0.5 transition-all duration-300">
         <div className="relative aspect-video bg-muted overflow-hidden">
           <SafeImage

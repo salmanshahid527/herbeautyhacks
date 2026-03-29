@@ -51,7 +51,7 @@ export function CategorySection({
           {posts.map((post, index) => (
             <Link
               key={post._id}
-              href={`/blog/${post.slug}`}
+              href={`/${post.slug}`}
               className="group block h-full animate-scale-in opacity-0"
               style={{ animationDelay: `${index * 0.06}s`, animationFillMode: "forwards" }}
             >

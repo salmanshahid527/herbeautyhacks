@@ -21,7 +21,7 @@ export function ArticleJsonLd({
   authorName,
   imageUrl,
 }: ArticleJsonLdProps) {
-  const url = `${siteUrl}/blog/${slug}`;
+  const url = `${siteUrl}/${slug}`;
   const absoluteImageUrl = imageUrl
     ? imageUrl.startsWith("http")
       ? imageUrl
