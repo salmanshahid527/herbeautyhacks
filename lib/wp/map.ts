@@ -16,6 +16,7 @@ export interface MappedPost {
   featured?: boolean;
   order?: number;
   publishedAt?: string;
+  author?: { name: string; image?: string };
 }
 
 function stripHtml(html: string): string {
@@ -25,6 +26,7 @@ function stripHtml(html: string): string {
 export function mapWpPostToPost(wp: WpPost): MappedPost {
   const category = wp._embedded?.["wp:term"]?.[0]?.[0];
   const featuredMedia = wp._embedded?.["wp:featuredmedia"]?.[0];
+  const author = wp._embedded?.author?.[0];
   const title = rewriteWpUrlsToSiteUrl(decodeHtmlEntities(stripHtml(wp.title?.rendered ?? "")));
   const excerpt = rewriteWpUrlsToSiteUrl(decodeHtmlEntities(stripHtml(wp.excerpt?.rendered ?? "")));
   return {
@@ -36,12 +38,14 @@ export function mapWpPostToPost(wp: WpPost): MappedPost {
     featuredImage: featuredMedia?.source_url,
     featured: !!wp.sticky,
     publishedAt: wp.date,
+    author: author
+      ? { name: author.name, image: author.avatar_urls?.[96] }
+      : undefined,
   };
 }
 
 export interface MappedPostDetail extends MappedPost {
   body?: string;
-  author?: { name: string; image?: string };
   modifiedAt?: string;
 }
 

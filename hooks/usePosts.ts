@@ -20,11 +20,11 @@ export interface Post {
   featured?: boolean;
   order?: number;
   publishedAt?: string;
+  author?: { name: string; image?: string };
 }
 
 export interface PostDetail extends Post {
   body?: string;
-  author?: { name: string; image?: string };
 }
 
 async function fetchPostsForBlog(
