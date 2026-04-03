@@ -2,6 +2,7 @@ import { decodeHtmlEntities, rewriteWpUrlsToSiteUrl } from "@/lib/html";
 import type { WpPost } from "@/lib/wp/types";
 
 export interface MappedPostCategory {
+  id: number;
   title: string;
   slug: string;
 }
@@ -34,7 +35,7 @@ export function mapWpPostToPost(wp: WpPost): MappedPost {
     title,
     slug: wp.slug,
     excerpt,
-    category: category ? { title: category.name, slug: category.slug } : undefined,
+    category: category ? { id: category.id, title: category.name, slug: category.slug } : undefined,
     featuredImage: featuredMedia?.source_url,
     featured: !!wp.sticky,
     publishedAt: wp.date,

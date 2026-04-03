@@ -119,3 +119,28 @@ export const getPostsForMultipleCategories = cache(async function getPostsForMul
     return {};
   }
 });
+
+/** Get related posts by category ID (excluding the current post) */
+export const getRelatedPostsByCategory = cache(async function getRelatedPostsByCategory(
+  categoryId: number,
+  currentPostSlug: string,
+  limit: number = 4
+) {
+  try {
+    const data = await fetchWp<WpPost[]>("/posts", {
+      _embed: 1,
+      categories: categoryId,
+      per_page: limit + 5,
+      orderby: "date",
+      order: "desc",
+    });
+    
+    const posts = Array.isArray(data) ? data : [];
+    return posts
+      .filter((wp) => wp.slug !== currentPostSlug)
+      .slice(0, limit)
+      .map(mapWpPostToPost);
+  } catch {
+    return [];
+  }
+});

@@ -3,7 +3,7 @@ import { ArticleJsonLd } from "@/components/seo/ArticleJsonLd";
 import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 import { WpPageContent } from "@/components/pages/WpPageContent";
 import { getSiteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
-import { getPostBySlug } from "@/lib/wp/post";
+import { getPostBySlug, getRelatedPostsByCategory } from "@/lib/wp/post";
 import { getPageBySlug } from "@/lib/wp/pages";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -99,6 +99,18 @@ export default async function SlugPage({ params }: Props) {
   const initialPost = await getPostBySlug(slug);
   if (!initialPost) notFound();
 
+  // Fetch related posts if category exists
+  const relatedPosts = [];
+  if (initialPost.category?.id) {
+    try {
+      const posts = await getRelatedPostsByCategory(initialPost.category.id, initialPost.slug, 4);
+      relatedPosts.push(...posts);
+    } catch (err) {
+      // Silently fail if we can't get related posts
+      console.log("Could not fetch related posts:", err);
+    }
+  }
+
   const siteUrl = getSiteUrl();
   const absoluteImageUrl =
     initialPost.featuredImage?.startsWith("http") === true
@@ -130,7 +142,7 @@ export default async function SlugPage({ params }: Props) {
           { name: initialPost.title ?? "Post", url: postUrl },
         ]}
       />
-      <BlogPostView slug={slug} initialPost={initialPost} shareUrl={postUrl} />
+      <BlogPostView slug={slug} initialPost={initialPost} shareUrl={postUrl} relatedPosts={relatedPosts} />
     </>
   );
 }

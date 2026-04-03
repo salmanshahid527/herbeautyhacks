@@ -6,11 +6,12 @@ import { usePost } from "@/hooks/usePosts";
 import type { PostDetail } from "@/hooks/usePosts";
 import { PostContent } from "./PostContent";
 import { ShareButtons } from "./ShareButtons";
+import { RelatedPosts } from "@/components/article/RelatedPosts";
 import { BlogPostSkeleton } from "@/components/skeletons/BlogPostSkeleton";
 import { ChevronRight } from "lucide-react";
 import { decodeHtmlEntities } from "@/lib/html";
 import { trackCategoryClick } from "@/lib/analytics";
-import type { MappedPostDetail } from "@/lib/wp/post";
+import type { MappedPostDetail, MappedPost } from "@/lib/wp/post";
 
 /** Strip HTML tags and decode entities for safe plain-text title (avoids DOMPurify/ESM on SSR). */
 function formatTitle(html: string): string {
@@ -40,9 +41,11 @@ interface BlogPostViewProps {
   initialPost?: MappedPostDetail | null;
   /** Canonical URL for sharing; used in share buttons. */
   shareUrl?: string;
+  /** Related posts to display at the end of the article */
+  relatedPosts?: MappedPost[];
 }
 
-export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps) {
+export function BlogPostView({ slug, initialPost, shareUrl, relatedPosts = [] }: BlogPostViewProps) {
   const { data: post, isLoading } = usePost(slug, initialPost ?? undefined);
 
   const displayPost = (post ?? initialPost) as PostDetail | undefined;
@@ -118,6 +121,13 @@ export function BlogPostView({ slug, initialPost, shareUrl }: BlogPostViewProps)
         <div className="w-full [&_.prose_p]:text-justify">
           <PostContent body={displayPost.body} />
         </div>
+
+        {/* Related Posts Section */}
+        {relatedPosts.length > 0 && (
+          <div className="mt-14 lg:mt-16">
+            <RelatedPosts posts={relatedPosts} currentPostSlug={slug} />
+          </div>
+        )}
 
         {(displayPost.author || displayPost.category) && (
           <div className="mt-12 pt-8 border-t border-border">
