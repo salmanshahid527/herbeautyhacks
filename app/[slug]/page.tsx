@@ -3,6 +3,7 @@ import { ArticleJsonLd } from "@/components/seo/ArticleJsonLd";
 import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 import { WpPageContent } from "@/components/pages/WpPageContent";
 import { getSiteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
+import { fetchRankMathDescription } from "@/lib/wp/rankmath";
 import { getPostBySlug, getRelatedPostsByCategory } from "@/lib/wp/post";
 import { getPageBySlug } from "@/lib/wp/pages";
 import { notFound } from "next/navigation";
@@ -46,10 +47,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPostBySlug(slug);
   if (!post) return { title: "Not found" };
 
+  const rankMathDesc = await fetchRankMathDescription(slug);
+
   const siteUrl = getSiteUrl();
   const url = `${siteUrl}/${slug}`;
   const title = post.title ?? "Post";
-  const description = post.excerpt ?? undefined;
+  const description = rankMathDesc || post.excerpt || undefined;
   const imageUrl =
     post.featuredImage?.startsWith("http") === true
       ? post.featuredImage
