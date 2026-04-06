@@ -156,7 +156,6 @@ export function BlogPostView({ slug, initialPost, shareUrl, relatedPosts = [] }:
 
         <ShareButtons title={formatTitle(displayPost.title ?? "")} url={shareUrl} />
       </div>
-      </div>
     </article>
   );
 }
