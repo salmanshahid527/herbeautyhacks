@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { useAuthor } from "@/hooks/useAuthor";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";

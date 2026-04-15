@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import { SmartImage as Image } from "@/components/ui/SmartImage";
 import type { MappedPost } from "@/lib/wp/post";
 
 interface RelatedPostsProps {
