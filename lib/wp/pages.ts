@@ -2,6 +2,7 @@ import { cache } from "react";
 import { decodeHtmlEntities, rewriteWpUrlsToSiteUrl } from "@/lib/html";
 import { fetchWp } from "@/lib/wp/client";
 import type { WpPage } from "@/lib/wp/types";
+import { isHeadlessExcludedWpPageSlug } from "./excludedPublicWpPages";
 
 export interface Page {
   _id: string;
@@ -40,11 +41,14 @@ async function fetchPageBySlug(slug: string): Promise<Page | null> {
 
 /** Cached per request so generateMetadata + page can share one fetch. */
 export const getPageBySlug = cache(async function getPageBySlug(slug: string): Promise<Page | null> {
+  if (isHeadlessExcludedWpPageSlug(slug)) return null;
+
   const page = await fetchPageBySlug(slug);
   if (page) return page;
   const fallbacks = SLUG_FALLBACKS[slug];
   if (!fallbacks?.length) return null;
   for (const fallback of fallbacks) {
+    if (isHeadlessExcludedWpPageSlug(fallback)) continue;
     const p = await fetchPageBySlug(fallback);
     if (p) return p;
   }
