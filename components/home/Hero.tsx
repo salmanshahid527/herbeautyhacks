@@ -6,7 +6,7 @@ import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { Button } from "@/components/ui/button";
 
 const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1200&q=80";
+  "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1000&q=72&auto=format&fit=crop";
 
 export function Hero() {
   const { data: settings } = useSiteSettings();
@@ -43,6 +43,7 @@ export function Hero() {
             fill
             className="object-cover object-center"
             priority
+            unoptimized
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
         </div>
