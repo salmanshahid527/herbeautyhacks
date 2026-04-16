@@ -2,7 +2,6 @@ import { HomeSections } from "@/components/home/HomeSections";
 import { getSiteUrl } from "@/lib/seo";
 import { getCategories } from "@/lib/wp/categories";
 import { getFeaturedPosts, getPostsForMultipleCategories } from "@/lib/wp/post";
-import { getAuthor } from "@/lib/wp/author";
 import type { Metadata } from "next";
 
 /** ISR: revalidate at most every 60 seconds */
@@ -30,10 +29,9 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const [categories, featuredPosts, author] = await Promise.all([
+  const [categories, featuredPosts] = await Promise.all([
     getCategories(),
     getFeaturedPosts(),
-    getAuthor(),
   ]);
   const categoryIds = categories.map((c) => c.id);
   const postsByCategoryId =
@@ -46,7 +44,6 @@ export default async function Home() {
       initialData={{
         categories,
         featuredPosts,
-        author,
         postsByCategoryId,
       }}
     />

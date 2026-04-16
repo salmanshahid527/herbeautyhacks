@@ -3,30 +3,25 @@
 import { useCategories } from "@/hooks/useCategories";
 import { useFeaturedPosts } from "@/hooks/useFeaturedPosts";
 import { usePostsForMultipleCategories } from "@/hooks/usePosts";
-import { useAuthor } from "@/hooks/useAuthor";
 import { Hero } from "./Hero";
 import { TopicCards } from "./TopicCards";
 import { FeaturedPosts } from "./FeaturedPosts";
 import { CategoriesAndSections } from "./CategoriesAndSections";
-import { MeetAuthor } from "./MeetAuthor";
 import {
   TopicCardsSkeleton,
   FeaturedPostsSkeleton,
   CategorySectionSkeleton,
-  MeetAuthorSkeleton,
 } from "@/components/skeletons/HomeSkeletons";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import type { Category } from "@/hooks/useCategories";
 import type { Post } from "@/hooks/usePosts";
-import type { Author } from "@/hooks/useAuthor";
 
 const POSTS_PER_CATEGORY = 4;
 
 export interface HomeSectionsInitialData {
   categories?: Category[];
   featuredPosts?: Post[];
-  author?: Author | null;
   postsByCategoryId?: Record<number, Post[]>;
 }
 
@@ -48,16 +43,13 @@ export function HomeSections({ initialData }: HomeSectionsProps) {
   const { data: posts = [], isLoading: postsLoading } = useFeaturedPosts(
     initialData?.featuredPosts
   );
-  const { data: author, isLoading: authorLoading } = useAuthor(
-    initialData?.author
-  );
 
   const hasCategories = categories.length > 0;
   const hasPosts = posts.length > 0;
-  const hasAuthor = !!author;
-  const isLoading = categoriesLoading || postsLoading || authorLoading || (hasCategories && categoryPostsLoading);
+  const isLoading =
+    categoriesLoading || postsLoading || (hasCategories && categoryPostsLoading);
 
-  const hasAnyContent = hasCategories || hasPosts || hasAuthor;
+  const hasAnyContent = hasCategories || hasPosts;
 
   return (
     <>
@@ -67,7 +59,6 @@ export function HomeSections({ initialData }: HomeSectionsProps) {
           <TopicCardsSkeleton />
           <FeaturedPostsSkeleton />
           <CategorySectionSkeleton />
-          <MeetAuthorSkeleton />
         </>
       ) : !hasAnyContent ? (
         <section className="section-spacing w-full bg-muted/30 border-y border-border/60">
@@ -85,7 +76,6 @@ export function HomeSections({ initialData }: HomeSectionsProps) {
           {hasCategories && <TopicCards postsByCategoryId={postsByCategoryId} />}
           {hasPosts && <FeaturedPosts />}
           {hasCategories && <CategoriesAndSections postsByCategoryId={postsByCategoryId} />}
-          {hasAuthor && <MeetAuthor />}
         </>
       )}
     </>
