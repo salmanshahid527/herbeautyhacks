@@ -19,6 +19,8 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
+    /** Bypass Vercel Image Optimization transforms (Hobby quota); WP/CDN serve sized assets */
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",

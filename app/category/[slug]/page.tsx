@@ -5,8 +5,8 @@ import { getCategories, getCategoryBySlug } from "@/lib/wp/categories";
 import { getPostsForCategoryBySlug } from "@/lib/wp/post";
 import type { Metadata } from "next";
 
-/** ISR: revalidate at most every 60 seconds */
-export const revalidate = 60;
+/** ISR: at most hourly — keeps Vercel Hobby ISR write limits sustainable */
+export const revalidate = 3600;
 
 interface PageProps {
   params: Promise<{ slug: string }>;

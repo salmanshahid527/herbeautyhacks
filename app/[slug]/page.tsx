@@ -19,7 +19,7 @@ const PAGE_SLUG_TO_PATH: Record<string, string> = {
 
 type Props = { params: Promise<{ slug: string }> };
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

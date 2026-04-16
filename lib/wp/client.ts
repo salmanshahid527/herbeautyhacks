@@ -20,7 +20,7 @@ export async function fetchWp<T>(
   }
   const url = `${apiBase}${path}${searchParams.toString() ? `?${searchParams}` : ""}`;
   const res = await fetch(url, {
-    next: { revalidate: 60 },
+    next: { revalidate: 3600 },
     headers: { "Content-Type": "application/json" },
   });
   if (!res.ok) {

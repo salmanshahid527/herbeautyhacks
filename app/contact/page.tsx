@@ -3,8 +3,8 @@ import { getSiteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import { getPageBySlug } from "@/lib/wp/pages";
 import type { Metadata } from "next";
 
-/** ISR: revalidate at most every 60 seconds */
-export const revalidate = 60;
+/** ISR: at most hourly — keeps Vercel Hobby ISR write limits sustainable */
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPageBySlug("contact");
