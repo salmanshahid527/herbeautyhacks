@@ -22,6 +22,7 @@ const defaultNavLinks: NavLink[] = [
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
+  { label: "Disclaimer", href: "/disclaimer" },
   { label: "Privacy Policy", href: "/privacy" },
 ];
 

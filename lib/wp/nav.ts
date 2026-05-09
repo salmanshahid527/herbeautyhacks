@@ -11,11 +11,12 @@ export interface NavLink {
 const SLUG_TO_PATH: Record<string, string> = {
   about: "/about",
   contact: "/contact",
+  disclaimer: "/disclaimer",
   "privacy-policy": "/privacy",
   privacy: "/privacy",
 };
 
-const NAV_PAGE_SLUGS = ["about", "contact", "privacy-policy", "privacy"];
+const NAV_PAGE_SLUGS = ["about", "contact", "disclaimer", "privacy-policy", "privacy"];
 
 function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "").trim();
@@ -26,6 +27,7 @@ const DEFAULT_FALLBACK: NavLink[] = [
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
+  { label: "Disclaimer", href: "/disclaimer" },
   { label: "Privacy Policy", href: "/privacy" },
 ];
 

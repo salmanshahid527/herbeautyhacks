@@ -13,6 +13,7 @@ import type { Metadata } from "next";
 const PAGE_SLUG_TO_PATH: Record<string, string> = {
   about: "/about",
   contact: "/contact",
+  disclaimer: "/disclaimer",
   "privacy-policy": "/privacy",
   privacy: "/privacy",
 };

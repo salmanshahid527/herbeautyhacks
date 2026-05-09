@@ -22,6 +22,7 @@ const MAX_POST_URLS = GOOGLE_MAX_URLS - RESERVED_NON_POST_SLOTS;
 const PAGE_SLUG_TO_PATH: Record<string, string> = {
   about: "/about",
   contact: "/contact",
+  disclaimer: "/disclaimer",
   "privacy-policy": "/privacy",
   privacy: "/privacy",
 };
@@ -45,6 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/blog`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: `${base}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/disclaimer`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/privacy`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
   ];
 

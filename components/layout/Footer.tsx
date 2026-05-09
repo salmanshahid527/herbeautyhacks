@@ -22,6 +22,7 @@ const defaultExploreLinks = [
   { label: "About", href: "/about" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
+  { label: "Disclaimer", href: "/disclaimer" },
   { label: "Privacy Policy", href: "/privacy" },
 ];
 
@@ -39,6 +40,9 @@ export function Footer({ initialCategories }: FooterProps) {
     navLinksFromWp && navLinksFromWp.length > 0 ? navLinksFromWp : defaultExploreLinks;
   const legalLinks = settings?.footerLegalLinks ?? [];
   const asSeenOn = settings?.asSeenOn ?? [];
+  const pinterestUrl = "https://www.pinterest.com/Herbeauty_hacks/";
+  const instagramUrl = author?.instagram ?? "#";
+  const facebookUrl = author?.facebook ?? "#";
 
   return (
     <footer className="bg-muted/40 border-t border-border">
@@ -56,43 +60,6 @@ export function Footer({ initialCategories }: FooterProps) {
               <p className="mt-2 text-sm text-muted-foreground max-w-xs">
                 Beauty, fashion, skincare & lifestyle — no one is you.
               </p>
-              {author && (author.pinterest || author.instagram || author.facebook) && (
-                <div className="mt-4 flex gap-2">
-                  {author.pinterest && (
-                    <a
-                      href={author.pinterest}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-                      aria-label="Pinterest"
-                    >
-                      <PinterestIcon className="size-4" />
-                    </a>
-                  )}
-                  {author.instagram && (
-                    <a
-                      href={author.instagram}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-                      aria-label="Instagram"
-                    >
-                      <Instagram className="size-4" />
-                    </a>
-                  )}
-                  {author.facebook && (
-                    <a
-                      href={author.facebook}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-                      aria-label="Facebook"
-                    >
-                      <Facebook className="size-4" />
-                    </a>
-                  )}
-                </div>
-              )}
             </div>
 
             {/* Categories */}
@@ -135,7 +102,49 @@ export function Footer({ initialCategories }: FooterProps) {
                 )}
               </ul>
             </div>
+
+            {/* Follow Us */}
+            <div>
+              <h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                Follow Us
+              </h3>
+              <p className="mt-4 text-sm text-muted-foreground max-w-xs">
+                Stay connected with us for beauty tips, product ideas, and updates.
+                Follow us on social media for the latest beauty tips and updates.
+              </p>
+              <div className="mt-4 flex items-center gap-2">
+                <a
+                  href={pinterestUrl}
+                  target={pinterestUrl.startsWith("http") ? "_blank" : undefined}
+                  rel={pinterestUrl.startsWith("http") ? "noopener noreferrer" : undefined}
+                  className="flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
+                  aria-label="Pinterest"
+                >
+                  <PinterestIcon className="size-4" />
+                </a>
+                <a
+                  href={instagramUrl}
+                  target={instagramUrl.startsWith("http") ? "_blank" : undefined}
+                  rel={instagramUrl.startsWith("http") ? "noopener noreferrer" : undefined}
+                  className="flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="size-4" />
+                </a>
+                <a
+                  href={facebookUrl}
+                  target={facebookUrl.startsWith("http") ? "_blank" : undefined}
+                  rel={facebookUrl.startsWith("http") ? "noopener noreferrer" : undefined}
+                  className="flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="size-4" />
+                </a>
+              </div>
+            </div>
           </div>
+
+          
 
           {/* As Seen On */}
           {asSeenOn.length > 0 && (
