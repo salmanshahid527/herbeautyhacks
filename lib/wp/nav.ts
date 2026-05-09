@@ -13,9 +13,10 @@ const SLUG_TO_PATH: Record<string, string> = {
   contact: "/contact",
   "privacy-policy": "/privacy",
   privacy: "/privacy",
+  disclaimer: "/disclaimer",
 };
 
-const NAV_PAGE_SLUGS = ["about", "contact", "privacy-policy", "privacy"];
+const NAV_PAGE_SLUGS = ["about", "contact", "privacy-policy", "privacy","disclaimer"];
 
 function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "").trim();
@@ -27,6 +28,7 @@ const DEFAULT_FALLBACK: NavLink[] = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "Privacy Policy", href: "/privacy" },
+  { label: "Disclaimer", href: "/disclaimer" },
 ];
 
 /** Fetch nav links from WordPress (for server-side initial render). */
