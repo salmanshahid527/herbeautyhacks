@@ -23,6 +23,7 @@ const defaultExploreLinks = [
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
   { label: "Privacy Policy", href: "/privacy" },
+  { label: "Disclaimer", href: "/disclaimer" }
 ];
 
 interface FooterProps {

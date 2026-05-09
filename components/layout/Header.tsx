@@ -23,6 +23,7 @@ const defaultNavLinks: NavLink[] = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "Privacy Policy", href: "/privacy" },
+  { label: "Disclaimer", href: "/disclaimer" }
 ];
 
 interface HeaderProps {
