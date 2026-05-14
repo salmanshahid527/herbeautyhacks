@@ -5,6 +5,7 @@ import { SafeImage } from "@/components/ui/safe-image";
 import { useFeaturedPosts } from "@/hooks/useFeaturedPosts";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { decodeHtmlEntities } from "@/lib/html";
 
 export function FeaturedPosts() {
   const { data: posts = [] } = useFeaturedPosts();
@@ -18,7 +19,14 @@ export function FeaturedPosts() {
           Posts you just can&apos;t miss!
         </h2>
         <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.slice(0, 6).map((post, index) => (
+          {posts.slice(0, 6).map((post, index) => {
+            const title = decodeHtmlEntities(post.title ?? "");
+            const excerptPlain = post.excerpt ? decodeHtmlEntities(post.excerpt) : undefined;
+            const categoryTitle = post.category?.title
+              ? decodeHtmlEntities(post.category.title)
+              : undefined;
+
+            return (
             <div
               key={post._id}
               className="group relative animate-slide-in-bottom opacity-0"
@@ -30,7 +38,7 @@ export function FeaturedPosts() {
                   <div className="relative aspect-video bg-muted overflow-hidden">
                     <SafeImage
                       src={post.featuredImage ?? "/placeholder.svg"}
-                      alt={post.title}
+                      alt={title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -40,13 +48,13 @@ export function FeaturedPosts() {
                   <CardContent className="p-3 sm:p-5">
                     {post.category && (
                       <Badge className="mb-2 text-xs bg-primary/15 text-primary border-primary/30 hover:bg-primary/25 shadow-sm">
-                        {post.category.title}
+                        {categoryTitle}
                       </Badge>
                     )}
-                    <h3 className="font-semibold line-clamp-2 text-foreground">{post.title}</h3>
-                    {post.excerpt && (
+                    <h3 className="font-semibold line-clamp-2 text-foreground">{title}</h3>
+                    {excerptPlain && (
                       <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                        {post.excerpt}
+                        {excerptPlain}
                       </p>
                     )}
                   </CardContent>
@@ -66,7 +74,8 @@ export function FeaturedPosts() {
                 </button>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

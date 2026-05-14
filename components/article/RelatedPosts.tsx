@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { SmartImage as Image } from "@/components/ui/SmartImage";
+import { decodeHtmlEntities } from "@/lib/html";
 import type { MappedPost } from "@/lib/wp/post";
 
 interface RelatedPostsProps {
@@ -31,7 +32,14 @@ export function RelatedPosts({ posts, currentPostSlug }: RelatedPostsProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-7 stagger-children">
-        {relatedPosts.map((post) => (
+        {relatedPosts.map((post) => {
+          const title = decodeHtmlEntities(post.title ?? "");
+          const excerptPlain = post.excerpt ? decodeHtmlEntities(post.excerpt) : undefined;
+          const categoryTitle = post.category?.title
+            ? decodeHtmlEntities(post.category.title)
+            : undefined;
+
+          return (
           <Link
             key={post._id}
             href={`/${post.slug}`}
@@ -42,7 +50,7 @@ export function RelatedPosts({ posts, currentPostSlug }: RelatedPostsProps) {
               <div className="hidden sm:block relative w-full h-40 sm:h-48 overflow-hidden bg-muted">
                 <Image
                   src={post.featuredImage}
-                  alt={post.title}
+                  alt={title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -55,19 +63,19 @@ export function RelatedPosts({ posts, currentPostSlug }: RelatedPostsProps) {
               {/* Category Badge */}
               {post.category && (
                 <span className="inline-block w-fit mb-3 text-xs font-semibold uppercase tracking-wider text-primary">
-                  {post.category.title}
+                  {categoryTitle}
                 </span>
               )}
 
               {/* Title */}
               <h3 className="font-display font-600 text-lg lg:text-xl text-foreground mb-3 group-hover:text-primary transition-colors line-clamp-2">
-                {post.title}
+                {title}
               </h3>
 
               {/* Excerpt */}
-              {post.excerpt && (
+              {excerptPlain && (
                 <p className="text-sm text-foreground-muted line-clamp-2 flex-1 mb-4">
-                  {post.excerpt}
+                  {excerptPlain}
                 </p>
               )}
 
@@ -86,7 +94,8 @@ export function RelatedPosts({ posts, currentPostSlug }: RelatedPostsProps) {
               </div>
             </div>
           </Link>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

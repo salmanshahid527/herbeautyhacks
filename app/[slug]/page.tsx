@@ -2,6 +2,7 @@ import { BlogPostView } from "@/components/blog/BlogPostView";
 import { ArticleJsonLd } from "@/components/seo/ArticleJsonLd";
 import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 import { WpPageContent } from "@/components/pages/WpPageContent";
+import { decodeHtmlEntities } from "@/lib/html";
 import { getSiteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import { fetchRankMathDescription } from "@/lib/wp/rankmath";
 import { getPostBySlug, getRelatedPostsByCategory } from "@/lib/wp/post";
@@ -28,8 +29,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const path = PAGE_SLUG_TO_PATH[slug] ?? `/${slug}`;
     const siteUrl = getSiteUrl();
     const url = `${siteUrl}${path}`;
-    const title = page.title ?? "Page";
-    const description = page.excerpt ?? undefined;
+    const title = decodeHtmlEntities(page.title ?? "Page");
+    const description = page.excerpt ? decodeHtmlEntities(page.excerpt) : undefined;
     return {
       title,
       description,
@@ -51,8 +52,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const siteUrl = getSiteUrl();
   const url = `${siteUrl}/${slug}`;
-  const title = post.title ?? "Post";
-  const description = rankMathDesc || post.excerpt || undefined;
+  const title = decodeHtmlEntities(post.title ?? "Post");
+  const rawDescription = rankMathDesc || post.excerpt || undefined;
+  const description = rawDescription ? decodeHtmlEntities(rawDescription) : undefined;
+  const ogSection = post.category?.title ? decodeHtmlEntities(post.category.title) : undefined;
   const imageUrl =
     post.featuredImage?.startsWith("http") === true
       ? post.featuredImage
@@ -75,7 +78,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       publishedTime: post.publishedAt,
       modifiedTime: post.modifiedAt ?? post.publishedAt,
       authors: post.author?.name ? [post.author.name] : undefined,
-      section: post.category?.title,
+      section: ogSection,
     },
     twitter: {
       card: "summary_large_image",
@@ -102,7 +105,10 @@ export default async function SlugPage({ params }: Props) {
   const initialPost = await getPostBySlug(slug);
   if (!initialPost) notFound();
 
-  const seoDescription = (await fetchRankMathDescription(slug)) || initialPost.excerpt;
+  const seoDescriptionRaw = (await fetchRankMathDescription(slug)) || initialPost.excerpt;
+  const seoDescription = seoDescriptionRaw ? decodeHtmlEntities(seoDescriptionRaw) : undefined;
+  const jsonLdTitle = decodeHtmlEntities(initialPost.title ?? "");
+  const breadcrumbPostName = decodeHtmlEntities(initialPost.title ?? "Post");
 
   // Fetch related posts if category exists
   const relatedPosts = [];
@@ -129,7 +135,7 @@ export default async function SlugPage({ params }: Props) {
   return (
     <>
       <ArticleJsonLd
-        title={initialPost.title ?? ""}
+        title={jsonLdTitle}
         description={seoDescription}
         slug={initialPost.slug}
         datePublished={initialPost.publishedAt ?? ""}
@@ -142,9 +148,14 @@ export default async function SlugPage({ params }: Props) {
           { name: "Home", url: siteUrl },
           { name: "Blog", url: `${siteUrl}/blog` },
           ...(initialPost.category
-            ? [{ name: initialPost.category.title, url: `${siteUrl}/category/${initialPost.category.slug}` }]
+            ? [
+                {
+                  name: decodeHtmlEntities(initialPost.category.title),
+                  url: `${siteUrl}/category/${initialPost.category.slug}`,
+                },
+              ]
             : []),
-          { name: initialPost.title ?? "Post", url: postUrl },
+          { name: breadcrumbPostName, url: postUrl },
         ]}
       />
       <BlogPostView slug={slug} initialPost={initialPost} shareUrl={postUrl} relatedPosts={relatedPosts} />

@@ -11,21 +11,11 @@
 
 import { cache } from "react";
 import { getSiteUrl } from "@/lib/seo";
+import { decodeHtmlEntities } from "@/lib/html";
 import { normalizeWpSiteRoot } from "@/lib/wp/env";
 
 function getRankMathApiOrigin(): string {
   return normalizeWpSiteRoot(process.env.NEXT_PUBLIC_WP_URL);
-}
-
-function decodeEntities(s: string): string {
-  return s
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#039;/g, "'")
-    .replace(/&#x27;/g, "'")
-    .replace(/&#8217;/g, "\u2019");
 }
 
 function parseDescriptionFromHead(html: string): string | undefined {
@@ -36,7 +26,7 @@ function parseDescriptionFromHead(html: string): string | undefined {
   for (const re of patterns) {
     const m = html.match(re);
     if (m?.[1]) {
-      const t = decodeEntities(m[1]).trim();
+      const t = decodeHtmlEntities(m[1]).trim();
       if (t) return t.replace(/\s+/g, " ");
     }
   }
@@ -83,7 +73,7 @@ async function fetchRankMathDescriptionFromRest(
     "_yoast_wpseo_metadesc",
     "yoast_wpseo_metadesc",
   ]);
-  return raw ? decodeEntities(raw).trim().replace(/\s+/g, " ") : undefined;
+  return raw ? decodeHtmlEntities(raw).trim().replace(/\s+/g, " ") : undefined;
 }
 
 async function fetchRankMathDescriptionImpl(
