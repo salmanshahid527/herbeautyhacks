@@ -5,7 +5,9 @@ import { SafeImage } from "@/components/ui/safe-image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { formatDateTimeShort } from "@/lib/utils";
+import { decodeHtmlEntities } from "@/lib/html";
 import type { Post } from "@/hooks/usePosts";
+
 
 interface PostCardProps {
   post: Post;
@@ -14,13 +16,19 @@ interface PostCardProps {
 }
 
 export function PostCard({ post, priority }: PostCardProps) {
+  const title = decodeHtmlEntities(post.title ?? "");
+  const excerptPlain = post.excerpt ? decodeHtmlEntities(post.excerpt) : undefined;
+  const categoryTitle = post.category?.title
+    ? decodeHtmlEntities(post.category.title)
+    : undefined;
+
   return (
     <Link href={`/${post.slug}`} className="group block h-full">
       <Card className="overflow-hidden h-full flex flex-col rounded-2xl border border-border/60 bg-card shadow-card hover:shadow-card-lg hover:border-primary/20 hover:-translate-y-0.5 transition-all duration-300">
         <div className="relative aspect-video bg-muted overflow-hidden">
           <SafeImage
             src={post.featuredImage ?? "/placeholder.svg"}
-            alt={post.title}
+            alt={title}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-500"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -48,12 +56,12 @@ export function PostCard({ post, priority }: PostCardProps) {
         <CardContent className="p-3 sm:p-4 flex-1 flex flex-col">
           {post.category && (
             <Badge className="mb-2 text-xs bg-primary/15 text-primary border-primary/30">
-              {post.category.title}
+              {categoryTitle}
             </Badge>
           )}
-          <h3 className="font-semibold line-clamp-2">{post.title}</h3>
-          {post.excerpt && (
-            <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{post.excerpt}</p>
+          <h3 className="font-semibold line-clamp-2">{title}</h3>
+          {excerptPlain && (
+            <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{excerptPlain}</p>
           )}
 
           {/* Published meta: author + date/time */}

@@ -5,6 +5,7 @@ import { SafeImage } from "@/components/ui/safe-image";
 import { trackCategoryClick } from "@/lib/analytics";
 import { usePostsByCategory } from "@/hooks/usePosts";
 import { Card, CardContent } from "@/components/ui/card";
+import { decodeHtmlEntities } from "@/lib/html";
 import type { Category } from "@/hooks/useCategories";
 import type { Post } from "@/hooks/usePosts";
 
@@ -30,8 +31,8 @@ export function CategorySection({
     limit
   );
   const posts = initialPosts ?? fetchedPosts;
-  const title = sectionTitle ?? category.title;
-
+  // const title = sectionTitle ?? category.title;
+const title = decodeHtmlEntities(sectionTitle ?? category.title ?? "");
   if (posts.length === 0) return null;
 
   return (
@@ -48,7 +49,9 @@ export function CategorySection({
           </Link>
         </div>
         <div className="grid gap-4 sm:gap-5 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
-          {posts.map((post, index) => (
+          {posts.map((post, index) => {
+            const title = decodeHtmlEntities(post.title ?? "");
+            return (
             <Link
               key={post._id}
               href={`/${post.slug}`}
@@ -59,7 +62,7 @@ export function CategorySection({
                 <div className="relative aspect-video bg-muted overflow-hidden">
                   <SafeImage
                     src={post.featuredImage ?? "/placeholder.svg"}
-                    alt={post.title}
+                    alt={title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                     sizes="(max-width: 768px) 50vw, 25vw"
@@ -67,11 +70,12 @@ export function CategorySection({
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
                 <CardContent className="p-3 sm:p-4">
-                  <h3 className="font-semibold text-sm line-clamp-2 text-foreground group-hover:text-primary transition-colors">{post.title}</h3>
+                  <h3 className="font-semibold text-sm line-clamp-2 text-foreground group-hover:text-primary transition-colors">{title}</h3>
                 </CardContent>
               </Card>
             </Link>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

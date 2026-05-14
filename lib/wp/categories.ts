@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { rewriteWpUrlsToSiteUrl } from "@/lib/html";
+import { decodeHtmlEntities, rewriteWpUrlsToSiteUrl } from "@/lib/html";
 import { fetchWp } from "@/lib/wp/client";
 import type { WpCategory } from "@/lib/wp/types";
 
@@ -19,7 +19,7 @@ function mapWpCategoryToCategory(wp: WpCategory): Category {
   return {
     _id: String(wp.id),
     id: wp.id,
-    title: wp.name,
+    title: decodeHtmlEntities(wp.name ?? ""),
     slug: wp.slug,
     description,
   };

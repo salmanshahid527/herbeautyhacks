@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useSearch } from "@/hooks/useSearch";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { decodeHtmlEntities } from "@/lib/html";
 
 interface SearchBarProps {
   placeholder?: string;
@@ -74,10 +75,12 @@ export function SearchBar({ placeholder = "Search…", className }: SearchBarPro
                     className="block px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm"
                     onClick={() => setOpen(false)}
                   >
-                    <span className="font-medium line-clamp-1">{post.title}</span>
+                    <span className="font-medium line-clamp-1">
+                      {decodeHtmlEntities(post.title ?? "")}
+                    </span>
                     {post.category && (
                       <span className="text-xs text-muted-foreground block mt-0.5">
-                        {post.category.title}
+                        {decodeHtmlEntities(post.category.title)}
                       </span>
                     )}
                   </Link>
