@@ -3,7 +3,6 @@ import Script from "next/script";
 import { Plus_Jakarta_Sans, Dancing_Script } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-import { TopBar } from "@/components/layout/TopBar";
 import { Header } from "@/components/layout/Header";
 import { CategoriesBar } from "@/components/layout/CategoriesBar";
 import { Footer } from "@/components/layout/Footer";
@@ -112,7 +111,7 @@ export default async function RootLayout({
         <OrganizationWebSiteJsonLd />
         <Providers>
           <div className="flex min-h-screen flex-col">
-            <TopBar />
+    
             <Header initialNavLinks={initialNavLinks} initialCategories={initialCategories} />
             <CategoriesBar initialCategories={initialCategories} />
             <main className="flex-1 w-full flex flex-col items-center overflow-x-hidden">{children}</main>

@@ -12,6 +12,8 @@ import { ChevronRight } from "lucide-react";
 import { decodeHtmlEntities } from "@/lib/html";
 import { trackCategoryClick } from "@/lib/analytics";
 import type { MappedPostDetail, MappedPost } from "@/lib/wp/post";
+import PinterestHover from "./PinterestHover"; 
+
 
 /** Strip HTML tags and decode entities for safe plain-text title (avoids DOMPurify/ESM on SSR). */
 function formatTitle(html: string): string {
@@ -58,7 +60,7 @@ export function BlogPostView({ slug, initialPost, shareUrl, relatedPosts = [] }:
   }
 
   return (
-    <article className="w-full min-h-[50vh] bg-muted/10">
+    <article className=" w-full min-h-[50vh] bg-muted/10">
       <div className="container container-narrow px-3 sm:px-4 md:px-6 py-8 sm:py-10 md:py-14 mx-auto">
         {/* Breadcrumb: Home / Category */}
         <nav aria-label="Breadcrumb" className="mb-6">
@@ -118,7 +120,11 @@ export function BlogPostView({ slug, initialPost, shareUrl, relatedPosts = [] }:
           )}
         </header>
 
-        <div className="w-full [&_.prose_p]:text-justify">
+{/* --- Pinterest Setup --- */}
+
+        <PinterestHover targetContainerClass="article-rich-text-body" />
+
+        <div className="article-rich-text-body w-full [&_.prose_p]:text-justify">
           <PostContent body={displayPost.body} />
         </div>
 
@@ -129,32 +135,75 @@ export function BlogPostView({ slug, initialPost, shareUrl, relatedPosts = [] }:
           </div>
         )}
 
-        {(displayPost.author || displayPost.category) && (
-          <div className="mt-12 pt-8 border-t border-border">
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
-              {displayPost.author && (
-                <span>
-                  By <span className="font-medium text-foreground">{displayPost.author.name}</span>
-                </span>
-              )}
-              {displayPost.category && (
-                <Link
-                  href={`/category/${displayPost.category.slug}`}
-                  className="text-primary hover:underline"
-                  onClick={() =>
-                    trackCategoryClick(
-                      displayPost.category!.slug,
-                      displayPost.category!.title
-                    )
-                  }
-                >
-                  More in {displayPost.category.title}
-                </Link>
-              )}
-            </div>
-          </div>
-        )}
+{/* --- Meet The Author Card --- */}
+{displayPost.author?.name && (
+  <div className="mt-12 p-6 sm:p-8 bg-card border border-border rounded-2xl shadow-sm flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
+    
+    {/* 1. Author Avatar / Image */}
+    <div className="size-16 shrink-0 rounded-full overflow-hidden ring-4 ring-primary/5 bg-primary/10 flex items-center justify-center relative">
+      {/* Explicit type casting to 'any' to bypass TypeScript field existence checks */}
+      {(displayPost.author as any).image ? (
+        <img
+          src={(displayPost.author as any).image}
+          alt={displayPost.author.name}
+          className="w-full h-full object-cover absolute inset-0"
+          onError={(e) => {
+            // Hide the broken image and display the fallback initials if loading fails
+            e.currentTarget.style.opacity = '0';
+            const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+            if (fallback) fallback.style.display = 'flex';
+          }}
+        />
+      ) : null}
 
+      {/* Fallback Initial Letter (Displayed dynamically if the image is missing or fails to load) */}
+      <span 
+        className="text-xl font-bold text-primary uppercase"
+        style={{ display: (displayPost.author as any).image ? 'none' : 'flex' }}
+      >
+        {displayPost.author.name.charAt(0)}
+      </span>
+    </div>
+
+    {/* 2. Author Details Area */}
+    <div className="flex-1 text-center sm:text-left">
+      <span className="text-xs font-semibold text-primary uppercase tracking-wider">
+        Written By
+      </span>
+      
+      {/* Author Name */}
+      <h3 className="mt-1 text-xl font-bold text-foreground">
+        {displayPost.author.name}
+      </h3>
+      
+      {/* Author Bio (Renders dynamic WordPress bio, falls back to default description if empty) */}
+      <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+        {(displayPost.author as any).bio 
+          ? (displayPost.author as any).bio 
+          : "Hey there! Welcome to my blog. I love sharing practical tips, hidden secrets, and awesome hacks to help you live beautifully and smart. Stay tuned for more exciting updates!"}
+      </p>
+      
+      {/* Category Link Tag */}
+      {displayPost.category && (
+        <div className="mt-4 flex justify-center sm:justify-start">
+          <Link
+            href={`/category/${displayPost.category.slug}`}
+            className="text-xs font-medium text-primary bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-full transition-colors"
+            onClick={() =>
+              trackCategoryClick(
+                displayPost.category!.slug,
+                displayPost.category!.title
+              )
+            }
+          >
+            More in {displayPost.category.title} →
+          </Link>
+        </div>
+      )}
+    </div>
+  </div>
+)}
+        
         <ShareButtons title={formatTitle(displayPost.title ?? "")} url={shareUrl} />
       </div>
     </article>
