@@ -24,34 +24,46 @@ export function AboutContent() {
     );
   }
 
-  if (!author) {
-    return (
-      <p className="text-muted-foreground">
-        No author info found. Add content in WordPress.
-      </p>
-    );
-  }
+  // --- FINAL FALLBACK DATA ---
+  // Agar WordPress se data na aaye, toh yeh details automatically show hongi
+  const finalName = author?.name || "Mila";
+  
+  const finalImage = author?.image || "/images/author-profile.jpg"; 
+  
+  const finalBio = author?.bio || "Beauty content creator and chief editor at Her Beauty Hacks. Dedicated to testing and sharing the best DIY skincare treatments, makeup techniques, and time-saving hair hacks. Mila helps women elevate their daily beauty routines without spending a fortune.";
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden border border-border bg-card shadow-card rounded-2xl">
       <CardContent className="p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center md:items-start">
-        <div className="relative size-40 rounded-full overflow-hidden shrink-0 bg-muted">
+        
+        {/* Author Profile Image (DP) */}
+        <div className="relative size-40 rounded-full overflow-hidden shrink-0 bg-muted border-2 border-primary/20 shadow-sm">
           <Image
-            src={author.image ?? "/placeholder.svg"}
-            alt={author.name}
+            src={finalImage}
+            alt={finalName}
             fill
             className="object-cover"
           />
         </div>
+        
+        {/* Author Text Details */}
         <div className="flex-1 text-center md:text-left">
-          <h2 className="text-xl font-semibold mb-2">{author.name}</h2>
-          {author.bio && (
-            <p className="text-muted-foreground whitespace-pre-line">{author.bio}</p>
-          )}
+          <span className="text-xs font-bold tracking-widest uppercase text-primary mb-1 block">
+            Author
+          </span>
+          <h2 className="text-xl sm:text-2xl font-bold mb-2 text-foreground">
+            {finalName}
+          </h2>
+          
+          <p className="text-muted-foreground whitespace-pre-line text-sm sm:text-base leading-relaxed">
+            {finalBio}
+          </p>
+          
+          {/* Social Links Section */}
           <div className="flex flex-wrap justify-center md:justify-start gap-4 mt-4">
-            {author.pinterest && (
+            {(author?.pinterest || true) && (
               <a
-                href={author.pinterest}
+                href={author?.pinterest || "https://www.pinterest.com/Herbeauty_hacks/"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary font-medium hover:underline text-sm"
@@ -59,7 +71,8 @@ export function AboutContent() {
                 Pinterest
               </a>
             )}
-            {author.instagram && (
+            
+            {author?.instagram && (
               <a
                 href={author.instagram}
                 target="_blank"
@@ -69,7 +82,8 @@ export function AboutContent() {
                 Instagram
               </a>
             )}
-            {author.facebook && (
+            
+            {author?.facebook && (
               <a
                 href={author.facebook}
                 target="_blank"
@@ -81,6 +95,7 @@ export function AboutContent() {
             )}
           </div>
         </div>
+
       </CardContent>
     </Card>
   );

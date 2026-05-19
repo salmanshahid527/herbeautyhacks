@@ -36,7 +36,8 @@ export function PostCard({ post, priority }: PostCardProps) {
           />
 
           {/* Pinterest Button Overlay - Top Left */}
-          <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity">
+    <div className="absolute top-3 left-3 z-20 transition-opacity duration-200 opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100">
+
             <button
               onClick={(e) => {
                 e.preventDefault();
