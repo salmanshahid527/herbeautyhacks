@@ -23,7 +23,11 @@ const defaultExploreLinks = [
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
   { label: "Privacy Policy", href: "/privacy" },
-  { label: "Disclaimer", href: "/disclaimer" }
+  { label: "Disclaimer", href: "/disclaimer" },
+  { label: "Terms & Conditions", href: "/terms-conditions" },
+  { label: "About Emma", href: "/about-emma" },
+
+
 ];
 
 interface FooterProps {
@@ -50,50 +54,13 @@ export function Footer({ initialCategories }: FooterProps) {
             {/* Brand column */}
             <div className="sm:col-span-2 lg:col-span-1">
               <Link href="/" className="inline-block">
-                <span className="font-script text-2xl font-semibold text-foreground">
+                <h1 className="font-script text-2xl font-semibold text-foreground">
                   Her Beauty Hacks
-                </span>
+                </h1>
               </Link>
               <p className="mt-2 text-sm text-muted-foreground max-w-xs">
                 Beauty, fashion, skincare & lifestyle — no one is you.
               </p>
-              {author && (author.pinterest || author.instagram || author.facebook) && (
-                <div className="mt-4 flex gap-2">
-                  {author.pinterest && (
-                    <a
-                      href={author.pinterest}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-                      aria-label="Pinterest"
-                    >
-                      <PinterestIcon className="size-4" />
-                    </a>
-                  )}
-                  {author.instagram && (
-                    <a
-                      href={author.instagram}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-                      aria-label="Instagram"
-                    >
-                      <Instagram className="size-4" />
-                    </a>
-                  )}
-                  {author.facebook && (
-                    <a
-                      href={author.facebook}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
-                      aria-label="Facebook"
-                    >
-                      <Facebook className="size-4" />
-                    </a>
-                  )}
-                </div>
-              )}
             </div>
 
             {/* Categories */}
