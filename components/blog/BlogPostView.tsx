@@ -182,24 +182,12 @@ export function BlogPostView({ slug, initialPost, shareUrl, relatedPosts = [] }:
           ? (displayPost.author as any).bio 
           : "Hey there! Welcome to my blog. I love sharing practical tips, hidden secrets, and awesome hacks to help you live beautifully and smart. Stay tuned for more exciting updates!"}
       </p>
-      
-      {/* Category Link Tag */}
-      {displayPost.category && (
-        <div className="mt-4 flex justify-center sm:justify-start">
-          <Link
-            href={`/category/${displayPost.category.slug}`}
-            className="text-xs font-medium text-primary bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-full transition-colors"
-            onClick={() =>
-              trackCategoryClick(
-                displayPost.category!.slug,
-                displayPost.category!.title
-              )
-            }
-          >
-            More in {displayPost.category.title} →
-          </Link>
-        </div>
-      )}
+      <Link
+  href="/about-emma"
+  className="inline-flex mt-4 text-sm font-semibold text-primary hover:underline">
+  Read More About Emma →
+</Link>
+    
     </div>
   </div>
 )}

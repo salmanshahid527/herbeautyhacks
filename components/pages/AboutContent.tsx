@@ -4,6 +4,7 @@ import { SmartImage as Image } from "@/components/ui/SmartImage";
 import { useAuthor } from "@/hooks/useAuthor";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/dist/client/link";
 
 export function AboutContent() {
   const { data: author, isLoading } = useAuthor();
@@ -61,7 +62,7 @@ export function AboutContent() {
           
           {/* Social Links Section */}
           <div className="flex flex-wrap justify-center md:justify-start gap-4 mt-4">
-            {(author?.pinterest || true) && (
+            {/* {(author?.pinterest || true) && (
               <a
                 href={author?.pinterest || "https://www.pinterest.com/Herbeauty_hacks/"}
                 target="_blank"
@@ -70,29 +71,11 @@ export function AboutContent() {
               >
                 Pinterest
               </a>
-            )}
-            
-            {author?.instagram && (
-              <a
-                href={author.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary font-medium hover:underline text-sm"
-              >
-                Instagram
-              </a>
-            )}
-            
-            {author?.facebook && (
-              <a
-                href={author.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary font-medium hover:underline text-sm"
-              >
-                Facebook
-              </a>
-            )}
+            )} */}
+       <Link  href="/about-emma"
+  className="inline-flex mt-4 text-sm font-semibold text-primary hover:underline">
+  Read More About Emma →
+</Link>
           </div>
         </div>
 
