@@ -21,9 +21,13 @@ export function Hero() {
       <div className="grid min-h-[70vh] w-full grid-cols-1 lg:grid-cols-2">
         {/* Left: copy */}
         <div className="flex flex-col justify-center px-4 py-12 sm:px-6 sm:py-16 md:px-12 lg:py-24">
-          <h1 className="font-script text-3xl font-bold text-primary sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-tight animate-fade-in-up">
-            {tagline}
-          </h1>
+      <h1 className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-primary mb-3 animate-fade-in-up">
+        Beauty, Skincare &amp; Fashion Tips by Her Beauty Hacks
+</h1>
+<h2 className="font-script  font-bold text-primary text-4xl  tracking-tight animate-fade-in-up animate-delay-1 opacity-0 [animation-fill-mode:both]">
+  {tagline}
+</h2>
+  
           <p className="mt-4 max-w-lg text-sm text-foreground/85 sm:text-base md:text-lg leading-relaxed animate-fade-in-up animate-delay-1 opacity-0 [animation-fill-mode:both]">
             {intro}
           </p>
