@@ -1,8 +1,6 @@
-import { Suspense } from "react";
-import { PostList } from "@/components/blog/PostList";
-import { PostCardSkeleton } from "@/components/skeletons/PostCardSkeleton";
+import { BlogPostList } from "@/components/blog/BlogPostList";
 import { getSiteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
-import { getPostsForBlog } from "@/lib/wp/post";
+import { getPostsForBlog, getPostsForCategoryBySlug } from "@/lib/wp/post";
 import { getCategories } from "@/lib/wp/categories";
 import type { Metadata } from "next";
 
@@ -42,30 +40,26 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-/** ISR: at most hourly — keeps Vercel Hobby ISR write limits sustainable */
 export const revalidate = 3600;
 
-function PostListFallback() {
-  return (
-    <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-      {[1, 2, 3, 4, 5, 6].map((i) => (
-        <PostCardSkeleton key={i} />
-      ))}
-    </div>
-  );
-}
+type BlogPageProps = {
+  searchParams: Promise<{ category?: string }>;
+};
 
-export default async function BlogPage() {
-  const [initialPosts, initialCategories] = await Promise.all([
-    getPostsForBlog(),
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const sp = await searchParams;
+  const categorySlug = sp.category?.trim() || undefined;
+  const [initialCategories, posts] = await Promise.all([
     getCategories(),
+    categorySlug ? getPostsForCategoryBySlug(categorySlug) : getPostsForBlog(),
   ]);
+
   return (
     <div className="container container-narrow px-3 sm:px-4 md:px-6 py-8 sm:py-12 md:py-16 mx-auto w-full min-h-[50vh] bg-muted/10">
-      <h1 className="section-title text-2xl sm:text-3xl md:text-4xl font-bold mb-8 sm:mb-12 text-foreground">Blog</h1>
-      <Suspense fallback={<PostListFallback />}>
-        <PostList initialPosts={initialPosts} initialCategories={initialCategories} />
-      </Suspense>
+      <h1 className="section-title text-2xl sm:text-3xl md:text-4xl font-bold mb-8 sm:mb-12 text-foreground">
+        Blog
+      </h1>
+      <BlogPostList posts={posts} categories={initialCategories} categorySlug={categorySlug} />
     </div>
   );
 }

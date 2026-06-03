@@ -1,7 +1,5 @@
-"use client";
-
-import { useCategories } from "@/hooks/useCategories";
 import type { Post } from "@/hooks/usePosts";
+import type { Category } from "@/hooks/useCategories";
 import { CategorySection } from "./CategorySection";
 
 const sectionTitles: Record<string, string> = {
@@ -15,12 +13,12 @@ const sectionTitles: Record<string, string> = {
 };
 
 export function CategoriesAndSections({
+  categories,
   postsByCategoryId = {},
 }: {
+  categories: Category[];
   postsByCategoryId?: Record<number, Post[]>;
 }) {
-  const { data: categories = [] } = useCategories();
-
   return (
     <>
       {categories.map((category, index) => (

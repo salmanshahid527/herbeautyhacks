@@ -5,6 +5,7 @@ import { getSiteUrl } from "@/lib/seo";
 const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: "Search",
   description: "Search beauty, skincare, and lifestyle articles on Her Beauty Hacks.",
   alternates: { canonical: `${siteUrl}/search` },
