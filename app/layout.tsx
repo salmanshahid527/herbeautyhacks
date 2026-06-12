@@ -65,6 +65,8 @@ export const metadata: Metadata = {
   },
 };
 
+const GROW_INITIALIZER = `!(function(){window.growMe||((window.growMe=function(e){window.growMe._.push(e);}),(window.growMe._=[]));var e=document.createElement("script");(e.type="text/javascript"),(e.src="https://faves.grow.me/main.js"),(e.defer=!0),e.setAttribute("data-grow-faves-site-id","U2l0ZTowMzEwODE1Zi0zNzM1LTRmMzUtYTI4OC03MzNkOTI1OTRiNzE=");var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t);})();`;
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -87,6 +89,12 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
+<script
+  data-grow-initializer=""
+  suppressHydrationWarning
+  dangerouslySetInnerHTML={{ __html: GROW_INITIALIZER }}
+/>
+
         {wpOrigin && (
           <link rel="preconnect" href={wpOrigin} crossOrigin="anonymous" />
         )}
