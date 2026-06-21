@@ -10,6 +10,7 @@ import { OrganizationWebSiteJsonLd } from "@/components/seo/JsonLd";
 import { getNavLinks } from "@/lib/wp/nav";
 import { getCategories } from "@/lib/wp/categories";
 import CookiesWrapper from '@/components/cookies/CookiesWrapper';
+import AdUnit from "@/components/AdUnit";
 
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -126,7 +127,8 @@ export default async function RootLayout({
             <CategoriesBar initialCategories={initialCategories} />
             <main className="flex-1 w-full flex flex-col items-center overflow-x-hidden">{children}</main>
             <Footer initialCategories={initialCategories} />
-                <CookiesWrapper />
+            <AdUnit type="social-bar" />
+            <CookiesWrapper />
 
           </div>
         </Providers>
