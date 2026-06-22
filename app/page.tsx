@@ -1,3 +1,4 @@
+import AdUnit from "@/components/AdUnit";
 import { HomeSections } from "@/components/home/HomeSections";
 import { getSiteUrl } from "@/lib/seo";
 import { getCategories } from "@/lib/wp/categories";
@@ -40,6 +41,7 @@ export default async function Home() {
       : {};
 
   return (
+    <>
     <HomeSections
       initialData={{
         categories,
@@ -47,5 +49,10 @@ export default async function Home() {
         postsByCategoryId,
       }}
     />
+
+    <div className="my-8 flex justify-center min-h-[250px]">
+        <AdUnit type="native" />
+      </div>
+    </>
   );
 }
