@@ -10,7 +10,7 @@ import { getPostsForCategoryBySlug } from "@/lib/wp/post";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 
-export const revalidate = 3600;
+export const revalidate = 43200;
 
 interface PageProps {
   params: Promise<{ slug: string }>;

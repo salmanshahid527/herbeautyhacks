@@ -4,6 +4,8 @@ import { getSiteUrl } from "@/lib/seo";
 
 const siteUrl = getSiteUrl();
 
+export const revalidate = 43200;
+
 export const metadata: Metadata = {
   robots: { index: false, follow: true },
   title: "Search",

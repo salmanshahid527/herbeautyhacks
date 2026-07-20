@@ -5,7 +5,7 @@ import { getFeaturedPosts, getPostsForMultipleCategories } from "@/lib/wp/post";
 import type { Metadata } from "next";
 
 /** ISR: at most hourly — keeps Vercel Hobby ISR write limits sustainable */
-export const revalidate = 3600;
+export const revalidate = 43200;
 
 const siteUrl = getSiteUrl();
 const POSTS_PER_CATEGORY = 4;

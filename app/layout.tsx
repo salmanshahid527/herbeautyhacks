@@ -11,6 +11,8 @@ import { getNavLinks } from "@/lib/wp/nav";
 import { getCategories } from "@/lib/wp/categories";
 import CookiesWrapper from '@/components/cookies/CookiesWrapper';
 
+export const revalidate = 43200;
+
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",

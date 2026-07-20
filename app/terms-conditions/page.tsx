@@ -4,7 +4,7 @@ import { getPageBySlug } from "@/lib/wp/pages";
 import type { Metadata } from "next";
 
 /** ISR: at most hourly — keeps Vercel Hobby ISR write limits sustainable */
-export const revalidate = 3600;
+export const revalidate = 43200;
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPageBySlug("terms-conditions");

@@ -3,7 +3,7 @@ import { getSiteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import { getPageBySlug } from "@/lib/wp/pages";
 import type { Metadata } from "next";
 
-export const revalidate = 3600;
+export const revalidate = 43200;
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPageBySlug("about-emma");

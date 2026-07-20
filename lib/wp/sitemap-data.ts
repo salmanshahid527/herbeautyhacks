@@ -1,7 +1,7 @@
 import { getWpJsonV2Base } from "@/lib/wp/env";
 
 /** ISR for sitemap fetches (seconds). */
-const REVALIDATE = 3600;
+const REVALIDATE = 43200;
 
 /** WordPress REST typical max per_page. */
 const WP_PER_PAGE = 100;

@@ -8,7 +8,7 @@ import {
 } from "@/lib/wp/sitemap-data";
 
 /** Regenerate sitemap periodically (ISR). */
-export const revalidate = 3600;
+export const revalidate = 43200;
 
 /**
  * Google allows at most 50,000 URLs per sitemap file.

@@ -40,7 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export const revalidate = 3600;
+export const revalidate = 43200;
 
 type BlogPageProps = {
   searchParams: Promise<{ category?: string }>;
