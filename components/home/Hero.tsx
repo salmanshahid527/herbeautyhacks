@@ -6,7 +6,7 @@ import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { Button } from "@/components/ui/button";
 
 const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1000&q=72&auto=format&fit=crop";
+  "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1000&q=72&fm=webp&fit=crop";
 
 export function Hero() {
   const { data: settings } = useSiteSettings();
