@@ -51,7 +51,7 @@ export function Header({ initialNavLinks, initialCategories }: HeaderProps) {
           <MobileNav navLinks={navLinks} categories={categories} />
           <Link href="/" className="flex items-center shrink-0">
             <Image
-              src="/logo-her-beauty-hacks.png"
+              src="/logo-her-beauty-hacks.webp"
               alt="Her Beauty Hacks"
               width={220}
               height={56}
