@@ -1,4 +1,3 @@
-import AdUnit from "@/components/AdUnit";
 import { HomeSections } from "@/components/home/HomeSections";
 import { getSiteUrl } from "@/lib/seo";
 import { getCategories } from "@/lib/wp/categories";
@@ -50,9 +49,6 @@ export default async function Home() {
       }}
     />
 
-    <div className="my-8 flex justify-center min-h-[250px]">
-        <AdUnit type="native" />
-      </div>
     </>
   );
 }

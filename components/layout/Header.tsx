@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import { MobileNav } from "./MobileNav";
-import { ResponsiveHeaderAd } from "@/components/ResponsiveHeaderAd";
 
 const defaultNavLinks: NavLink[] = [
   { label: "Home", href: "/" },
@@ -95,11 +94,6 @@ export function Header({ initialNavLinks, initialCategories }: HeaderProps) {
             )}
           </NavigationMenuList>
         </NavigationMenu>
-      </div>
-      <div className="border-t border-border/50 bg-muted/5">
-        <div className="container container-wide mx-auto flex justify-center py-2 px-3 min-h-[50px] md:min-h-[90px]">
-          <ResponsiveHeaderAd />
-        </div>
       </div>
     </header>
   );

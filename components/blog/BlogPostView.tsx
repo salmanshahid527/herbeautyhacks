@@ -13,8 +13,6 @@ import { decodeHtmlEntities } from "@/lib/html";
 import { trackCategoryClick } from "@/lib/analytics";
 import type { MappedPostDetail, MappedPost } from "@/lib/wp/post";
 import PinterestHover from "./PinterestHover";
-import AdUnit from "@/components/AdUnit";
-
 
 /** Strip HTML tags and decode entities for safe plain-text title (avoids DOMPurify/ESM on SSR). */
 function formatTitle(html: string): string {
@@ -129,10 +127,6 @@ export function BlogPostView({ slug, initialPost, shareUrl, relatedPosts = [] }:
           <PostContent body={displayPost.body} />
         </div>
 
-        <div className="my-8 flex justify-center min-h-[250px]">
-          <AdUnit type="native" />
-        </div>
-
         {/* Related Posts Section */}
         {relatedPosts.length > 0 && (
           <div className="mt-14 lg:mt-16">
@@ -197,9 +191,6 @@ export function BlogPostView({ slug, initialPost, shareUrl, relatedPosts = [] }:
   </div>
 
 )}         
-<div className="my-8 flex justify-center min-h-[250px]">
-          <AdUnit type="medium" />
-        </div>
 
         <ShareButtons title={formatTitle(displayPost.title ?? "")} url={shareUrl} />
       </div>
