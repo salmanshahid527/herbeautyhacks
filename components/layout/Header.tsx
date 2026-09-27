@@ -25,7 +25,6 @@ const defaultNavLinks: NavLink[] = [
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Disclaimer", href: "/disclaimer" },
   { label: "Terms & Conditions", href: "/terms-conditions" },
-  { label: "About Emma", href: "/about-emma" },
 
 ];
 

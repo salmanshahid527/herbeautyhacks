@@ -177,14 +177,12 @@ export function BlogPostView({ slug, initialPost, shareUrl, relatedPosts = [] }:
       
       {/* Author Bio (Renders dynamic WordPress bio, falls back to default description if empty) */}
       <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-        {(displayPost.author as any).bio 
-          ? (displayPost.author as any).bio 
-          : "Hey there! Welcome to my blog. I love sharing practical tips, hidden secrets, and awesome hacks to help you live beautifully and smart. Stay tuned for more exciting updates!"}
+        {(displayPost.author as any).bio ?? null}
       </p>
       <Link
-  href="/about-emma"
+  href="/about"
   className="inline-flex mt-4 text-sm font-semibold text-primary hover:underline">
-  Read More About Emma →
+  About the author →
 </Link>
     
     </div>

@@ -27,11 +27,12 @@ export function AboutContent() {
 
   // --- FINAL FALLBACK DATA ---
   // Agar WordPress se data na aaye, toh yeh details automatically show hongi
-  const finalName = author?.name || "Mila";
+  const finalName = author?.name || "Her Beauty Hacks";
   
   const finalImage = author?.image || "/images/author-profile.jpg"; 
   
-  const finalBio = author?.bio || "Beauty content creator and chief editor at Her Beauty Hacks. Dedicated to testing and sharing the best DIY skincare treatments, makeup techniques, and time-saving hair hacks. Mila helps women elevate their daily beauty routines without spending a fortune.";
+  // Real bio from the WordPress user profile only; never a made-up fallback.
+  const finalBio = author?.bio || "";
 
   return (
     <Card className="overflow-hidden border border-border bg-card shadow-card rounded-2xl">
@@ -72,10 +73,7 @@ export function AboutContent() {
                 Pinterest
               </a>
             )} */}
-       <Link  href="/about-emma"
-  className="inline-flex mt-4 text-sm font-semibold text-primary hover:underline">
-  Read More About Emma →
-</Link>
+
           </div>
         </div>
 
