@@ -25,7 +25,6 @@ const defaultExploreLinks = [
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Disclaimer", href: "/disclaimer" },
   { label: "Terms & Conditions", href: "/terms-conditions" },
-  { label: "About Emma", href: "/about-emma" },
 
 
 ];
@@ -54,9 +53,9 @@ export function Footer({ initialCategories }: FooterProps) {
             {/* Brand column */}
             <div className="sm:col-span-2 lg:col-span-1">
               <Link href="/" className="inline-block">
-                <h1 className="font-script text-2xl font-semibold text-foreground">
+                <p className="font-script text-2xl font-semibold text-foreground">
                   Her Beauty Hacks
-                </h1>
+                </p>
               </Link>
               <p className="mt-2 text-sm text-muted-foreground max-w-xs">
                 Beauty, fashion, skincare & lifestyle — no one is you.

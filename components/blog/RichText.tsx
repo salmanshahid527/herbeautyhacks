@@ -9,6 +9,7 @@ import {
   sanitizeHtmlForProse,
 } from "@/lib/html";
 import { ImageLightbox } from "@/components/ui/ImageLightboxLazy";
+import { addMissingImageAlts } from "@/lib/imageAlt";
 
 interface RichTextProps {
   value: string | null | undefined;
@@ -39,7 +40,7 @@ export function RichText({ value }: RichTextProps) {
   const withSiteUrls = rewriteWpUrlsToSiteUrl(sanitized);
   const withHttps = forceHttpsForImgSrc(withSiteUrls);
   const withLazy = addLazyLoadingToProseImages(withHttps);
-  const html = decodeHtmlEntities(withLazy);
+  const html = addMissingImageAlts(decodeHtmlEntities(withLazy));
 
   return (
     <>

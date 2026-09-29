@@ -13,8 +13,6 @@ import { decodeHtmlEntities } from "@/lib/html";
 import { trackCategoryClick } from "@/lib/analytics";
 import type { MappedPostDetail, MappedPost } from "@/lib/wp/post";
 import PinterestHover from "./PinterestHover";
-import AdUnit from "@/components/AdUnit";
-
 
 /** Strip HTML tags and decode entities for safe plain-text title (avoids DOMPurify/ESM on SSR). */
 function formatTitle(html: string): string {
@@ -129,10 +127,6 @@ export function BlogPostView({ slug, initialPost, shareUrl, relatedPosts = [] }:
           <PostContent body={displayPost.body} />
         </div>
 
-        <div className="my-8 flex justify-center min-h-[250px]">
-          <AdUnit type="native" />
-        </div>
-
         {/* Related Posts Section */}
         {relatedPosts.length > 0 && (
           <div className="mt-14 lg:mt-16">
@@ -183,23 +177,18 @@ export function BlogPostView({ slug, initialPost, shareUrl, relatedPosts = [] }:
       
       {/* Author Bio (Renders dynamic WordPress bio, falls back to default description if empty) */}
       <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-        {(displayPost.author as any).bio 
-          ? (displayPost.author as any).bio 
-          : "Hey there! Welcome to my blog. I love sharing practical tips, hidden secrets, and awesome hacks to help you live beautifully and smart. Stay tuned for more exciting updates!"}
+        {(displayPost.author as any).bio ?? null}
       </p>
       <Link
-  href="/about-emma"
+  href="/about"
   className="inline-flex mt-4 text-sm font-semibold text-primary hover:underline">
-  Read More About Emma →
+  About the author →
 </Link>
     
     </div>
   </div>
 
 )}         
-<div className="my-8 flex justify-center min-h-[250px]">
-          <AdUnit type="medium" />
-        </div>
 
         <ShareButtons title={formatTitle(displayPost.title ?? "")} url={shareUrl} />
       </div>
