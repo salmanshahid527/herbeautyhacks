@@ -138,8 +138,14 @@ export default async function SlugPage({ params }: Props) {
         title={jsonLdTitle}
         description={seoDescription}
         slug={initialPost.slug}
-        datePublished={initialPost.publishedAt ?? ""}
-        dateModified={initialPost.modifiedAt ?? initialPost.publishedAt ?? ""}
+        datePublished={initialPost.publishedAtIso ?? initialPost.publishedAt ?? ""}
+        dateModified={
+          initialPost.modifiedAtIso ??
+          initialPost.modifiedAt ??
+          initialPost.publishedAtIso ??
+          initialPost.publishedAt ??
+          ""
+        }
         authorName={initialPost.author?.name}
         imageUrl={absoluteImageUrl}
       />
