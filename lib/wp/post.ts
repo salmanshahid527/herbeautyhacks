@@ -1,5 +1,6 @@
 import { cache } from "react";
 import {
+  demoteBodyH1ToH2,
   forceHttpsForImgSrc,
   rewriteWpUrlsToSiteUrl,
   sanitizeHtmlForProse,
@@ -17,7 +18,7 @@ function processPostBody(html: string | undefined): string | undefined {
   if (!html?.trim()) return html;
   const sanitized = sanitizeHtmlForProse(html);
   const withSiteUrls = rewriteWpUrlsToSiteUrl(sanitized);
-  return forceHttpsForImgSrc(withSiteUrls);
+  return demoteBodyH1ToH2(forceHttpsForImgSrc(withSiteUrls));
 }
 
 /** Fetch a single post by slug (for server-side pre-render / SEO). Cached per request for generateMetadata + page. */
