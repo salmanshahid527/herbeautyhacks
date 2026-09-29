@@ -26,10 +26,10 @@ const PAGE_SLUG_TO_PATH: Record<string, string> = {
   privacy: "/privacy",
 };
 
-function lastMod(iso?: string): Date {
-  if (!iso) return new Date();
+function lastMod(iso?: string): Date | undefined {
+  if (!iso) return undefined;
   const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? new Date() : d;
+  return Number.isNaN(d.getTime()) ? undefined : d;
 }
 
 /**
@@ -41,11 +41,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getSiteUrl();
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: base, lastModified: new Date(), changeFrequency: "daily", priority: 1 },
-    { url: `${base}/blog`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
-    { url: `${base}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${base}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${base}/privacy`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: base, changeFrequency: "daily", priority: 1 },
+    { url: `${base}/blog`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${base}/about`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/contact`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/privacy`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/disclaimer`, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${base}/terms-conditions`, changeFrequency: "monthly", priority: 0.5 },
   ];
 
   // WP errors propagate (no try/catch) so ISR keeps the last good sitemap instead of publishing a truncated one.
@@ -60,7 +62,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const categories: MetadataRoute.Sitemap = cats.map((c) => ({
     url: `${base}/category/${c.slug}`,
-    lastModified: new Date(),
     changeFrequency: "daily" as const,
     priority: 0.7,
   }));
