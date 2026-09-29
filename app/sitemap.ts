@@ -48,43 +48,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/privacy`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
   ];
 
-  let categories: MetadataRoute.Sitemap = [];
-  let pages: MetadataRoute.Sitemap = [];
-  let posts: MetadataRoute.Sitemap = [];
+  // WP errors propagate (no try/catch) so ISR keeps the last good sitemap instead of publishing a truncated one.
+  const totalPosts = await getPublishedPostCount();
+  const postLimit = Math.min(totalPosts, MAX_POST_URLS);
 
-  try {
-    const totalPosts = await getPublishedPostCount();
-    const postLimit = Math.min(totalPosts, MAX_POST_URLS);
+  const [cats, pgs, postStubs] = await Promise.all([
+    fetchAllCategoriesForSitemap(),
+    fetchMappedWpPagesForSitemap(PAGE_SLUG_TO_PATH),
+    postLimit > 0 ? fetchPostsSitemapSlice(0, postLimit) : Promise.resolve([]),
+  ]);
 
-    const [cats, pgs, postStubs] = await Promise.all([
-      fetchAllCategoriesForSitemap(),
-      fetchMappedWpPagesForSitemap(PAGE_SLUG_TO_PATH),
-      postLimit > 0 ? fetchPostsSitemapSlice(0, postLimit) : Promise.resolve([]),
-    ]);
+  const categories: MetadataRoute.Sitemap = cats.map((c) => ({
+    url: `${base}/category/${c.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.7,
+  }));
 
-    categories = cats.map((c) => ({
-      url: `${base}/category/${c.slug}`,
-      lastModified: new Date(),
-      changeFrequency: "daily" as const,
-      priority: 0.7,
-    }));
+  const pages: MetadataRoute.Sitemap = pgs.map((p) => ({
+    url: `${base}${PAGE_SLUG_TO_PATH[p.slug] ?? `/${p.slug}`}`,
+    lastModified: lastMod(p.modified ?? p.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
 
-    pages = pgs.map((p) => ({
-      url: `${base}${PAGE_SLUG_TO_PATH[p.slug] ?? `/${p.slug}`}`,
-      lastModified: lastMod(p.modified ?? p.date),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    }));
-
-    posts = postStubs.map((p) => ({
-      url: `${base}/${p.slug}`,
-      lastModified: lastMod(p.modified ?? p.date),
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    }));
-  } catch {
-    // WP unavailable: still emit static URLs
-  }
+  const posts: MetadataRoute.Sitemap = postStubs.map((p) => ({
+    url: `${base}/${p.slug}`,
+    lastModified: lastMod(p.modified ?? p.date),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
 
   const merge = [...staticRoutes, ...categories, ...pages, ...posts];
   const seen = new Set<string>();
