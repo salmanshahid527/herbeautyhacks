@@ -2,7 +2,7 @@
 
 import { SafeImage } from "@/components/ui/safe-image";
 import { useAuthor } from "@/hooks/useAuthor";
-import { Instagram, Facebook } from "lucide-react";
+import { Instagram, Facebook, Linkedin } from "lucide-react";
 
 function PinterestIcon({ className }: { className?: string }) {
   return (
@@ -74,6 +74,17 @@ export function MeetAuthor() {
                     aria-label="Facebook"
                   >
                     <Facebook className="size-5" />
+                  </a>
+                )}
+                {author.linkedin && (
+                  <a
+                    href={author.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                    aria-label="LinkedIn"
+                  >
+                    <Linkedin className="size-5" />
                   </a>
                 )}
               </div>

@@ -1,4 +1,5 @@
 import { getSiteUrl } from "@/lib/seo";
+import { authorSameAs } from "@/lib/authors";
 
 const siteUrl = getSiteUrl();
 
@@ -35,7 +36,9 @@ export function ArticleJsonLd({
     url,
     datePublished,
     dateModified: dateModified ?? datePublished,
-    author: authorName ? { "@type": "Person", name: authorName, url: `${getSiteUrl()}/about` } : undefined,
+    author: authorName
+      ? { "@type": "Person", name: authorName, url: `${getSiteUrl()}/about`, sameAs: authorSameAs(authorName) }
+      : undefined,
     image: absoluteImageUrl ? [absoluteImageUrl] : undefined,
     publisher: {
       "@type": "Organization",
