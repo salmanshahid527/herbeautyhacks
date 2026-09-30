@@ -212,6 +212,17 @@ export function sanitizeHtmlForProse(html: string): string {
   return out;
 }
 
+/**
+ * Demote any `<h1>` inside WP body HTML to `<h2>` (the page template already renders the only H1).
+ * Tagged with `data-was-h1` so globals.css keeps the original H1 visual style.
+ */
+export function demoteBodyH1ToH2(html: string): string {
+  if (!html || typeof html !== "string") return html;
+  return html
+    .replace(/<h1(?=[\s>])/gi, "<h2 data-was-h1")
+    .replace(/<\/h1\s*>/gi, "</h2>");
+}
+
 /** Strip all HTML tags */
 export function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "").trim();

@@ -1,3 +1,4 @@
+import { fetchWithRetry } from "@/lib/wp/client";
 import { getWpJsonV2Base } from "@/lib/wp/env";
 
 /** ISR for sitemap fetches (seconds). */
@@ -22,10 +23,13 @@ function buildUrl(path: string, params: Record<string, string | number | undefin
 
 async function wpFetch(path: string, params: Record<string, string | number | undefined>) {
   const url = buildUrl(path, params);
-  return fetch(url, {
+  const res = await fetchWithRetry(url, {
     next: { revalidate: REVALIDATE },
     headers: { Accept: "application/json" },
   });
+  // A persistent WP 5xx must not silently produce a truncated sitemap.
+  if (res.status >= 500) throw new Error(`WP API error ${res.status}: ${url}`);
+  return res;
 }
 
 /** Total published posts (for chunk count). */

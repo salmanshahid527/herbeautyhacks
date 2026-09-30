@@ -18,6 +18,15 @@ const PAGE_SLUG_TO_PATH: Record<string, string> = {
   privacy: "/privacy",
 };
 
+/** Strip HTML and cut to ~max chars at a word boundary (no rewriting). */
+function truncateAtWord(text: string, max: number): string {
+  const clean = text.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  if (clean.length <= max) return clean;
+  const cut = clean.slice(0, max + 1);
+  const lastSpace = cut.lastIndexOf(" ");
+  return (lastSpace > 0 ? cut.slice(0, lastSpace) : clean.slice(0, max)).replace(/[\s,;:.\-–—]+$/, "");
+}
+
 type Props = { params: Promise<{ slug: string }> };
 
 export const revalidate = 43200;
@@ -30,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const siteUrl = getSiteUrl();
     const url = `${siteUrl}${path}`;
     const title = decodeHtmlEntities(page.title ?? "Page");
-    const description = page.excerpt ? decodeHtmlEntities(page.excerpt) : undefined;
+    const description = page.excerpt ? truncateAtWord(decodeHtmlEntities(page.excerpt), 155) : undefined;
     return {
       title,
       description,
@@ -138,8 +147,14 @@ export default async function SlugPage({ params }: Props) {
         title={jsonLdTitle}
         description={seoDescription}
         slug={initialPost.slug}
-        datePublished={initialPost.publishedAt ?? ""}
-        dateModified={initialPost.modifiedAt ?? initialPost.publishedAt ?? ""}
+        datePublished={initialPost.publishedAtIso ?? initialPost.publishedAt ?? ""}
+        dateModified={
+          initialPost.modifiedAtIso ??
+          initialPost.modifiedAt ??
+          initialPost.publishedAtIso ??
+          initialPost.publishedAt ??
+          ""
+        }
         authorName={initialPost.author?.name}
         imageUrl={absoluteImageUrl}
       />

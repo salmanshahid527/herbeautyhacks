@@ -27,27 +27,19 @@ function mapWpCategoryToCategory(wp: WpCategory): Category {
 
 /** Fetch categories for blog (server-only). Cached per request. */
 export const getCategories = cache(async function getCategories(): Promise<Category[]> {
-  try {
-    const data = await fetchWp<WpCategory[]>("/categories", {
-      per_page: 100,
-      orderby: "name",
-      order: "asc",
-    });
-    return (Array.isArray(data) ? data : []).map(mapWpCategoryToCategory);
-  } catch {
-    return [];
-  }
+  const data = await fetchWp<WpCategory[]>("/categories", {
+    per_page: 100,
+    orderby: "name",
+    order: "asc",
+  });
+  return (Array.isArray(data) ? data : []).map(mapWpCategoryToCategory);
 });
 
 /** Fetch a single category by slug (server-only). Cached per request. */
 export const getCategoryBySlug = cache(async function getCategoryBySlug(
   slug: string
 ): Promise<Category | null> {
-  try {
-    const data = await fetchWp<WpCategory[]>("/categories", { slug });
-    const wp = Array.isArray(data) ? data[0] : null;
-    return wp ? mapWpCategoryToCategory(wp) : null;
-  } catch {
-    return null;
-  }
+  const data = await fetchWp<WpCategory[]>("/categories", { slug });
+  const wp = Array.isArray(data) ? data[0] : null;
+  return wp ? mapWpCategoryToCategory(wp) : null;
 });

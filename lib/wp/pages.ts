@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { decodeHtmlEntities, rewriteWpUrlsToSiteUrl } from "@/lib/html";
+import { decodeHtmlEntities, demoteBodyH1ToH2, rewriteWpUrlsToSiteUrl } from "@/lib/html";
 import { fetchWp } from "@/lib/wp/client";
 import type { WpPage } from "@/lib/wp/types";
 import { isHeadlessExcludedWpPageSlug } from "./excludedPublicWpPages";
@@ -19,24 +19,20 @@ const SLUG_FALLBACKS: Record<string, string[]> = {
 };
 
 async function fetchPageBySlug(slug: string): Promise<Page | null> {
-  try {
-    const data = await fetchWp<WpPage[]>(`/pages`, { slug, per_page: 1 });
-    const wp = Array.isArray(data) ? data[0] : null;
-    if (!wp) return null;
-    const strip = (html: string) => html.replace(/<[^>]*>/g, "").trim();
-    const title = rewriteWpUrlsToSiteUrl(decodeHtmlEntities(strip(wp.title?.rendered ?? "")));
-    const content = rewriteWpUrlsToSiteUrl(wp.content?.rendered ?? "");
-    const excerpt = rewriteWpUrlsToSiteUrl(decodeHtmlEntities(strip(wp.excerpt?.rendered ?? "")));
-    return {
-      _id: String(wp.id),
-      slug: wp.slug,
-      title,
-      content,
-      excerpt,
-    };
-  } catch {
-    return null;
-  }
+  const data = await fetchWp<WpPage[]>(`/pages`, { slug, per_page: 1 });
+  const wp = Array.isArray(data) ? data[0] : null;
+  if (!wp) return null;
+  const strip = (html: string) => html.replace(/<[^>]*>/g, "").trim();
+  const title = rewriteWpUrlsToSiteUrl(decodeHtmlEntities(strip(wp.title?.rendered ?? "")));
+  const content = demoteBodyH1ToH2(rewriteWpUrlsToSiteUrl(wp.content?.rendered ?? ""));
+  const excerpt = rewriteWpUrlsToSiteUrl(decodeHtmlEntities(strip(wp.excerpt?.rendered ?? "")));
+  return {
+    _id: String(wp.id),
+    slug: wp.slug,
+    title,
+    content,
+    excerpt,
+  };
 }
 
 /** Cached per request so generateMetadata + page can share one fetch. */

@@ -26,10 +26,10 @@ const PAGE_SLUG_TO_PATH: Record<string, string> = {
   privacy: "/privacy",
 };
 
-function lastMod(iso?: string): Date {
-  if (!iso) return new Date();
+function lastMod(iso?: string): Date | undefined {
+  if (!iso) return undefined;
   const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? new Date() : d;
+  return Number.isNaN(d.getTime()) ? undefined : d;
 }
 
 /**
@@ -41,50 +41,44 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getSiteUrl();
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: base, lastModified: new Date(), changeFrequency: "daily", priority: 1 },
-    { url: `${base}/blog`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
-    { url: `${base}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${base}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${base}/privacy`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: base, changeFrequency: "daily", priority: 1 },
+    { url: `${base}/blog`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${base}/about`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/contact`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/privacy`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/disclaimer`, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${base}/terms-conditions`, changeFrequency: "monthly", priority: 0.5 },
   ];
 
-  let categories: MetadataRoute.Sitemap = [];
-  let pages: MetadataRoute.Sitemap = [];
-  let posts: MetadataRoute.Sitemap = [];
+  // WP errors propagate (no try/catch) so ISR keeps the last good sitemap instead of publishing a truncated one.
+  const totalPosts = await getPublishedPostCount();
+  const postLimit = Math.min(totalPosts, MAX_POST_URLS);
 
-  try {
-    const totalPosts = await getPublishedPostCount();
-    const postLimit = Math.min(totalPosts, MAX_POST_URLS);
+  const [cats, pgs, postStubs] = await Promise.all([
+    fetchAllCategoriesForSitemap(),
+    fetchMappedWpPagesForSitemap(PAGE_SLUG_TO_PATH),
+    postLimit > 0 ? fetchPostsSitemapSlice(0, postLimit) : Promise.resolve([]),
+  ]);
 
-    const [cats, pgs, postStubs] = await Promise.all([
-      fetchAllCategoriesForSitemap(),
-      fetchMappedWpPagesForSitemap(PAGE_SLUG_TO_PATH),
-      postLimit > 0 ? fetchPostsSitemapSlice(0, postLimit) : Promise.resolve([]),
-    ]);
+  const categories: MetadataRoute.Sitemap = cats.map((c) => ({
+    url: `${base}/category/${c.slug}`,
+    changeFrequency: "daily" as const,
+    priority: 0.7,
+  }));
 
-    categories = cats.map((c) => ({
-      url: `${base}/category/${c.slug}`,
-      lastModified: new Date(),
-      changeFrequency: "daily" as const,
-      priority: 0.7,
-    }));
+  const pages: MetadataRoute.Sitemap = pgs.map((p) => ({
+    url: `${base}${PAGE_SLUG_TO_PATH[p.slug] ?? `/${p.slug}`}`,
+    lastModified: lastMod(p.modified ?? p.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
 
-    pages = pgs.map((p) => ({
-      url: `${base}${PAGE_SLUG_TO_PATH[p.slug] ?? `/${p.slug}`}`,
-      lastModified: lastMod(p.modified ?? p.date),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    }));
-
-    posts = postStubs.map((p) => ({
-      url: `${base}/${p.slug}`,
-      lastModified: lastMod(p.modified ?? p.date),
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    }));
-  } catch {
-    // WP unavailable: still emit static URLs
-  }
+  const posts: MetadataRoute.Sitemap = postStubs.map((p) => ({
+    url: `${base}/${p.slug}`,
+    lastModified: lastMod(p.modified ?? p.date),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
 
   const merge = [...staticRoutes, ...categories, ...pages, ...posts];
   const seen = new Set<string>();

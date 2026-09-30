@@ -54,6 +54,13 @@ export function mapWpPostToPost(wp: WpPost): MappedPost {
 export interface MappedPostDetail extends MappedPost {
   body?: string;
   modifiedAt?: string;
+  /** UTC ISO 8601 (with Z) for structured data; WP `date`/`modified` carry no timezone offset. */
+  publishedAtIso?: string;
+  modifiedAtIso?: string;
+}
+
+function gmtToIso(gmt?: string): string | undefined {
+  return gmt && /^\d{4}-\d{2}-\d{2}T[\d:]+$/.test(gmt) && !gmt.startsWith("0000") ? `${gmt}Z` : undefined;
 }
 
 export function mapWpPostToPostDetail(wp: WpPost): MappedPostDetail {
@@ -67,5 +74,7 @@ export function mapWpPostToPostDetail(wp: WpPost): MappedPostDetail {
       ? { name: author.name, image: author.avatar_urls?.[96] }
       : undefined,
     modifiedAt: wp.modified ?? wp.date,
+    publishedAtIso: gmtToIso(wp.date_gmt),
+    modifiedAtIso: gmtToIso(wp.modified_gmt) ?? gmtToIso(wp.date_gmt),
   };
 }
