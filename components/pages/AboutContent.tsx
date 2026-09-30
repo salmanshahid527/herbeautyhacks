@@ -63,16 +63,23 @@ export function AboutContent() {
           
           {/* Social Links Section */}
           <div className="flex flex-wrap justify-center md:justify-start gap-4 mt-4">
-            {/* {(author?.pinterest || true) && (
-              <a
-                href={author?.pinterest || "https://www.pinterest.com/Herbeauty_hacks/"}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary font-medium hover:underline text-sm"
-              >
-                Pinterest
-              </a>
-            )} */}
+            {[
+              { href: author?.instagram, label: "Instagram" },
+              { href: author?.facebook, label: "Facebook" },
+              { href: author?.linkedin, label: "LinkedIn" },
+            ]
+              .filter((l): l is { href: string; label: string } => Boolean(l.href))
+              .map((l) => (
+                <a
+                  key={l.label}
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary font-medium hover:underline text-sm"
+                >
+                  {l.label}
+                </a>
+              ))}
 
           </div>
         </div>
