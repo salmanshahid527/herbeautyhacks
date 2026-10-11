@@ -1,5 +1,5 @@
 # Keyword map: herbeautyhacks.com
-Updated: 2026-09-29 · Data: GSC 2026-08-30–2026-09-26 (27 days synced; no previous-28-day comparison yet). Site total: 2 clicks, 2,511 impressions, avg pos 53.9.
+Updated: 2026-10-11 · Data: GSC 2026-09-11–2026-10-08 vs the previous 28 days. Site total: 3 clicks (was 9), 2,845 impressions (was 4,952), CTR 0.11%, avg pos 51.7. Per-cluster figures below are from 2026-09-29 and were not re-pulled this run (no content changes are allowed while the September 2026 spam update is rolling out).
 
 Every cluster sits at position 20 or worse except the milky-white question, so nothing counts as "almost page 1" yet. Google's September 2026 spam update was rolling out on 2026-09-24, so content changes are deferred and this map is planning only.
 
