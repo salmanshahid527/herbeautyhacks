@@ -1,7 +1,7 @@
 # Keyword map: herbeautyhacks.com
-Updated: 2026-10-16 · Data: GSC 2026-09-16–2026-10-13 vs the previous 28 days. Site total: 2 clicks (was 6), 2,740 impressions (was 4,676), CTR 0.07%, avg pos 50.4 (top-10 queries 67, was 45). Per-cluster figures below are from 2026-09-29 and were not re-pulled this run (no content changes are allowed while the September 2026 spam update is rolling out).
+Updated: 2026-10-27 · Data: GSC 2026-09-27–2026-10-24 vs the previous 28 days. Site total: 2 clicks (was 3), 3,416 impressions (was 3,404), CTR 0.06%, avg pos 52.9 (top-10 queries 62, was 50). Per-cluster figures below are from 2026-09-29 and were not re-pulled (the clusters were last reviewed within 28 days and no page copy has changed since).
 
-Every cluster sits at position 20 or worse except the milky-white question, so nothing counts as "almost page 1" yet. Google's September 2026 spam update was rolling out on 2026-09-24, so content changes are deferred and this map is planning only.
+Every cluster sits at position 20 or worse except the milky-white question, so nothing counts as "almost page 1" yet. Google's September 2026 spam update finished on 2026-10-08, so ranking-motivated changes are allowed again. Content changes still go through WordPress revision packages (WP login is not working), and the packages from 10-11 and 10-16 are waiting for the owner to apply them. This run changed the Related Articles links in code (every post now receives internal links from three category siblings), which supports the indexing of the 33 "Discovered, not indexed" pages.
 
 | Cluster | Top queries | Intent | Owner page | Pos | Impr (28d) | Clicks | CTR | Status | Next action |
 |---|---|---|---|---|---|---|---|---|---|
