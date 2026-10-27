@@ -5,7 +5,7 @@ import { WpPageContent } from "@/components/pages/WpPageContent";
 import { decodeHtmlEntities } from "@/lib/html";
 import { getSiteUrl, DEFAULT_OG_IMAGE } from "@/lib/seo";
 import { fetchRankMathDescription } from "@/lib/wp/rankmath";
-import { getPostBySlug, getRelatedPostsByCategory } from "@/lib/wp/post";
+import { getPostBySlug, getRelatedPostsRing } from "@/lib/wp/post";
 import { getPageBySlug } from "@/lib/wp/pages";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -123,7 +123,7 @@ export default async function SlugPage({ params }: Props) {
   const relatedPosts = [];
   if (initialPost.category?.id) {
     try {
-      const posts = await getRelatedPostsByCategory(initialPost.category.id, initialPost.slug, 4);
+      const posts = await getRelatedPostsRing(initialPost.category.id, initialPost.slug, 3);
       relatedPosts.push(...posts);
     } catch (err) {
       // Silently fail if we can't get related posts
