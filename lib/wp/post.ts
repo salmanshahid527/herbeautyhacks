@@ -121,3 +121,40 @@ export const getRelatedPostsByCategory = cache(async function getRelatedPostsByC
     .slice(0, limit)
     .map(mapWpPostToPost);
 });
+
+/**
+ * Related posts that spread internal links across a whole category.
+ * Every published post in the category gets a fixed place in a ring (by id), and each post links to the
+ * next `limit` posts in that ring. Every post then receives `limit` links from its siblings, instead of
+ * the newest few receiving all of them. Deterministic, so builds and ISR agree. Falls back to the
+ * newest-first list when the category is too small.
+ */
+export const getRelatedPostsRing = cache(async function getRelatedPostsRing(
+  categoryId: number,
+  currentPostSlug: string,
+  limit: number = 3
+) {
+  const stubs = await fetchWp<{ id: number; slug: string }[]>("/posts", {
+    categories: categoryId,
+    per_page: 100,
+    orderby: "id",
+    order: "asc",
+    _fields: "id,slug",
+  });
+  const ring = Array.isArray(stubs) ? stubs : [];
+  const index = ring.findIndex((p) => p.slug === currentPostSlug);
+  if (index === -1 || ring.length <= limit) {
+    return getRelatedPostsByCategory(categoryId, currentPostSlug, limit);
+  }
+  const ids: number[] = [];
+  for (let step = 1; ids.length < limit; step++) {
+    ids.push(ring[(index + step) % ring.length].id);
+  }
+  const data = await fetchWp<WpPost[]>("/posts", {
+    _embed: 1,
+    include: ids.join(","),
+    per_page: limit,
+    orderby: "include",
+  });
+  return (Array.isArray(data) ? data : []).map(mapWpPostToPost);
+});
